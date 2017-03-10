@@ -1,8 +1,5 @@
 #include "DisplayObject.h"
 
-
-
-
 DisplayObject::DisplayObject()
 {
 	m_model = NULL;
@@ -19,10 +16,31 @@ DisplayObject::DisplayObject()
 	m_render = true;
 }
 
-
 DisplayObject::~DisplayObject()
 {
 //	delete m_texture_diffuse;
+}
+
+void DisplayObject::AddCollider()
+{
+	_position.x = m_position.x;
+	_position.y = m_position.y;
+	_position.z = m_position.z;
+
+	DirectX::SimpleMath::Vector3 objectLeft(_position.x - m_scale.x, _position.y, _position.z);
+	DirectX::SimpleMath::Vector3 objectRight(_position.x + m_scale.x, _position.y, _position.z);
+	DirectX::SimpleMath::Vector3 objectUp(_position.x, _position.y + m_scale.y, _position.z);
+	DirectX::SimpleMath::Vector3 objectDown(_position.x, _position.y - m_scale.y, _position.z);
+	DirectX::SimpleMath::Vector3 objectFront(_position.x, _position.y, _position.z + m_scale.z);
+	DirectX::SimpleMath::Vector3 objectBack(_position.x, _position.y, _position.z - m_scale.z);
+
+	// Setting up the AABB collider for the display object.
+	_aabb.back = objectBack;
+	_aabb.front = objectFront;
+	_aabb.top = objectUp;
+	_aabb.bottom = objectDown;
+	_aabb.left = objectLeft;
+	_aabb.right = objectRight;
 }
 
 /*
@@ -32,30 +50,24 @@ DisplayObject::~DisplayObject()
  */
 bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
 {
-	_position.x = m_position.x;
-	_position.y = m_position.y;
-	_position.z = m_position.z;
-
 	float rayDistance = 10.0f;
-	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
-	DirectX::SimpleMath::Vector3 end(start.x, start.y, start.z + rayDistance);		// SIDE NOTE: This end needs manipulating based on the camera forward vector i.e multiply by the camera forward.
-	//end *= camForward;
+	DirectX::SimpleMath::Vector3 roundedStart(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
+	DirectX::SimpleMath::Vector3 start(Maths::RoundToInt(roundedStart.x), Maths::RoundToInt(roundedStart.y), Maths::RoundToInt(roundedStart.z));
+	DirectX::SimpleMath::Vector3 end(Maths::RoundToInt(start.x), Maths::RoundToInt(start.y), Maths::RoundToInt(start.z + rayDistance));
 	end = end.Cross(camForward);
 
-	DirectX::SimpleMath::Vector3 objectLeft(_position.x - m_scale.x, _position.y, _position.z);
-	DirectX::SimpleMath::Vector3 objectRight(_position.x + m_scale.x, _position.y, _position.z);
-	DirectX::SimpleMath::Vector3 objectUp(_position.x, _position.y + m_scale.y, _position.z);
-	DirectX::SimpleMath::Vector3 objectDown(_position.x, _position.y - m_scale.y, _position.z);
+	std::vector<DirectX::SimpleMath::Vector3> points = Maths::BresenhamsLine(start, end);
 
-	bool objectFocus = true;
-
-	objectFocus &= Maths::IsPointBetween(start, end, _position);
-
-	//objectFocus &= Maths::IsPointBetween(start, end, objectLeft);
-	//objectFocus &= Maths::IsPointBetween(start, end, objectRight);
-	//objectFocus &= Maths::IsPointBetween(start, end, objectUp);
-	//objectFocus &= Maths::IsPointBetween(start, end, objectDown);
-	_inFocus = objectFocus;
+	bool objectFocus = false;
+	
+	/*for (size_t i = 0; i < points.size(); ++i)
+	{
+		if (Physics::PointToAABB(_aabb, points[i]))
+		{
+			objectFocus = true;
+			break;
+		}
+	}*/
 
 	return objectFocus;
 }

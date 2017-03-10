@@ -13,7 +13,7 @@
 #include "InputCommands.h"
 #include <vector>
 
-#include "1300455_MottersheadJason/Utilities/Maths/Maths.h"
+#include "1300455_MottersheadJason/Utilities/Physics/Physics.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.

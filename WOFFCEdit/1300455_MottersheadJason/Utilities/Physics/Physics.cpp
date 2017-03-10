@@ -25,5 +25,12 @@ Physics::~Physics()
  */
 bool Physics::PointToAABB(const AABB& box, DirectX::SimpleMath::Vector3& point)
 {
+	if ((point.x > box.left.x && point.x < box.right.x)
+		&& (point.y > box.bottom.y && point.y < box.top.y)
+		&& (point.z > box.front.z && point.z < box.back.z))
+	{
+		return true;
+	}
+
 	return false;
 }

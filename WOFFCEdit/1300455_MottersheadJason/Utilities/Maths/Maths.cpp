@@ -67,6 +67,17 @@ float Maths::Abs(float value)
 }
 
 /*
+ * Provides access to rounded floating point values.
+ * @param the value to return as rounded.
+ * @return float the rounded float value.
+ */
+float Maths::RoundToInt(float value)
+{
+	float rounded = static_cast<int>(value);
+	return rounded;
+}
+
+/*
  * Determines the points on a line given a start and end point.
  * @param start the point to go from.
  * @param end the point to go to.

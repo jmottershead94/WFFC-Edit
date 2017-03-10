@@ -70,14 +70,11 @@ Game::~Game()
 void Game::Initialize(HWND window, int width, int height)
 {
     m_gamePad = std::make_unique<GamePad>();
-
     m_keyboard = std::make_unique<Keyboard>();
-
     m_mouse = std::make_unique<Mouse>();
     m_mouse->SetWindow(window);
 
     m_deviceResources->SetWindow(window, width, height);
-
     m_deviceResources->CreateDeviceResources();
     CreateDeviceDependentResources();
 
@@ -212,12 +209,15 @@ void Game::Update(DX::StepTimer const& timer)
 	if (m_InputCommands.generateTerrain)
 		m_displayChunk.GenerateHeightmap();
 
-	if (!m_displayList.empty())
+	if (GetKeyState(VK_LBUTTON) < 0)
 	{
-		for (size_t i = 0; i < m_displayList.size(); ++i)
+		if (!m_displayList.empty())
 		{
-			DisplayObject displayObject = m_displayList[i];
-			displayObject.Update(m_world, m_camPosition, m_camLookDirection);
+			for (size_t i = 0; i < m_displayList.size(); ++i)
+			{
+				DisplayObject displayObject = m_displayList[i];
+				displayObject.Update(m_world, m_camPosition, m_camLookDirection);
+			}
 		}
 	}
 
@@ -289,20 +289,8 @@ void Game::Render()
 
 			if (displayObject.InFocus())
 			{
-				triggered = true;
-
-				if (triggered)
-				{
-					std::wstring clicky = L"Clicked ON!" + std::to_wstring(displayObject.m_ID);
-					m_font->DrawString(m_sprites.get(), clicky.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
-					//triggered = false;
-				}
-				else
-				{
-					std::wstring clicky = L"NAH MATE!" + std::to_wstring(displayObject.m_ID);
-					m_font->DrawString(m_sprites.get(), clicky.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
-					//triggered = true;
-				}
+				std::wstring clicky = L"Clicked ON!" + std::to_wstring(displayObject.m_ID);
+				m_font->DrawString(m_sprites.get(), clicky.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
 			}
 
 			std::wstring focusString = L"Focus = " + std::to_wstring(displayObject.InFocus());
@@ -504,6 +492,9 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		newDisplayObject.m_scale.y = SceneGraph->at(i).scaY;
 		newDisplayObject.m_scale.z = SceneGraph->at(i).scaZ;
 		
+		// Add a collider.
+		newDisplayObject.AddCollider();
+
 		m_displayList.push_back(newDisplayObject);
 	}
 		

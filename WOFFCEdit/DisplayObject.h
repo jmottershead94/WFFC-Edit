@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "1300455_MottersheadJason/Utilities/Maths/Maths.h"
+#include "1300455_MottersheadJason/Utilities/Physics/Physics.h"
 
 class DisplayObject
 {
@@ -18,7 +18,7 @@ class DisplayObject
 		DirectX::SimpleMath::Vector3			m_scale;
 		bool									m_render;
 
-		bool ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
+		void AddCollider();
 		void Update(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
 
 		/*
@@ -36,7 +36,8 @@ class DisplayObject
 	private:
 		bool _inFocus = false;
 		DirectX::SimpleMath::Vector3 _position;
+		Physics::AABB _aabb;
 
-		
+		bool ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
 };
 

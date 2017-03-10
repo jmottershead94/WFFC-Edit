@@ -16,7 +16,6 @@ ToolMain::ToolMain()
 	m_toolInputCommands.back		= false;
 	m_toolInputCommands.left		= false;
 	m_toolInputCommands.right		= false;
-	
 }
 
 
@@ -39,6 +38,7 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	m_height	= height;
 	m_d3dRenderer.GetDefaultSize(m_width, m_height);
 	m_d3dRenderer.Initialize(handle, m_width, m_height);
+	_utilities.Initialize(handle);
 
 	//database connection establish
 	int rc;
@@ -52,7 +52,7 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	else 
 	{
 		TRACE("Opened database successfully");
-	}
+	}	
 
 	onActionLoad();
 }

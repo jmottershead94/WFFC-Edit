@@ -17,8 +17,11 @@ class Utils
 
 	private:
 		Utils();
+		HWND _hwnd;
 
 	public:
 		~Utils();
-		static DirectX::SimpleMath::Vector3 GetCursorPositionInWindow(HWND hwnd);
+		void Initialize(HWND hwnd);
+		static HWND const GetWindow();
+		static DirectX::SimpleMath::Vector3 GetCursorPositionInWindow();
 };

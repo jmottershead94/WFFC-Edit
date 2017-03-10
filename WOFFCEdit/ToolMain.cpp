@@ -18,8 +18,7 @@ ToolMain::ToolMain()
 	m_toolInputCommands.right		= false;
 	m_toolInputCommands.up			= false;
 	m_toolInputCommands.down		= false;
-
-
+	
 	m_toolInputCommands.generateTerrain = false;
 }
 
@@ -267,16 +266,26 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.down = false;
 	//rotation
-	if (m_keyArray['E'])
+	if (m_keyArray['L'])
 	{
 		m_toolInputCommands.rotRight = true;
 	}
 	else m_toolInputCommands.rotRight = false;
-	if (m_keyArray['Q'])
+	if (m_keyArray['J'])
 	{
 		m_toolInputCommands.rotLeft = true;
 	}
 	else m_toolInputCommands.rotLeft = false;
+	if (m_keyArray['I'])
+	{
+		m_toolInputCommands.rotUp = true;
+	}
+	else m_toolInputCommands.rotUp = false;
+	if (m_keyArray['K'])
+	{
+		m_toolInputCommands.rotDown = true;
+	}
+	else m_toolInputCommands.rotDown = false;
 	// Generating Terrain.
 	if (m_keyArray['G'])
 	{

@@ -8,9 +8,6 @@
 #include "InputCommands.h"
 #include <vector>
 
-// Added header files.
-#include "1300455_MottersheadJason/Utilities/Maths/Maths.h"
-
 class ToolMain
 {
 public: //methods
@@ -51,5 +48,6 @@ private:	//variables
 	int m_selectedObject;
 
 	// Jason's Added Variables.
+	Utils _utilities;
 	Maths _maths;
 };

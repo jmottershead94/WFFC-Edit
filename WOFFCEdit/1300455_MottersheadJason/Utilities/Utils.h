@@ -13,7 +13,12 @@ using namespace std;
  */
 class Utils
 {
-	public:
+	friend class ToolMain;
+
+	private:
 		Utils();
+
+	public:
 		~Utils();
+		static DirectX::SimpleMath::Vector3 GetCursorPositionInWindow(HWND hwnd);
 };

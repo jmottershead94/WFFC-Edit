@@ -3,8 +3,8 @@
 std::unique_ptr<Maths> instance = nullptr;
 
 /*
-* Constructs this instance.
-*/
+ * Constructs this instance.
+ */
 Maths::Maths()
 {
 	if (instance == nullptr)
@@ -14,16 +14,16 @@ Maths::Maths()
 }
 
 /*
-* Destructs this instance.
-*/
+ * Destructs this instance.
+ */
 Maths::~Maths()
 {}
 
 /*
-* Get the absolute value of a number.
-* @param the value to return an absolute value of.
-* @return float the absolute value itself.
-*/
+ * Get the absolute value of a number.
+ * @param the value to return an absolute value of.
+ * @return float the absolute value itself.
+ */
 float Maths::Abs(float value)
 {
 	float absolute = value;
@@ -35,11 +35,11 @@ float Maths::Abs(float value)
 }
 
 /*
-* Determines the points on a line given a start and end point.
-* @param start the point to go from.
-* @param end the point to go to.
-* @return std::vector<DirectX::SimpleMath::Vector3> the data structure of points on the line.
-*/
+ * Determines the points on a line given a start and end point.
+ * @param start the point to go from.
+ * @param end the point to go to.
+ * @return std::vector<DirectX::SimpleMath::Vector3> the data structure of points on the line.
+ */
 std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end)
 {
 	std::vector<DirectX::SimpleMath::Vector3> result;

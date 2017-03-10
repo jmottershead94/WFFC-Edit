@@ -13,6 +13,7 @@
 #include "InputCommands.h"
 #include <vector>
 
+#include "1300455_MottersheadJason/Utilities/Maths/Maths.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -129,6 +130,8 @@ private:
     DirectX::SimpleMath::Matrix                                             m_view;
     DirectX::SimpleMath::Matrix                                             m_projection;
 
+	// Jason's Added Variables.
+	HWND _hwnd;
 
 };
 

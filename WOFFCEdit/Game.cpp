@@ -276,6 +276,7 @@ void Game::Render()
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
 	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
+	mousePosition = Maths::RoundVector3(mousePosition);
 
 	//std::wstring var = L"Cam X: " + std::to_wstring(m_camPosition.x) + L"Cam Z: " + std::to_wstring(m_camPosition.z);
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);

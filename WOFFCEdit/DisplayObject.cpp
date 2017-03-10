@@ -51,10 +51,12 @@ void DisplayObject::AddCollider()
 bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
 {
 	float rayDistance = 10.0f;
-	DirectX::SimpleMath::Vector3 roundedStart(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
-	DirectX::SimpleMath::Vector3 start(Maths::RoundToInt(roundedStart.x), Maths::RoundToInt(roundedStart.y), Maths::RoundToInt(roundedStart.z));
-	DirectX::SimpleMath::Vector3 end(Maths::RoundToInt(start.x), Maths::RoundToInt(start.y), Maths::RoundToInt(start.z + rayDistance));
+	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
+	DirectX::SimpleMath::Vector3 roundedStart(Maths::RoundVector3(start));
+
+	DirectX::SimpleMath::Vector3 end(start.x, start.y, start.z + rayDistance);
 	end = end.Cross(camForward);
+	DirectX::SimpleMath::Vector3 roundedEnd(Maths::RoundVector3(end));
 
 	std::vector<DirectX::SimpleMath::Vector3> points = Maths::BresenhamsLine(start, end);
 

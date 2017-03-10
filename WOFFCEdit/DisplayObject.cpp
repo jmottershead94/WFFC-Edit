@@ -64,5 +64,9 @@ bool DisplayObject::ClickedOn(DirectX::SimpleMath::Vector3& camForward)
  */
 void DisplayObject::Update(DirectX::SimpleMath::Vector3& camForward)
 {
-	_inFocus = ClickedOn(camForward);
+	//_inFocus = ClickedOn(camForward);
+	if (ClickedOn(camForward))
+	{
+		_inFocus = !_inFocus;
+	}
 }

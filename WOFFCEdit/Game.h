@@ -132,7 +132,7 @@ private:
     DirectX::SimpleMath::Matrix                                             m_projection;
 
 	// Jason's Added Variables.
-
+	bool triggered = false;
 };
 
 std::wstring StringToWCHART(std::string s);

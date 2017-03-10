@@ -8,9 +8,7 @@ std::unique_ptr<Maths> instance = nullptr;
 Maths::Maths()
 {
 	if (instance == nullptr)
-	{
 		instance = std::make_unique<Maths>(*this);
-	}
 }
 
 /*

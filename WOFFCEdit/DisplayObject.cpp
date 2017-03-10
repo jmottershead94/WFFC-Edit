@@ -30,16 +30,17 @@ DisplayObject::~DisplayObject()
  * @param camForward the direction the camera is looking.
  * @return bool if this object has been clicked on.
  */
-bool DisplayObject::ClickedOn(DirectX::SimpleMath::Vector3& camForward)
+bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
 {
 	_position.x = m_position.x;
 	_position.y = m_position.y;
 	_position.z = m_position.z;
 
 	float rayDistance = 10.0f;
-	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWindow() / 512.0f);
+	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
 	DirectX::SimpleMath::Vector3 end(start.x, start.y, start.z + rayDistance);		// SIDE NOTE: This end needs manipulating based on the camera forward vector i.e multiply by the camera forward.
-	end *= camForward;
+	//end *= camForward;
+	end = end.Cross(camForward);
 
 	DirectX::SimpleMath::Vector3 objectLeft(_position.x - m_scale.x, _position.y, _position.z);
 	DirectX::SimpleMath::Vector3 objectRight(_position.x + m_scale.x, _position.y, _position.z);
@@ -48,12 +49,13 @@ bool DisplayObject::ClickedOn(DirectX::SimpleMath::Vector3& camForward)
 
 	bool objectFocus = true;
 
-	//objectFocus &= Maths::IsPointBetween(start, end, _position);
+	objectFocus &= Maths::IsPointBetween(start, end, _position);
 
-	objectFocus &= Maths::IsPointBetween(start, end, objectLeft);
-	objectFocus &= Maths::IsPointBetween(start, end, objectRight);
-	objectFocus &= Maths::IsPointBetween(start, end, objectUp);
-	objectFocus &= Maths::IsPointBetween(start, end, objectDown);
+	//objectFocus &= Maths::IsPointBetween(start, end, objectLeft);
+	//objectFocus &= Maths::IsPointBetween(start, end, objectRight);
+	//objectFocus &= Maths::IsPointBetween(start, end, objectUp);
+	//objectFocus &= Maths::IsPointBetween(start, end, objectDown);
+	_inFocus = objectFocus;
 
 	return objectFocus;
 }
@@ -62,11 +64,7 @@ bool DisplayObject::ClickedOn(DirectX::SimpleMath::Vector3& camForward)
  * Called every frame.
  * @param camForward the direction the camera is looking.
  */
-void DisplayObject::Update(DirectX::SimpleMath::Vector3& camForward)
+void DisplayObject::Update(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
 {
-	//_inFocus = ClickedOn(camForward);
-	if (ClickedOn(camForward))
-	{
-		_inFocus = !_inFocus;
-	}
+	ClickedOn(worldMatrix, camPosition, camForward);
 }

@@ -61,6 +61,7 @@
     </ClCompile>
     <ClCompile Include="1300455_MottersheadJason\Utilities\Maths\Maths.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Utilities\Utils.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Utilities\Physics\Physics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -112,6 +113,7 @@
     </ClInclude>
     <ClInclude Include="1300455_MottersheadJason\Utilities\Maths\Maths.h" />
     <ClInclude Include="1300455_MottersheadJason\Utilities\Utils.h" />
+    <ClInclude Include="1300455_MottersheadJason\Utilities\Physics\Physics.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

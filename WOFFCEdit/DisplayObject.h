@@ -18,7 +18,8 @@ class DisplayObject
 		DirectX::SimpleMath::Vector3			m_scale;
 		bool									m_render;
 
-		void Update(DirectX::SimpleMath::Vector3& camForward);
+		bool ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
+		void Update(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
 
 		/*
 		* Allows us to set this object being in focus.
@@ -30,12 +31,12 @@ class DisplayObject
 		* Allows us to see if this object is in focus.
 		* @return const bool if the object is in focus.
 		*/
-		inline bool const InFocus() const { return _inFocus; }
+		inline bool& InFocus() { return _inFocus; }
 
 	private:
 		bool _inFocus = false;
 		DirectX::SimpleMath::Vector3 _position;
 
-		bool ClickedOn(DirectX::SimpleMath::Vector3& camForward);
+		
 };
 

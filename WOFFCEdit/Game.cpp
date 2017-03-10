@@ -210,16 +210,14 @@ void Game::Update(DX::StepTimer const& timer)
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
 
 	if (m_InputCommands.generateTerrain)
-	{
 		m_displayChunk.GenerateHeightmap();
-	}
 
 	if (!m_displayList.empty())
 	{
 		for (size_t i = 0; i < m_displayList.size(); ++i)
 		{
 			DisplayObject displayObject = m_displayList[i];
-			displayObject.Update(m_camLookDirection);
+			displayObject.Update(m_world, m_camPosition, m_camLookDirection);
 		}
 	}
 
@@ -282,13 +280,7 @@ void Game::Render()
 	//std::wstring var = L"Cam X: " + std::to_wstring(m_camPosition.x) + L"Cam Z: " + std::to_wstring(m_camPosition.z);
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
 	m_font->DrawString(m_sprites.get(), var.c_str() , XMFLOAT2(100, 10), Colors::Yellow);
-
-	//if (GetKeyState(VK_LBUTTON) < 0)
-	//{
-	//	std::wstring clicked = L"Left Click";
-	//	m_font->DrawString(m_sprites.get(), clicked.c_str(), XMFLOAT2(100, 50), Colors::Red);
-	//}
-
+	
 	if (!m_displayList.empty())
 	{
 		for (size_t i = 0; i < m_displayList.size(); ++i)
@@ -297,9 +289,24 @@ void Game::Render()
 
 			if (displayObject.InFocus())
 			{
-				std::wstring clicky = L"Clicked ON!" + std::to_wstring(displayObject.m_ID);
-				m_font->DrawString(m_sprites.get(), clicky.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
+				triggered = true;
+
+				if (triggered)
+				{
+					std::wstring clicky = L"Clicked ON!" + std::to_wstring(displayObject.m_ID);
+					m_font->DrawString(m_sprites.get(), clicky.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
+					//triggered = false;
+				}
+				else
+				{
+					std::wstring clicky = L"NAH MATE!" + std::to_wstring(displayObject.m_ID);
+					m_font->DrawString(m_sprites.get(), clicky.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
+					//triggered = true;
+				}
 			}
+
+			std::wstring focusString = L"Focus = " + std::to_wstring(displayObject.InFocus());
+			m_font->DrawString(m_sprites.get(), focusString.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
 		}
 	}
 

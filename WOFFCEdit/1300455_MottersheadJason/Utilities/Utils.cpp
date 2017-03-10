@@ -21,10 +21,11 @@ Utils::~Utils()
  * Initializes this instance.
  * @param hwnd the handle to the current window.
  */
-void Utils::Initialize(HWND hwnd, const float mapSize)
+void Utils::Initialize(HWND hwnd, int width, int height)
 {
 	instance->_hwnd = hwnd;
-	instance->_mapSize = mapSize;
+	instance->_width = width;
+	instance->_height = height;
 }
 
 /*
@@ -68,13 +69,6 @@ DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWindow()
  */
 DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Matrix projectionMatrix, DirectX::SimpleMath::Vector3 camPosition)
 {
-	DirectX::SimpleMath::Vector3 cursorPosition(GetCursorPositionInWindow());
-	DirectX::SimpleMath::Matrix cursorMatrix;
-	cursorMatrix.CreateTranslation(cursorPosition);
-
-	DirectX::SimpleMath::Matrix camMatrix;
-	camMatrix.Translation(camPosition);
-
 	//mousePosition.x /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
 	//mousePosition.y /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
 	//mousePosition.x *= 512.0f;
@@ -92,21 +86,39 @@ DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWorld(DirectX::Simp
 	cursorPosition.y += cameraPosition.y;
 	cursorPosition.z += cameraPosition.z;*/
 
-	//1024, 768
+	// Converting cursor coordinates into a matrix for operations later on.
+
+	DirectX::SimpleMath::Vector3 cursorPosition(GetCursorPositionInWindow());
+	cursorPosition.x -= (instance->_width * 0.5f);
+	cursorPosition.y -= (instance->_height * 0.5f);
+	DirectX::SimpleMath::Matrix cursorMatrix;
+	cursorMatrix.CreateTranslation(cursorPosition);
+
+	// Convering camera coordiantes into a matrix for operations later on.
+	DirectX::SimpleMath::Matrix camMatrix;
+	camMatrix.Translation(camPosition);
 	
+	// Attempting to unproject screen coordinates.
 	DirectX::SimpleMath::Matrix mat;
 	mat = worldMatrix * projectionMatrix.Invert();
 
-	DirectX::SimpleMath::Matrix dir;
+	// Using the cursor position.
 	DirectX::SimpleMath::Matrix screenCoordinates;
 	DirectX::SimpleMath::Vector3 screenPosition(cursorPosition.x, cursorPosition.y, 1.0f);
 	screenCoordinates = screenCoordinates.CreateTranslation(screenPosition);
-	//DirectX::SimpleMath::Vector3 cameraPosition(camPosition.x, camPosition.y, 1.0f);
-	//screenCoordinates = screenCoordinates.CreateTranslation(cameraPosition);
-
-	dir = mat.Transpose() * screenCoordinates;
+	
+	// Using the camera position.
+	DirectX::SimpleMath::Matrix cameraScreenCoordinates;
+	DirectX::SimpleMath::Vector3 cameraPosition(camPosition.x, camPosition.y, 1.0f);
+	cameraScreenCoordinates = cameraScreenCoordinates.CreateTranslation(cameraPosition);
+	
+	DirectX::SimpleMath::Matrix resultingMatrix = screenCoordinates * cameraScreenCoordinates;
+	DirectX::SimpleMath::Matrix dir;
+	dir = mat.Transpose() * resultingMatrix;
 	dir /= mat.m[3][0] + mat.m[3][1] + mat.m[3][2] + mat.m[3][3];
-	dir -= (camMatrix - cursorMatrix);
+	//dir -= (camMatrix - cursorMatrix);
+	//dir -= (cursorMatrix - camMatrix);
+	dir -= (cursorMatrix - camMatrix);
 
 	return dir.Translation();
 }

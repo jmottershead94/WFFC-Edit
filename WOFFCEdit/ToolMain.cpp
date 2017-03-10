@@ -38,7 +38,7 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	m_height	= height;
 	m_d3dRenderer.GetDefaultSize(m_width, m_height);
 	m_d3dRenderer.Initialize(handle, m_width, m_height);
-	Utils::Initialize(handle, (128.0f * 128.0f));
+	Utils::Initialize(handle, width, height);
 
 	//database connection establish
 	int rc;

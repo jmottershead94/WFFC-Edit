@@ -277,15 +277,7 @@ void Game::Render()
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
-	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_projection, m_camPosition));
-	//DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWindow());
-	/*mousePosition.x /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
-	mousePosition.y /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
-	mousePosition.x *= 512.0f;
-	mousePosition.y *= 512.0f;
-	mousePosition.x += m_camPosition.x;
-	mousePosition.y += m_camPosition.y;
-	mousePosition.z += m_camPosition.z;*/
+	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
 
 	//std::wstring var = L"Cam X: " + std::to_wstring(m_camPosition.x) + L"Cam Z: " + std::to_wstring(m_camPosition.z);
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
@@ -465,7 +457,6 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		//create a temp display object that we will populate then append to the display list.
 		DisplayObject newDisplayObject;
 		
-
 		//load model
 		std::wstring modelwstr = StringToWCHART(SceneGraph->at(i).model_path);							//convect string to Wchar
 		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);	//get DXSDK to load model "False" for LH coordinate system (maya)

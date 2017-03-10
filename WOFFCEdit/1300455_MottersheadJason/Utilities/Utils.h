@@ -27,5 +27,5 @@ class Utils
 		static void Initialize(HWND hwnd, int width, int height);
 		static HWND const GetWindow();
 		static DirectX::SimpleMath::Vector3 const GetCursorPositionInWindow();
-		static DirectX::SimpleMath::Vector3 const GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Matrix projectionMatrix, DirectX::SimpleMath::Vector3 camPosition);
+		static DirectX::SimpleMath::Vector3 const GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Vector3 camPosition);
 };

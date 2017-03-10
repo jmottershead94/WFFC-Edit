@@ -69,25 +69,7 @@ DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWindow()
  */
 DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Matrix projectionMatrix, DirectX::SimpleMath::Vector3 camPosition)
 {
-	//mousePosition.x /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
-	//mousePosition.y /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
-	//mousePosition.x *= 512.0f;
-	//mousePosition.y *= 512.0f;
-	//mousePosition.x += m_camPosition.x;
-	//mousePosition.y += m_camPosition.y;
-	//mousePosition.z += m_camPosition.z;
-
-	/*cursorPosition.x /= instance->_mapSize;
-	cursorPosition.y /= instance->_mapSize;
-	cursorPosition.x *= 512.0f;
-	cursorPosition.y *= 512.0f;
-	cursorPosition.x = cameraPosition.x;
-	cursorPosition.x += cameraPosition.x;
-	cursorPosition.y += cameraPosition.y;
-	cursorPosition.z += cameraPosition.z;*/
-
 	// Converting cursor coordinates into a matrix for operations later on.
-
 	DirectX::SimpleMath::Vector3 cursorPosition(GetCursorPositionInWindow());
 	cursorPosition.x -= (instance->_width * 0.5f);
 	cursorPosition.y -= (instance->_height * 0.5f);

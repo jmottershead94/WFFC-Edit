@@ -50,19 +50,23 @@ void DisplayObject::AddCollider()
  */
 bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
 {
-	float rayDistance = 10.0f;
+	float rayDistance = 3.0f;
 	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
 	DirectX::SimpleMath::Vector3 roundedStart(Maths::RoundVector3(start));
 
-	DirectX::SimpleMath::Vector3 end(start.x, start.y, start.z + rayDistance);
+	DirectX::SimpleMath::Vector3 end(start.x, start.y, start.z);
+	end.z *= rayDistance;
 	end = end.Cross(camForward);
 	DirectX::SimpleMath::Vector3 roundedEnd(Maths::RoundVector3(end));
 
-	std::vector<DirectX::SimpleMath::Vector3> points = Maths::BresenhamsLine(start, end);
+	/*std::vector<DirectX::SimpleMath::Vector3> points = Maths::BresenhamsLine(roundedStart, roundedEnd);
+
+	if (points.size() <= 0)
+		return false;
 
 	bool objectFocus = false;
 	
-	/*for (size_t i = 0; i < points.size(); ++i)
+	for (size_t i = 0; i < points.size(); ++i)
 	{
 		if (Physics::PointToAABB(_aabb, points[i]))
 		{
@@ -70,6 +74,8 @@ bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX:
 			break;
 		}
 	}*/
+
+	bool objectFocus = Physics::Ray(roundedStart, roundedEnd, _aabb, true);
 
 	return objectFocus;
 }

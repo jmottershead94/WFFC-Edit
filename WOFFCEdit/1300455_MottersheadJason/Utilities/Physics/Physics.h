@@ -22,4 +22,5 @@ class Physics
 
 		~Physics();
 		static bool PointToAABB(const AABB& box, DirectX::SimpleMath::Vector3& point);
+		static bool Ray(DirectX::SimpleMath::Vector3& start, DirectX::SimpleMath::Vector3& end, const AABB& box, bool returnFirstHit);
 };

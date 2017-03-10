@@ -102,14 +102,11 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 	float x = RoundFloat(start.x);
 	float y = RoundFloat(start.y);
 	float z = RoundFloat(start.z);
-	float endX = RoundFloat(end.x);
-	float endY = RoundFloat(end.y);
-	float endZ = RoundFloat(end.z);
 
 	// Calculating the difference in x, y and z.
-	float dx = RoundFloat(Abs(endX - x));
-	float dy = RoundFloat(Abs(endY - y));
-	float dz = RoundFloat(Abs(endZ - z));
+	float dx = RoundFloat(Abs(end.x - start.x));
+	float dy = RoundFloat(Abs(end.y - start.y));
+	float dz = RoundFloat(Abs(end.z - start.z));
 
 	float xStep = 1.0f, yStep = 1.0f, zStep = 1.0f;
 	float errorX = 1.0f, errorY = 1.0f, errorZ = 1.0f;
@@ -130,7 +127,7 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 		errorY = RoundFloat(dz * 0.5f);
 
 		// Stepping the z coordinate along.
-		while (z != endZ)
+		while (z != end.z)
 		{
 			DirectX::SimpleMath::Vector3 point(x, y, z);
 			result.push_back(point);
@@ -159,7 +156,7 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 		errorY = dx * 0.5f;
 
 		// Stepping the x coordinate along.
-		while (x != endX)
+		while (x != end.x)
 		{
 			DirectX::SimpleMath::Vector3 point(x, y, z);
 			result.push_back(point);
@@ -188,7 +185,7 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 		errorZ = dy * 0.5f;
 
 		// Stepping the y coordinate along.
-		while (y != endY)
+		while (y != end.y)
 		{
 			DirectX::SimpleMath::Vector3 point(x, y, z);
 			result.push_back(point);

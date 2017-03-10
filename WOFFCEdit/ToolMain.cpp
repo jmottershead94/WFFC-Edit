@@ -255,12 +255,12 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.right = false;
 	// Y axis movement.
-	if (m_keyArray['Z'])
+	if (m_keyArray['Q'])
 	{
 		m_toolInputCommands.up = true;
 	}
 	else m_toolInputCommands.up = false;
-	if (m_keyArray['X'])
+	if (m_keyArray['E'])
 	{
 		m_toolInputCommands.down = true;
 	}

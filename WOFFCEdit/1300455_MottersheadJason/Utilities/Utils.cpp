@@ -110,7 +110,7 @@ DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWorld(DirectX::Simp
 	cursorPosition.y = (cursorPosition.y / halfHeight) - 1.0f;
 
 	DirectX::SimpleMath::Matrix position3D;
-	position3D = position3D.CreateTranslation(camPosition.x - (cursorPosition.x * halfWidth), camPosition.y - (cursorPosition.y * halfHeight), camPosition.z);
+	position3D = position3D.CreateTranslation(camPosition.x - (cursorPosition.x * (1.0f / halfWidth)), camPosition.y - (cursorPosition.y * (1.0f / halfHeight)) - halfHeight, camPosition.z);
 	
 	dir = worldMatrix * position3D;
 	return dir.Translation();

@@ -20,6 +20,40 @@ Maths::~Maths()
 {}
 
 /*
+ * Calculates the distance between two points.
+ * @param start the first point we are calculating from.
+ * @param end the second point we are calculating to.
+ * @return float the distance between the two given points.
+ */
+float Maths::Distance(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end)
+{
+	float result = 0.0f;
+	float x = (end.x - start.x) * (end.x - start.x);
+	float y = (end.y - start.y) * (end.y - start.y);
+	float z = (end.z - start.z) * (end.z - start.z);
+
+	// Calculate the square root of x^2 + y^2 + z^2 for the distance.
+	result = std::sqrt(x + y + z);
+
+	return result;
+}
+
+/*
+ * Checks to see if a given point is on a line between two given points.
+ * @param start the first point we are calculating from.
+ * @param end the second point we are calculating to.
+ * @param currentPoint the point we want to check and see if it is on the line.
+ * @return bool if the current point is on the line.
+ */
+bool Maths::IsPointBetween(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end, DirectX::SimpleMath::Vector3 currentPoint)
+{
+	if (Distance(start, currentPoint) + Distance(end, currentPoint) == Distance(start, end))
+		return true;
+
+	return false;
+}
+
+/*
  * Get the absolute value of a number.
  * @param the value to return an absolute value of.
  * @return float the absolute value itself.

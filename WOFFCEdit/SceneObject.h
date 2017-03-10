@@ -2,7 +2,6 @@
 
 #include <string>
 
-
 //This object should accurately and totally reflect the information stored in the object table
 
 

@@ -1,7 +1,5 @@
 #include "SceneObject.h"
 
-
-
 SceneObject::SceneObject()
 {
 	ID = 0;
@@ -41,7 +39,5 @@ SceneObject::SceneObject()
 	int parent_id =0;
 }
 
-
 SceneObject::~SceneObject()
-{
-}
+{}

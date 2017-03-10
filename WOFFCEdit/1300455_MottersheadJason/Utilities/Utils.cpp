@@ -21,9 +21,10 @@ Utils::~Utils()
  * Initializes this instance.
  * @param hwnd the handle to the current window.
  */
-void Utils::Initialize(HWND hwnd)
+void Utils::Initialize(HWND hwnd, const float mapSize)
 {
-	_hwnd = hwnd;
+	instance->_hwnd = hwnd;
+	instance->_mapSize = mapSize;
 }
 
 /*
@@ -37,10 +38,9 @@ HWND const Utils::GetWindow()
 
 /*
  * Provides access to the cursor position in the current window instance.
- * @param hwnd the current handle to the window.
  * @return Vector3 the position of the cursor on screen.
  */
-DirectX::SimpleMath::Vector3 Utils::GetCursorPositionInWindow()
+DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWindow()
 {
 	DirectX::SimpleMath::Vector3 cursorPosition;
 	POINT p;
@@ -60,4 +60,53 @@ DirectX::SimpleMath::Vector3 Utils::GetCursorPositionInWindow()
 	}
 
 	return cursorPosition;
+}
+
+/*
+ * Provides access to the cursor position in the game world.
+ * @return Vector3 the position of the cursor in the game.
+ */
+DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Matrix projectionMatrix, DirectX::SimpleMath::Vector3 camPosition)
+{
+	DirectX::SimpleMath::Vector3 cursorPosition(GetCursorPositionInWindow());
+	DirectX::SimpleMath::Matrix cursorMatrix;
+	cursorMatrix.CreateTranslation(cursorPosition);
+
+	DirectX::SimpleMath::Matrix camMatrix;
+	camMatrix.Translation(camPosition);
+
+	//mousePosition.x /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
+	//mousePosition.y /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
+	//mousePosition.x *= 512.0f;
+	//mousePosition.y *= 512.0f;
+	//mousePosition.x += m_camPosition.x;
+	//mousePosition.y += m_camPosition.y;
+	//mousePosition.z += m_camPosition.z;
+
+	/*cursorPosition.x /= instance->_mapSize;
+	cursorPosition.y /= instance->_mapSize;
+	cursorPosition.x *= 512.0f;
+	cursorPosition.y *= 512.0f;
+	cursorPosition.x = cameraPosition.x;
+	cursorPosition.x += cameraPosition.x;
+	cursorPosition.y += cameraPosition.y;
+	cursorPosition.z += cameraPosition.z;*/
+
+	//1024, 768
+	
+	DirectX::SimpleMath::Matrix mat;
+	mat = worldMatrix * projectionMatrix.Invert();
+
+	DirectX::SimpleMath::Matrix dir;
+	DirectX::SimpleMath::Matrix screenCoordinates;
+	DirectX::SimpleMath::Vector3 screenPosition(cursorPosition.x, cursorPosition.y, 1.0f);
+	screenCoordinates = screenCoordinates.CreateTranslation(screenPosition);
+	//DirectX::SimpleMath::Vector3 cameraPosition(camPosition.x, camPosition.y, 1.0f);
+	//screenCoordinates = screenCoordinates.CreateTranslation(cameraPosition);
+
+	dir = mat.Transpose() * screenCoordinates;
+	dir /= mat.m[3][0] + mat.m[3][1] + mat.m[3][2] + mat.m[3][3];
+	dir -= (camMatrix - cursorMatrix);
+
+	return dir.Translation();
 }

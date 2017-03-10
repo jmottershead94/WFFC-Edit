@@ -16,14 +16,14 @@ ToolMain::ToolMain()
 	m_toolInputCommands.back		= false;
 	m_toolInputCommands.left		= false;
 	m_toolInputCommands.right		= false;
+	m_toolInputCommands.up			= false;
+	m_toolInputCommands.down		= false;
 }
-
 
 ToolMain::~ToolMain()
 {
 	sqlite3_close(m_databaseConnection);		//close the database connection
 }
-
 
 int ToolMain::getCurrentSelectionID()
 {
@@ -38,7 +38,7 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	m_height	= height;
 	m_d3dRenderer.GetDefaultSize(m_width, m_height);
 	m_d3dRenderer.Initialize(handle, m_width, m_height);
-	_utilities.Initialize(handle);
+	Utils::Initialize(handle, (128.0f * 128.0f));
 
 	//database connection establish
 	int rc;
@@ -252,6 +252,17 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.right = true;
 	}
 	else m_toolInputCommands.right = false;
+	// Y axis movement.
+	if (m_keyArray['Z'])
+	{
+		m_toolInputCommands.up = true;
+	}
+	else m_toolInputCommands.up = false;
+	if (m_keyArray['X'])
+	{
+		m_toolInputCommands.down = true;
+	}
+	else m_toolInputCommands.down = false;
 	//rotation
 	if (m_keyArray['E'])
 	{
@@ -263,6 +274,6 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.rotLeft = true;
 	}
 	else m_toolInputCommands.rotLeft = false;
-
+	
 	//WASD
 }

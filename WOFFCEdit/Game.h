@@ -82,6 +82,7 @@ private:
 	DirectX::SimpleMath::Vector3		m_camLookAt;
 	DirectX::SimpleMath::Vector3		m_camLookDirection;
 	DirectX::SimpleMath::Vector3		m_camRight;
+	DirectX::SimpleMath::Vector3		m_camUp;
 	float m_camRotRate;
 
 	//control variables
@@ -131,7 +132,6 @@ private:
     DirectX::SimpleMath::Matrix                                             m_projection;
 
 	// Jason's Added Variables.
-	HWND _hwnd;
 
 };
 

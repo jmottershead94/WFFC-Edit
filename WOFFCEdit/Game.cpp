@@ -49,6 +49,10 @@ Game::Game()
 	m_camRight.y = 0.0f;
 	m_camRight.z = 0.0f;
 
+	m_camUp.x = 0.0f;
+	m_camUp.y = 0.0f;
+	m_camUp.z = 0.0f;
+
 	m_camOrientation.x = 0.0f;
 	m_camOrientation.y = 0.0f;
 	m_camOrientation.z = 0.0f;
@@ -83,8 +87,6 @@ void Game::Initialize(HWND window, int width, int height)
 
     m_deviceResources->CreateWindowSizeDependentResources();
     CreateWindowSizeDependentResources();
-
-	_hwnd = window;
 
 #ifdef DXTK_AUDIO
     // Create DirectXTK for Audio objects
@@ -163,6 +165,7 @@ void Game::Update(DX::StepTimer const& timer)
 
 	//create right vector from look Direction
 	m_camLookDirection.Cross(Vector3::UnitY, m_camRight);
+	m_camLookDirection.Cross(Vector3::UnitX, m_camUp);
 
 	//process input and update stuff
 	if (m_InputCommands.forward)
@@ -181,6 +184,14 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		m_camPosition -= m_camRight*m_movespeed;
 	}
+	if (m_InputCommands.up)
+	{
+		m_camPosition += m_camUp*m_movespeed;
+	}
+	if (m_InputCommands.down)
+	{
+		m_camPosition -= m_camUp*m_movespeed;
+	}
 
 	//update lookat point
 	m_camLookAt = m_camPosition + m_camLookDirection;
@@ -192,6 +203,15 @@ void Game::Update(DX::StepTimer const& timer)
     m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_view);
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
+
+	if (!m_displayList.empty())
+	{
+		for (size_t i = 0; i < m_displayList.size(); ++i)
+		{
+			DisplayObject displayObject = m_displayList[i];
+			displayObject.Update(m_camLookDirection);
+		}
+	}
 
 #ifdef DXTK_AUDIO
     m_audioTimerAcc -= (float)timer.GetElapsedSeconds();
@@ -247,11 +267,40 @@ void Game::Render()
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
-	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWindow());
+	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_projection, m_camPosition));
+	//DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWindow());
+	/*mousePosition.x /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
+	mousePosition.y /= (TERRAINRESOLUTION * TERRAINRESOLUTION);
+	mousePosition.x *= 512.0f;
+	mousePosition.y *= 512.0f;
+	mousePosition.x += m_camPosition.x;
+	mousePosition.y += m_camPosition.y;
+	mousePosition.z += m_camPosition.z;*/
 
 	//std::wstring var = L"Cam X: " + std::to_wstring(m_camPosition.x) + L"Cam Z: " + std::to_wstring(m_camPosition.z);
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
 	m_font->DrawString(m_sprites.get(), var.c_str() , XMFLOAT2(100, 10), Colors::Yellow);
+
+	//if (GetKeyState(VK_LBUTTON) < 0)
+	//{
+	//	std::wstring clicked = L"Left Click";
+	//	m_font->DrawString(m_sprites.get(), clicked.c_str(), XMFLOAT2(100, 50), Colors::Red);
+	//}
+
+	if (!m_displayList.empty())
+	{
+		for (size_t i = 0; i < m_displayList.size(); ++i)
+		{
+			DisplayObject displayObject = m_displayList[i];
+
+			if (displayObject.InFocus())
+			{
+				std::wstring clicky = L"Clicked ON!" + std::to_wstring(displayObject.m_ID);
+				m_font->DrawString(m_sprites.get(), clicky.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
+			}
+		}
+	}
+
 	m_sprites->End();
 
 	//RENDER OBJECTS FROM SCENEGRAPH
@@ -565,6 +614,7 @@ void Game::CreateWindowSizeDependentResources()
 
     m_batchEffect->SetProjection(m_projection);
 	
+
 }
 
 void Game::OnDeviceLost()

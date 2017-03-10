@@ -32,7 +32,7 @@ BOOL MFCMain::InitInstance()
 	m_frame->m_DirXView.GetWindowRect(&WindowRECT);
 	m_width = WindowRECT.Width();
 	m_height = WindowRECT.Height();
-
+	
 	m_frame->ShowWindow(SW_SHOW);
 	m_frame->UpdateWindow();
 

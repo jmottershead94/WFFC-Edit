@@ -20,6 +20,7 @@ ToolMain::ToolMain()
 	m_toolInputCommands.down		= false;
 	
 	m_toolInputCommands.generateTerrain = false;
+	m_toolInputCommands.resetText = false;
 }
 
 ToolMain::~ToolMain()
@@ -292,4 +293,9 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.generateTerrain = true;
 	}
 	else m_toolInputCommands.generateTerrain = false;
+	if (m_keyArray['T'])
+	{
+		m_toolInputCommands.resetText = true;
+	}
+	else m_toolInputCommands.resetText = false;
 }

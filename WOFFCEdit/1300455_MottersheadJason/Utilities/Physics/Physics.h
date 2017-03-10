@@ -2,6 +2,9 @@
 
 #include "../Maths/Maths.h"
 
+/*
+ * Provides access to common physics functionality.
+ */
 class Physics
 {
 	friend class ToolMain;
@@ -10,17 +13,16 @@ class Physics
 		Physics();
 
 	public:
+		/*
+		 * A struct of data for an axis aligned bounding box.
+		 */
 		struct AABB
 		{
-			DirectX::SimpleMath::Vector3 left;
-			DirectX::SimpleMath::Vector3 right;
-			DirectX::SimpleMath::Vector3 top;
-			DirectX::SimpleMath::Vector3 bottom;
-			DirectX::SimpleMath::Vector3 front;
-			DirectX::SimpleMath::Vector3 back;
+			DirectX::SimpleMath::Vector3 vecMax;
+			DirectX::SimpleMath::Vector3 vecMin;
 		};
 
 		~Physics();
 		static bool PointToAABB(const AABB& box, DirectX::SimpleMath::Vector3& point);
-		static bool Ray(DirectX::SimpleMath::Vector3& start, DirectX::SimpleMath::Vector3& end, const AABB& box, bool returnFirstHit);
+		static bool Ray(DirectX::SimpleMath::Vector3& start, DirectX::SimpleMath::Vector3& end, const AABB& box, bool returnFirstHit = true);
 };

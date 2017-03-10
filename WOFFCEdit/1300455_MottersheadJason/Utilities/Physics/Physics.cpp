@@ -25,9 +25,16 @@ Physics::~Physics()
  */
 bool Physics::PointToAABB(const AABB& box, DirectX::SimpleMath::Vector3& point)
 {
-	if ((point.x > box.left.x && point.x < box.right.x)
+	/*if ((point.x > box.left.x && point.x < box.right.x)
 		&& (point.y > box.bottom.y && point.y < box.top.y)
 		&& (point.z > box.back.z && point.z < box.front.z))
+	{
+		return true;
+	}*/
+
+	if ((point.x > box.vecMin.x && point.x <= box.vecMax.x) &&
+		(point.y > box.vecMin.y && point.y <= box.vecMax.y) &&
+		(point.z > box.vecMin.z && point.z <= box.vecMax.z))
 	{
 		return true;
 	}
@@ -47,17 +54,28 @@ bool Physics::Ray(DirectX::SimpleMath::Vector3& start, DirectX::SimpleMath::Vect
 {
 	std::vector<DirectX::SimpleMath::Vector3> points = Maths::BresenhamsLine(start, end);
 
+	// No points to test!
 	if (points.size() <= 0)
 		return false;
 
+	bool result = true;
+
+	// Loop through each of the points and compare them to the AABB.
 	for (size_t i = 0; i < points.size(); ++i)
 	{
 		if (Physics::PointToAABB(box, points[i]))
 		{
-			if(returnFirstHit)
+			result &= true;
+
+			if (returnFirstHit)
 				return true;
 		}
+		else
+			result &= false;
 	}
+
+	if (returnFirstHit && result)
+		return true;
 
 	return false;
 }

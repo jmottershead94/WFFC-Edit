@@ -194,6 +194,11 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		m_camPosition -= m_camUp*m_movespeed;
 	}
+	if (m_InputCommands.resetText)
+	{
+		_testingFocus = false;
+		_secondTest = false;
+	}
 
 	//update lookat point
 	m_camLookAt = m_camPosition + m_camLookDirection;
@@ -216,7 +221,17 @@ void Game::Update(DX::StepTimer const& timer)
 			for (size_t i = 0; i < m_displayList.size(); ++i)
 			{
 				DisplayObject displayObject = m_displayList[i];
-				displayObject.Update(m_world, m_camPosition, m_camLookDirection);
+
+				if (displayObject.ClickedOn(m_world, m_camPosition, m_camLookDirection))
+				{
+					if (_testingFocus)
+						_secondTest = true;
+
+					_testingFocus = true;
+					break;
+				}
+				
+				//displayObject.Update(m_world, m_camPosition, m_camLookDirection);
 			}
 		}
 	}
@@ -281,22 +296,17 @@ void Game::Render()
 	//std::wstring var = L"Cam X: " + std::to_wstring(m_camPosition.x) + L"Cam Z: " + std::to_wstring(m_camPosition.z);
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
 	m_font->DrawString(m_sprites.get(), var.c_str() , XMFLOAT2(100, 10), Colors::Yellow);
-	
-	if (!m_displayList.empty())
+
+	if (_testingFocus)
 	{
-		for (size_t i = 0; i < m_displayList.size(); ++i)
-		{
-			DisplayObject displayObject = m_displayList[i];
+		std::wstring tranquility = L"Experience tranquility...";
+		m_font->DrawString(m_sprites.get(), tranquility.c_str(), XMFLOAT2(100, 70), Colors::Chocolate);
+	}
 
-			if (displayObject.InFocus())
-			{
-				std::wstring clicky = L"Clicked ON!" + std::to_wstring(displayObject.m_ID);
-				m_font->DrawString(m_sprites.get(), clicky.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
-			}
-
-			std::wstring focusString = L"Focus = " + std::to_wstring(displayObject.InFocus());
-			m_font->DrawString(m_sprites.get(), focusString.c_str(), XMFLOAT2(100, 70), Colors::Yellow);
-		}
+	if (_secondTest)
+	{
+		std::wstring clickyText = L"Clicky works...";
+		m_font->DrawString(m_sprites.get(), clickyText.c_str(), XMFLOAT2(100, 90), Colors::Lavender);
 	}
 
 	m_sprites->End();

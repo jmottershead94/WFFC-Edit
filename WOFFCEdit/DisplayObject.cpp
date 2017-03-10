@@ -21,30 +21,28 @@ DisplayObject::~DisplayObject()
 //	delete m_texture_diffuse;
 }
 
+/*
+ * Adds a collider to this object.
+ */
 void DisplayObject::AddCollider()
 {
 	_position.x = m_position.x;
 	_position.y = m_position.y;
 	_position.z = m_position.z;
 
-	DirectX::SimpleMath::Vector3 objectLeft(_position.x - m_scale.x, _position.y, _position.z);
-	DirectX::SimpleMath::Vector3 objectRight(_position.x + m_scale.x, _position.y, _position.z);
-	DirectX::SimpleMath::Vector3 objectUp(_position.x, _position.y + m_scale.y, _position.z);
-	DirectX::SimpleMath::Vector3 objectDown(_position.x, _position.y - m_scale.y, _position.z);
-	DirectX::SimpleMath::Vector3 objectFront(_position.x, _position.y, _position.z + m_scale.z);
-	DirectX::SimpleMath::Vector3 objectBack(_position.x, _position.y, _position.z - m_scale.z);
+	// Setting up the maximum and minimum positions for the collider.	
+	DirectX::SimpleMath::Vector3 objectMax(_position.x + m_scale.x, _position.y + m_scale.y, _position.z + m_scale.z);
+	DirectX::SimpleMath::Vector3 objectMin(_position.x - m_scale.x, _position.y - m_scale.y, _position.z - m_scale.z);
 
-	// Setting up the AABB collider for the display object.
-	_aabb.back = objectBack;
-	_aabb.front = objectFront;
-	_aabb.top = objectUp;
-	_aabb.bottom = objectDown;
-	_aabb.left = objectLeft;
-	_aabb.right = objectRight;
+	// Setting up the AABB for this display object.
+	_aabb.vecMax = objectMax;
+	_aabb.vecMin = objectMin;
 }
 
 /*
  * Provides a way to check if this scene object has been clicked on.
+ * @param worldMatrix used to help calculate the cursor position in the world.
+ * @param camPosition used to help determine the cursor position in the world.
  * @param camForward the direction the camera is looking.
  * @return bool if this object has been clicked on.
  */
@@ -54,37 +52,26 @@ bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX:
 	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
 	DirectX::SimpleMath::Vector3 roundedStart(Maths::RoundVector3(start));
 
+	// Setup the rounded ending distance for the ray.
 	DirectX::SimpleMath::Vector3 end(start.x, start.y, start.z);
-	end.z *= rayDistance;
 	end = end.Cross(camForward);
+	end.z *= rayDistance;
 	DirectX::SimpleMath::Vector3 roundedEnd(Maths::RoundVector3(end));
 
-	/*std::vector<DirectX::SimpleMath::Vector3> points = Maths::BresenhamsLine(roundedStart, roundedEnd);
+	bool rayHit = Physics::Ray(roundedStart, roundedEnd, _aabb, true);
 
-	if (points.size() <= 0)
-		return false;
+	// Cast a ray from the cursor to this object and see if it hits.
+	if (rayHit)
+		_inFocus = true;
 
-	bool objectFocus = false;
-	
-	for (size_t i = 0; i < points.size(); ++i)
-	{
-		if (Physics::PointToAABB(_aabb, points[i]))
-		{
-			objectFocus = true;
-			break;
-		}
-	}*/
-
-	bool objectFocus = Physics::Ray(roundedStart, roundedEnd, _aabb, true);
-
-	return objectFocus;
+	return rayHit;
 }
 
-/*
- * Called every frame.
- * @param camForward the direction the camera is looking.
- */
-void DisplayObject::Update(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
-{
-	ClickedOn(worldMatrix, camPosition, camForward);
-}
+///*
+// * Called every frame.
+// * @param camForward the direction the camera is looking.
+// */
+//void DisplayObject::Update(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
+//{
+//	ClickedOn(worldMatrix, camPosition, camForward);
+//}

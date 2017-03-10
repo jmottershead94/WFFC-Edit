@@ -132,7 +132,8 @@ private:
     DirectX::SimpleMath::Matrix                                             m_projection;
 
 	// Jason's Added Variables.
-	bool triggered = false;
+	bool _testingFocus = false;
+	bool _secondTest = false;
 };
 
 std::wstring StringToWCHART(std::string s);

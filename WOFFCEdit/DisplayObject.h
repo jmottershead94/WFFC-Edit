@@ -19,7 +19,8 @@ class DisplayObject
 		bool									m_render;
 
 		void AddCollider();
-		void Update(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
+		//void Update(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
+		bool ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
 
 		/*
 		* Allows us to set this object being in focus.
@@ -38,6 +39,6 @@ class DisplayObject
 		DirectX::SimpleMath::Vector3 _position;
 		Physics::AABB _aabb;
 
-		bool ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
+		
 };
 

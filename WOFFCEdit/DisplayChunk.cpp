@@ -185,7 +185,9 @@ void DisplayChunk::GenerateHeightmap()
 	
 	// Random terrain.
 	for (size_t i = 0; i < TERRAINRESOLUTION * TERRAINRESOLUTION; ++i)
-		m_heightMap[i] = rand() % i;
+		m_heightMap[i] = rand() % 50;
+
+	UpdateTerrain();
 }
 
 void DisplayChunk::CalculateTerrainNormals()

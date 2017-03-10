@@ -10,4 +10,5 @@ struct InputCommands
 	bool down;
 	bool rotRight;
 	bool rotLeft;
+	bool generateTerrain;
 };

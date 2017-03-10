@@ -204,6 +204,11 @@ void Game::Update(DX::StepTimer const& timer)
 	m_displayChunk.m_terrainEffect->SetView(m_view);
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
 
+	if (m_InputCommands.generateTerrain)
+	{
+		m_displayChunk.GenerateHeightmap();
+	}
+
 	if (!m_displayList.empty())
 	{
 		for (size_t i = 0; i < m_displayList.size(); ++i)

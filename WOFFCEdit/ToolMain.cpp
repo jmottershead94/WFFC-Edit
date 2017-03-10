@@ -18,6 +18,9 @@ ToolMain::ToolMain()
 	m_toolInputCommands.right		= false;
 	m_toolInputCommands.up			= false;
 	m_toolInputCommands.down		= false;
+
+
+	m_toolInputCommands.generateTerrain = false;
 }
 
 ToolMain::~ToolMain()
@@ -274,6 +277,10 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.rotLeft = true;
 	}
 	else m_toolInputCommands.rotLeft = false;
-	
-	//WASD
+	// Generating Terrain.
+	if (m_keyArray['G'])
+	{
+		m_toolInputCommands.generateTerrain = true;
+	}
+	else m_toolInputCommands.generateTerrain = false;
 }

@@ -59,6 +59,8 @@
     <ClCompile Include="SelectDialogue.cpp">
       <Filter>MFC</Filter>
     </ClCompile>
+    <ClCompile Include="1300455_MottersheadJason\Utilities\Maths\Maths.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Utilities\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -108,6 +110,8 @@
     <ClInclude Include="SelectDialogue.h">
       <Filter>MFC</Filter>
     </ClInclude>
+    <ClInclude Include="1300455_MottersheadJason\Utilities\Maths\Maths.h" />
+    <ClInclude Include="1300455_MottersheadJason\Utilities\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

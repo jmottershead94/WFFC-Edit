@@ -171,6 +171,7 @@
     <ClCompile Include="DisplayObject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Utilities\Maths\Maths.cpp" />
     <ClCompile Include="MFCFrame.cpp" />
     <ClCompile Include="MFCRenderFrame.cpp" />
     <ClCompile Include="pch.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="SelectDialogue.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="ToolMain.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Utilities\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChunkObject.h" />
@@ -187,6 +189,7 @@
     <ClInclude Include="DisplayObject.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputCommands.h" />
+    <ClInclude Include="1300455_MottersheadJason\Utilities\Maths\Maths.h" />
     <ClInclude Include="MFCFrame.h" />
     <ClInclude Include="MFCRenderFrame.h" />
     <ClInclude Include="pch.h" />
@@ -198,6 +201,7 @@
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="MFCMain.h" />
     <ClInclude Include="ToolMain.h" />
+    <ClInclude Include="1300455_MottersheadJason\Utilities\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="database\data\Scene1.fbx">

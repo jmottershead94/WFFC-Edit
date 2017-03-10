@@ -8,6 +8,8 @@
 #include "InputCommands.h"
 #include <vector>
 
+// Added header files.
+#include "1300455_MottersheadJason/Utilities/Maths/Maths.h"
 
 class ToolMain
 {
@@ -48,5 +50,6 @@ private:	//variables
 	int m_currentChunk;			//the current chunk of thedatabase that we are operating on.  Dictates loading and saving. 
 	int m_selectedObject;
 
-	
+	// Jason's Added Variables.
+	Maths _maths;
 };

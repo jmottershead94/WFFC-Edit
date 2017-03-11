@@ -61,7 +61,8 @@
     </ClCompile>
     <ClCompile Include="1300455_MottersheadJason\Utilities\Maths\Maths.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Utilities\Utils.cpp" />
-    <ClCompile Include="1300455_MottersheadJason\Utilities\Physics\Physics.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Physics\AABBCollider.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Physics\Raycast.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -113,7 +114,9 @@
     </ClInclude>
     <ClInclude Include="1300455_MottersheadJason\Utilities\Maths\Maths.h" />
     <ClInclude Include="1300455_MottersheadJason\Utilities\Utils.h" />
-    <ClInclude Include="1300455_MottersheadJason\Utilities\Physics\Physics.h" />
+    <ClInclude Include="1300455_MottersheadJason\Physics\Collider.h" />
+    <ClInclude Include="1300455_MottersheadJason\Physics\AABBCollider.h" />
+    <ClInclude Include="1300455_MottersheadJason\Physics\Raycast.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
-#include "1300455_MottersheadJason/Utilities/Physics/Physics.h"
+#include "1300455_MottersheadJason/Physics/AABBCollider.h"
+#include "1300455_MottersheadJason/Physics/Raycast.h"
 
 class DisplayObject
 {
@@ -10,7 +11,6 @@ class DisplayObject
 
 		std::shared_ptr<DirectX::Model>						m_model;							//main Mesh
 		ID3D11ShaderResourceView *							m_texture_diffuse;					//diffuse texture
-
 
 		int m_ID;
 		DirectX::SimpleMath::Vector3			m_position;
@@ -46,9 +46,7 @@ class DisplayObject
 
 	private:
 		bool _inFocus = false;
-		DirectX::SimpleMath::Vector3 _position;
-		Physics::AABB _aabb;
-
-		
+		Collider* _collider;
+		Raycast _ray;
 };
 

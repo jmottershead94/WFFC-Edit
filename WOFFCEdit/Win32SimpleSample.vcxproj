@@ -165,6 +165,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="1300455_MottersheadJason\Physics\AABBCollider.cpp" />
     <ClCompile Include="ChunkObject.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DisplayChunk.cpp" />
@@ -176,7 +177,7 @@
     <ClCompile Include="MFCRenderFrame.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="MFCMain.cpp" />
-    <ClCompile Include="1300455_MottersheadJason\Utilities\Physics\Physics.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Physics\Raycast.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="SelectDialogue.cpp" />
     <ClCompile Include="sqlite3.c" />
@@ -184,7 +185,9 @@
     <ClCompile Include="1300455_MottersheadJason\Utilities\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="1300455_MottersheadJason\Physics\AABBCollider.h" />
     <ClInclude Include="ChunkObject.h" />
+    <ClInclude Include="1300455_MottersheadJason\Physics\Collider.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DisplayChunk.h" />
     <ClInclude Include="DisplayObject.h" />
@@ -194,7 +197,7 @@
     <ClInclude Include="MFCFrame.h" />
     <ClInclude Include="MFCRenderFrame.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="1300455_MottersheadJason\Utilities\Physics\Physics.h" />
+    <ClInclude Include="1300455_MottersheadJason\Physics\Raycast.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="SelectDialogue.h" />

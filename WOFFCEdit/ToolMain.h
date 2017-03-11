@@ -50,5 +50,4 @@ private:	//variables
 	// Jason's Added Variables.
 	Utils _utilities;
 	Maths _maths;
-	Physics _physics;
 };

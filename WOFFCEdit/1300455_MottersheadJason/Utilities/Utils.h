@@ -22,7 +22,7 @@ class Utils
 		/*
 		 * Constructs this instance.
 		 */
-		Utils();
+		explicit Utils();
 		
 	public:
 		/*

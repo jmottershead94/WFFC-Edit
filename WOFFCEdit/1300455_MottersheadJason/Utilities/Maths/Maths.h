@@ -14,7 +14,7 @@ class Maths
 		/*
 		 * Constructs this instance.
 		 */
-		Maths();
+		explicit Maths();
 
 	public:
 		const float PI;

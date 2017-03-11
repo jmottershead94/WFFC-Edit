@@ -5,7 +5,8 @@ std::unique_ptr<Maths> instance = nullptr;
 /*
  * Constructs this instance.
  */
-Maths::Maths()
+Maths::Maths() :
+	PI(3.1415f)
 {
 	if (instance == nullptr)
 		instance = std::make_unique<Maths>(*this);
@@ -52,11 +53,35 @@ bool Maths::IsPointBetween(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMa
 }
 
 /*
+ * Converts any radian value to degrees.
+ * @param radians the radian value to convert to degrees.
+ * @return float the value in degrees.
+ */
+float Maths::RadiansToDegrees(const float radians)
+{
+	float degrees = 0.0f;
+	degrees = radians * (180.0f / instance->PI);
+	return degrees;
+}
+
+/*
  * Get the absolute value of a number.
- * @param the value to return an absolute value of.
+ * @param degrees the degree value to convert to radians.
  * @return float the absolute value itself.
  */
-float Maths::Abs(float value)
+float Maths::DegreesToRadians(const float degrees)
+{
+	float radians = 0.0f;
+	radians = degrees * (instance->PI / 180.0f);
+	return radians;
+}
+
+/*
+ * Get the absolute value of a number.
+ * @param value the value to return an absolute value of.
+ * @return float the absolute value itself.
+ */
+float Maths::Abs(const float value)
 {
 	float absolute = value;
 
@@ -68,10 +93,10 @@ float Maths::Abs(float value)
 
 /*
  * Provides access to rounded floating point values.
- * @param the value to return as rounded.
+ * @param value the value to return as rounded.
  * @return float the rounded float value.
  */
-float Maths::RoundFloat(float value)
+float Maths::RoundFloat(const float value)
 {
 	float rounded = static_cast<int>(value);
 	return rounded;
@@ -110,6 +135,7 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 
 	float xStep = 1.0f, yStep = 1.0f, zStep = 1.0f;
 	float errorX = 1.0f, errorY = 1.0f, errorZ = 1.0f;
+	//float marginOfError = 0.01f;
 
 	// If any of the start points are greater than the end points, reverse their respective steps.
 	if (start.x > end.x)

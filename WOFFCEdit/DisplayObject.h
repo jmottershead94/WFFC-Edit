@@ -19,7 +19,6 @@ class DisplayObject
 		bool									m_render;
 
 		void AddCollider();
-		//void Update(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
 		bool ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
 
 		/*

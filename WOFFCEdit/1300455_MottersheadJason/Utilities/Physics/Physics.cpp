@@ -74,8 +74,5 @@ bool Physics::Ray(DirectX::SimpleMath::Vector3& start, DirectX::SimpleMath::Vect
 			result &= false;
 	}
 
-	if (returnFirstHit && result)
-		return true;
-
 	return false;
 }

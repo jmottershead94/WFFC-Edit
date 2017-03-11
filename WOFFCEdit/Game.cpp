@@ -160,9 +160,9 @@ void Game::Update(DX::StepTimer const& timer)
 	}
 
 	//create look direction from Euler angles in m_camOrientation
-	m_camLookDirection.x = sin((m_camOrientation.y)*3.1415 / 180);
-	m_camLookDirection.y = tan((m_camOrientation.x)*3.1415 / 180);
-	m_camLookDirection.z = cos((m_camOrientation.y)*3.1415 / 180);
+	m_camLookDirection.x = sin(Maths::DegreesToRadians(m_camOrientation.y));
+	m_camLookDirection.y = tan(Maths::DegreesToRadians(m_camOrientation.x));
+	m_camLookDirection.z = cos(Maths::DegreesToRadians(m_camOrientation.y));
 	m_camLookDirection.Normalize();
 
 	//create right vector from look Direction
@@ -205,7 +205,7 @@ void Game::Update(DX::StepTimer const& timer)
 
 	//apply camera vectors
     m_view = Matrix::CreateLookAt(m_camPosition, m_camLookAt, Vector3::UnitY);
-
+	
     m_batchEffect->SetView(m_view);
     m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_view);
@@ -222,7 +222,7 @@ void Game::Update(DX::StepTimer const& timer)
 			{
 				DisplayObject displayObject = m_displayList[i];
 
-				if (displayObject.ClickedOn(m_world, m_camPosition, m_camLookDirection))
+				if (displayObject.ClickedOn(m_world, m_camPosition, m_camLookAt))
 				{
 					if (_testingFocus)
 						_secondTest = true;
@@ -230,7 +230,7 @@ void Game::Update(DX::StepTimer const& timer)
 					_testingFocus = true;
 					break;
 				}
-				
+
 				//displayObject.Update(m_world, m_camPosition, m_camLookDirection);
 			}
 		}

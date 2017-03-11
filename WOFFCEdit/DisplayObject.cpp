@@ -48,14 +48,16 @@ void DisplayObject::AddCollider()
  */
 bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
 {
-	float rayDistance = 3.0f;
+	//
+	// NOTE:	These coordinates are rounded because of the line algorithm requiring exact measurements for 
+	//			equalling to the end points. This could be improved upon be allowing a margin of error.
+	//
+
 	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
 	DirectX::SimpleMath::Vector3 roundedStart(Maths::RoundVector3(start));
 
 	// Setup the rounded ending distance for the ray.
-	DirectX::SimpleMath::Vector3 end(start.x, start.y, start.z);
-	end = end.Cross(camForward);
-	end.z *= rayDistance;
+	DirectX::SimpleMath::Vector3 end(start.x, start.y, camPosition.z);
 	DirectX::SimpleMath::Vector3 roundedEnd(Maths::RoundVector3(end));
 
 	bool rayHit = Physics::Ray(roundedStart, roundedEnd, _aabb, true);
@@ -66,12 +68,3 @@ bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX:
 
 	return rayHit;
 }
-
-///*
-// * Called every frame.
-// * @param camForward the direction the camera is looking.
-// */
-//void DisplayObject::Update(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
-//{
-//	ClickedOn(worldMatrix, camPosition, camForward);
-//}

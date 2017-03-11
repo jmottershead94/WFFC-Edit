@@ -41,5 +41,8 @@ public:
 	bool path_node_start;
 	bool path_node_end;
 	int parent_id;
+	bool editor_wireframe;
+	std::string name;
+
 };
 

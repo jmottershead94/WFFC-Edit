@@ -224,14 +224,10 @@ void Game::Update(DX::StepTimer const& timer)
 
 				if (displayObject.ClickedOn(m_world, m_camPosition, m_camLookAt))
 				{
-					if (_testingFocus)
-						_secondTest = true;
-
+					_testingClick = displayObject.m_position.x;
 					_testingFocus = true;
 					break;
 				}
-
-				//displayObject.Update(m_world, m_camPosition, m_camLookDirection);
 			}
 		}
 	}
@@ -293,20 +289,13 @@ void Game::Render()
 	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
 	//mousePosition = Maths::RoundVector3(mousePosition);
 
-	//std::wstring var = L"Cam X: " + std::to_wstring(m_camPosition.x) + L"Cam Z: " + std::to_wstring(m_camPosition.z);
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
 	m_font->DrawString(m_sprites.get(), var.c_str() , XMFLOAT2(100, 10), Colors::Yellow);
 
 	if (_testingFocus)
 	{
-		std::wstring tranquility = L"Experience tranquility...";
+		std::wstring tranquility = L"Experience tranquility with object X = " + std::to_wstring(_testingClick);
 		m_font->DrawString(m_sprites.get(), tranquility.c_str(), XMFLOAT2(100, 70), Colors::Chocolate);
-	}
-
-	if (_secondTest)
-	{
-		std::wstring clickyText = L"Clicky works...";
-		m_font->DrawString(m_sprites.get(), clickyText.c_str(), XMFLOAT2(100, 90), Colors::Lavender);
 	}
 
 	m_sprites->End();

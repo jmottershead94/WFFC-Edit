@@ -83,6 +83,8 @@ private:
 	DirectX::SimpleMath::Vector3		m_camLookDirection;
 	DirectX::SimpleMath::Vector3		m_camRight;
 	DirectX::SimpleMath::Vector3		m_camUp;
+	DirectX::SimpleMath::Vector3		m_camForward;
+
 	float m_camRotRate;
 
 	//control variables
@@ -134,6 +136,7 @@ private:
 	// Jason's Added Variables.
 	bool _testingFocus = false;
 	bool _secondTest = false;
+	float _testingClick = 0.0f;
 };
 
 std::wstring StringToWCHART(std::string s);

@@ -2,9 +2,6 @@
 
 std::unique_ptr<Maths> instance = nullptr;
 
-/*
- * Constructs this instance.
- */
 Maths::Maths() :
 	PI(3.1415f)
 {
@@ -12,18 +9,9 @@ Maths::Maths() :
 		instance = std::make_unique<Maths>(*this);
 }
 
-/*
- * Destructs this instance.
- */
 Maths::~Maths()
 {}
 
-/*
- * Calculates the distance between two points.
- * @param start the first point we are calculating from.
- * @param end the second point we are calculating to.
- * @return float the distance between the two given points.
- */
 float Maths::Distance(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end)
 {
 	float result = 0.0f;
@@ -37,26 +25,11 @@ float Maths::Distance(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::V
 	return result;
 }
 
-/*
- * Checks to see if a given point is on a line between two given points.
- * @param start the first point we are calculating from.
- * @param end the second point we are calculating to.
- * @param currentPoint the point we want to check and see if it is on the line.
- * @return bool if the current point is on the line.
- */
 bool Maths::IsPointBetween(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end, DirectX::SimpleMath::Vector3 currentPoint)
 {
-	if (Distance(start, currentPoint) + Distance(end, currentPoint) == Distance(start, end))
-		return true;
-
-	return false;
+	return (Distance(start, currentPoint) + Distance(end, currentPoint) == Distance(start, end));
 }
 
-/*
- * Converts any radian value to degrees.
- * @param radians the radian value to convert to degrees.
- * @return float the value in degrees.
- */
 float Maths::RadiansToDegrees(const float radians)
 {
 	float degrees = 0.0f;
@@ -64,11 +37,6 @@ float Maths::RadiansToDegrees(const float radians)
 	return degrees;
 }
 
-/*
- * Get the absolute value of a number.
- * @param degrees the degree value to convert to radians.
- * @return float the absolute value itself.
- */
 float Maths::DegreesToRadians(const float degrees)
 {
 	float radians = 0.0f;
@@ -76,11 +44,6 @@ float Maths::DegreesToRadians(const float degrees)
 	return radians;
 }
 
-/*
- * Get the absolute value of a number.
- * @param value the value to return an absolute value of.
- * @return float the absolute value itself.
- */
 float Maths::Abs(const float value)
 {
 	float absolute = value;
@@ -91,34 +54,18 @@ float Maths::Abs(const float value)
 	return absolute;
 }
 
-/*
- * Provides access to rounded floating point values.
- * @param value the value to return as rounded.
- * @return float the rounded float value.
- */
 float Maths::RoundFloat(const float value)
 {
 	float rounded = static_cast<int>(value);
 	return rounded;
 }
 
-/*
- * Provides quick access to a rounded off Vector3.
- * @param point the Vector3 to round off.
- * @return DirectX::SimpleMath::Vector3 the rounded Vector3.
- */
 DirectX::SimpleMath::Vector3 Maths::RoundVector3(DirectX::SimpleMath::Vector3& point)
 {
 	DirectX::SimpleMath::Vector3 roundedFloatValues(RoundFloat(point.x), RoundFloat(point.y), RoundFloat(point.z));
 	return roundedFloatValues;
 }
 
-/*
- * Determines the points on a line given a start and end point.
- * @param start the point to go from.
- * @param end the point to go to.
- * @return std::vector<DirectX::SimpleMath::Vector3> the data structure of points on the line.
- */
 std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end)
 {
 	std::vector<DirectX::SimpleMath::Vector3> result;

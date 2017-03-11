@@ -16,16 +16,45 @@ class Utils
 	friend class ToolMain;
 
 	private:
-		Utils();
 		HWND _hwnd;
-		float _mapSize;
 		int _width, _height;
-		DirectX::SimpleMath::Matrix _projectionMatrix;
 
+		/*
+		 * Constructs this instance.
+		 */
+		Utils();
+		
 	public:
+		/*
+		 * Destructs this instance.
+		 */
 		~Utils();
+
+		/*
+		 * Initializes this instance.
+		 * @param hwnd the handle to the current window.
+		 * @param width the width of the window used.
+		 * @param height the height of the window used.
+		 */
 		static void Initialize(HWND hwnd, int width, int height);
+
+		/*
+		 * Provides access to the window handle instance.
+		 * @return const HWND the current window.
+		 */
 		static HWND const GetWindow();
+
+		/*
+		 * Provides access to the cursor position in the current window instance.
+		 * @return const DirectX::SimpleMath::Vector3 the position of the cursor on screen.
+		 */
 		static DirectX::SimpleMath::Vector3 const GetCursorPositionInWindow();
+
+		/*
+		 * Provides access to the cursor position in the game world.
+		 * @param worldMatrix the world matrix from the game.
+		 * @param camPosition the position of the game camera.
+		 * @return const DirectX::SimpleMath::Vector3 the position of the cursor in the game.
+		 */
 		static DirectX::SimpleMath::Vector3 const GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Vector3 camPosition);
 };

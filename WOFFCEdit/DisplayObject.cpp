@@ -21,9 +21,6 @@ DisplayObject::~DisplayObject()
 //	delete m_texture_diffuse;
 }
 
-/*
- * Adds a collider to this object.
- */
 void DisplayObject::AddCollider()
 {
 	_position.x = m_position.x;
@@ -39,13 +36,6 @@ void DisplayObject::AddCollider()
 	_aabb.vecMin = objectMin;
 }
 
-/*
- * Provides a way to check if this object has been clicked on.
- * @param worldMatrix used to help calculate the cursor position in the world.
- * @param camPosition used to help determine the cursor position in the world.
- * @param camForward the direction the camera is looking.
- * @return bool if this object has been clicked on.
- */
 bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
 {
 	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));

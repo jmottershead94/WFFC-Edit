@@ -2,25 +2,15 @@
 
 std::unique_ptr<Utils> instance = nullptr;
 
-/*
- * Constructs this instance.
- */
 Utils::Utils()
 {
 	if (instance == nullptr)
 		instance = std::make_unique<Utils>(*this);
 }
 
-/*
- * Destructs this instance.
- */
 Utils::~Utils()
 {}
 
-/*
- * Initializes this instance.
- * @param hwnd the handle to the current window.
- */
 void Utils::Initialize(HWND hwnd, int width, int height)
 {
 	instance->_hwnd = hwnd;
@@ -28,19 +18,11 @@ void Utils::Initialize(HWND hwnd, int width, int height)
 	instance->_height = height;
 }
 
-/*
- * Provides access to the window handle instance.
- * @return const HWND the current window.
- */
 HWND const Utils::GetWindow()
 {
 	return instance->_hwnd;
 }
 
-/*
- * Provides access to the cursor position in the current window instance.
- * @return const Vector3 the position of the cursor on screen.
- */
 DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWindow()
 {
 	DirectX::SimpleMath::Vector3 cursorPosition;
@@ -63,12 +45,6 @@ DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWindow()
 	return cursorPosition;
 }
 
-/*
- * Provides access to the cursor position in the game world.
- * @param worldMatrix the world matrix from the game.
- * @param camPosition the position of the game camera.
- * @return const Vector3 the position of the cursor in the game.
- */
 DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Vector3 camPosition)
 {
 	// Converting cursor coordinates into a matrix for operations later on.

@@ -48,21 +48,10 @@ void DisplayObject::AddCollider()
  */
 bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
 {
-	//
-	// NOTE:	These coordinates are rounded because of the line algorithm requiring exact measurements for 
-	//			equalling to the end points. This could be improved upon be allowing a margin of error.
-	//
-
 	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
-	DirectX::SimpleMath::Vector3 roundedStart(start);
-	//DirectX::SimpleMath::Vector3 roundedStart(Maths::RoundVector3(start));
-
-	// Setup the rounded ending distance for the ray.
 	DirectX::SimpleMath::Vector3 end(start.x, start.y, camPosition.z);
-	DirectX::SimpleMath::Vector3 roundedEnd(end);
-	//DirectX::SimpleMath::Vector3 roundedEnd(Maths::RoundVector3(end));
 
-	bool rayHit = Physics::Ray(roundedStart, roundedEnd, _aabb, true);
+	bool rayHit = Physics::Ray(start, end, _aabb, true);
 
 	// Cast a ray from the cursor to this object and see if it hits.
 	if (rayHit)

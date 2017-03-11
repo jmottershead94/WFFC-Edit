@@ -40,7 +40,7 @@ void DisplayObject::AddCollider()
 }
 
 /*
- * Provides a way to check if this scene object has been clicked on.
+ * Provides a way to check if this object has been clicked on.
  * @param worldMatrix used to help calculate the cursor position in the world.
  * @param camPosition used to help determine the cursor position in the world.
  * @param camForward the direction the camera is looking.
@@ -54,11 +54,13 @@ bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX:
 	//
 
 	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
-	DirectX::SimpleMath::Vector3 roundedStart(Maths::RoundVector3(start));
+	DirectX::SimpleMath::Vector3 roundedStart(start);
+	//DirectX::SimpleMath::Vector3 roundedStart(Maths::RoundVector3(start));
 
 	// Setup the rounded ending distance for the ray.
 	DirectX::SimpleMath::Vector3 end(start.x, start.y, camPosition.z);
-	DirectX::SimpleMath::Vector3 roundedEnd(Maths::RoundVector3(end));
+	DirectX::SimpleMath::Vector3 roundedEnd(end);
+	//DirectX::SimpleMath::Vector3 roundedEnd(Maths::RoundVector3(end));
 
 	bool rayHit = Physics::Ray(roundedStart, roundedEnd, _aabb, true);
 

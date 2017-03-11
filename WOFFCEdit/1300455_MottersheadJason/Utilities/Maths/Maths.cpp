@@ -124,18 +124,18 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 	std::vector<DirectX::SimpleMath::Vector3> result;
 
 	// The current position values to use.
-	float x = RoundFloat(start.x);
-	float y = RoundFloat(start.y);
-	float z = RoundFloat(start.z);
+	float x = start.x;
+	float y = start.y;
+	float z = start.z;
 
 	// Calculating the difference in x, y and z.
-	float dx = RoundFloat(Abs(end.x - start.x));
-	float dy = RoundFloat(Abs(end.y - start.y));
-	float dz = RoundFloat(Abs(end.z - start.z));
+	float dx = Abs(end.x - start.x);
+	float dy = Abs(end.y - start.y);
+	float dz = Abs(end.z - start.z);
 
 	float xStep = 1.0f, yStep = 1.0f, zStep = 1.0f;
 	float errorX = 1.0f, errorY = 1.0f, errorZ = 1.0f;
-	//float marginOfError = 0.01f;
+	float marginOfError = 0.003f;
 
 	// If any of the start points are greater than the end points, reverse their respective steps.
 	if (start.x > end.x)
@@ -149,11 +149,11 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 
 	if (dz > dx && dz > dy)
 	{
-		errorX = RoundFloat(dz * 0.5f);
-		errorY = RoundFloat(dz * 0.5f);
+		errorX = dz * 0.5f;
+		errorY = dz * 0.5f;
 
 		// Stepping the z coordinate along.
-		while (z != end.z)
+		while(z < (end.z - marginOfError) && z > (end.z + marginOfError))
 		{
 			DirectX::SimpleMath::Vector3 point(x, y, z);
 			result.push_back(point);
@@ -182,7 +182,7 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 		errorY = dx * 0.5f;
 
 		// Stepping the x coordinate along.
-		while (x != end.x)
+		while (x < (end.x - marginOfError) && x > (end.x + marginOfError))
 		{
 			DirectX::SimpleMath::Vector3 point(x, y, z);
 			result.push_back(point);
@@ -211,7 +211,7 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 		errorZ = dy * 0.5f;
 
 		// Stepping the y coordinate along.
-		while (y != end.y)
+		while (y < (end.y - marginOfError) && y > (end.y + marginOfError))
 		{
 			DirectX::SimpleMath::Vector3 point(x, y, z);
 			result.push_back(point);

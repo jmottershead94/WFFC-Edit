@@ -31,19 +31,7 @@ void DisplayObject::AddCollider()
 	_collider->Update(m_position, m_orientation, m_scale);
 }
 
-bool DisplayObject::ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward)
+void DisplayObject::Update()
 {
-	// Make sure the collider is with this object.
 	_collider->Update(m_position, m_orientation, m_scale);
-
-	DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(worldMatrix, camPosition));
-	DirectX::SimpleMath::Vector3 end(start.x, start.y, camPosition.z);
-	
-	// Cast a ray from the cursor to this object and see if it hits.
-	bool rayHit = _ray.Hit(start, end, *_collider, true);
-
-	if (rayHit)
-		_inFocus = true;
-
-	return rayHit;
 }

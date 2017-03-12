@@ -150,18 +150,9 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		m_camOrientation.y += m_camRotRate;
 	}
-	if (m_InputCommands.rotUp)
-	{
-		m_camOrientation.x += m_camRotRate;
-	}
-	if (m_InputCommands.rotDown)
-	{
-		m_camOrientation.x -= m_camRotRate;
-	}
 
 	//create look direction from Euler angles in m_camOrientation
 	m_camLookDirection.x = sin(Maths::DegreesToRadians(m_camOrientation.y));
-	m_camLookDirection.y = tan(Maths::DegreesToRadians(m_camOrientation.x));
 	m_camLookDirection.z = cos(Maths::DegreesToRadians(m_camOrientation.y));
 	m_camLookDirection.Normalize();
 
@@ -211,26 +202,8 @@ void Game::Update(DX::StepTimer const& timer)
 	m_displayChunk.m_terrainEffect->SetView(m_view);
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
 
-	if (m_InputCommands.generateTerrain)
-		m_displayChunk.GenerateHeightmap();
-
-	if (GetKeyState(VK_LBUTTON) < 0)
-	{
-		if (!m_displayList.empty())
-		{
-			for (size_t i = 0; i < m_displayList.size(); ++i)
-			{
-				DisplayObject displayObject = m_displayList[i];
-
-				if (displayObject.ClickedOn(m_world, m_camPosition, m_camLookAt))
-				{
-					_testingClick = displayObject.m_position.x;
-					_testingFocus = true;
-					break;
-				}
-			}
-		}
-	}
+	SceneControls();
+	SceneUpdate();
 
 #ifdef DXTK_AUDIO
     m_audioTimerAcc -= (float)timer.GetElapsedSeconds();
@@ -287,11 +260,11 @@ void Game::Render()
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
 	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
-	//mousePosition = Maths::RoundVector3(mousePosition);
+	mousePosition = Maths::RoundVector3(mousePosition);
 
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
 	m_font->DrawString(m_sprites.get(), var.c_str() , XMFLOAT2(100, 10), Colors::Yellow);
-
+	
 	if (_testingFocus)
 	{
 		std::wstring tranquility = L"Experience tranquility with object X = " + std::to_wstring(_testingClick);
@@ -643,6 +616,49 @@ void Game::OnDeviceRestored()
     CreateWindowSizeDependentResources();
 }
 #pragma endregion
+
+void Game::SceneControls()
+{
+	if (m_InputCommands.generateTerrain)
+		m_displayChunk.GenerateHeightmap();
+
+	if (GetKeyState(VK_LBUTTON) < 0)
+	{
+		if (!m_displayList.empty())
+		{
+			for (size_t i = 0; i < m_displayList.size(); ++i)
+			{
+				DisplayObject displayObject = m_displayList[i];
+
+				DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
+				DirectX::SimpleMath::Vector3 end(m_camLookDirection);
+
+				// Cast a ray from the cursor to this object and see if it hits.
+				bool rayHit = _ray.Hit(Maths::RoundVector3(start), end, 10.0f, *displayObject.GetCollider(), true);
+
+				if (rayHit)
+				{
+					displayObject.SetFocus(!displayObject.InFocus());
+					_testingClick = displayObject.m_position.x;
+					_testingFocus = true;
+					break;
+				}
+			}
+		}
+	}
+}
+
+void Game::SceneUpdate()
+{
+	if (!m_displayList.empty())
+	{
+		for (size_t i = 0; i < m_displayList.size(); ++i)
+		{
+			DisplayObject displayObject = m_displayList[i];
+			displayObject.Update();
+		}
+	}
+}
 
 std::wstring StringToWCHART(std::string s)
 {

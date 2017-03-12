@@ -133,10 +133,21 @@ private:
     DirectX::SimpleMath::Matrix                                             m_view;
     DirectX::SimpleMath::Matrix                                             m_projection;
 
-	// Jason's Added Variables.
+	// Jason's Added Work.
 	bool _testingFocus = false;
 	bool _secondTest = false;
 	float _testingClick = 0.0f;
+	Raycast _ray;
+
+	/*
+	 * Provides specific tool controls.
+	 */
+	void SceneControls();
+
+	/*
+	 * Provides specific tool updates.
+	 */
+	void SceneUpdate();
 };
 
 std::wstring StringToWCHART(std::string s);

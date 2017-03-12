@@ -100,7 +100,7 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 		errorY = dz * 0.5f;
 
 		// Stepping the z coordinate along.
-		while(z < (end.z - marginOfError) && z > (end.z + marginOfError))
+		while(z != end.z)
 		{
 			DirectX::SimpleMath::Vector3 point(x, y, z);
 			result.push_back(point);
@@ -129,7 +129,7 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 		errorY = dx * 0.5f;
 
 		// Stepping the x coordinate along.
-		while (x < (end.x - marginOfError) && x > (end.x + marginOfError))
+		while (x != end.x)
 		{
 			DirectX::SimpleMath::Vector3 point(x, y, z);
 			result.push_back(point);
@@ -158,7 +158,7 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleM
 		errorZ = dy * 0.5f;
 
 		// Stepping the y coordinate along.
-		while (y < (end.y - marginOfError) && y > (end.y + marginOfError))
+		while (y != end.y)
 		{
 			DirectX::SimpleMath::Vector3 point(x, y, z);
 			result.push_back(point);

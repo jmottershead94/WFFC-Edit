@@ -9,9 +9,14 @@ Raycast::Raycast() :
 Raycast::~Raycast()
 {}
 
-bool Raycast::Hit(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end, Collider& collider, const bool& returnFirstHit)
+bool Raycast::Hit(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& direction, const float distance, Collider& collider, const bool& returnFirstHit)
 {
-	std::vector<DirectX::SimpleMath::Vector3> points = Maths::BresenhamsLine(start, end);
+	// Calculate the end point of the ray.
+	DirectX::SimpleMath::Vector3 testEnd;
+	testEnd = start + (direction * distance);
+
+	// Obtain a list of points on the ray.
+	std::vector<DirectX::SimpleMath::Vector3> points = Maths::BresenhamsLine(start, Maths::RoundVector3(testEnd));
 
 	// No points to test!
 	if (points.size() <= 0)

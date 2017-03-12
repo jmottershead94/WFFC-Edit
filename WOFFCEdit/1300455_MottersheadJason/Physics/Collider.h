@@ -19,8 +19,11 @@ class Collider
 			position(DirectX::SimpleMath::Vector3::Zero),
 			rotation(DirectX::SimpleMath::Vector3::Zero),
 			scale(1.0f, 1.0f, 1.0f),
+			halfScale(0.5f, 0.5f, 0.5f),
 			offset(DirectX::SimpleMath::Vector3::Zero)
-		{};
+		{
+			SetBounds();
+		};
 
 		/*
 		 * Constructs this instance.
@@ -35,8 +38,11 @@ class Collider
 			position(newPosition),
 			rotation(newRotation),
 			scale(newScale),
+			halfScale(newScale * 0.5f),
 			offset(newOffset)
-		{};
+		{
+			SetBounds();
+		};
 
 		/*
 		 * Destructs this instance.
@@ -56,6 +62,7 @@ class Collider
 		DirectX::SimpleMath::Vector3 position;
 		DirectX::SimpleMath::Vector3 rotation;
 		DirectX::SimpleMath::Vector3 scale;
+		DirectX::SimpleMath::Vector3 halfScale;
 		DirectX::SimpleMath::Vector3 offset;
 
 		/*
@@ -67,8 +74,11 @@ class Collider
 			position(collider.position),
 			rotation(collider.rotation),
 			scale(collider.scale),
+			halfScale(collider.halfScale),
 			offset(collider.offset)
-		{}
+		{
+			SetBounds();
+		}
 
 		/*
 		 * Tests for point collisions in this collider.
@@ -83,4 +93,9 @@ class Collider
 		 * @return bool if the AABB lies inside of the collider.
 		 */
 		virtual bool const AABBCollision(const Collider& collider) = 0;
+
+		/*
+		 * Used to update the bounds of the collider.
+		 */
+		virtual void SetBounds() {};
 };

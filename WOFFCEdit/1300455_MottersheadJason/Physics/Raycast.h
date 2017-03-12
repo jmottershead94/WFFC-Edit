@@ -21,12 +21,13 @@ class Raycast
 		/*
 		 * Casts a ray from a start point to an end point and checks for collisions along the ray.
 		 * @param start where to draw the ray FROM.
-		 * @param end where the ray should END.
+		 * @param direction the direction the ray is heading in.
+		 * @param distance the length of the ray.
 		 * @param collider the collider to test this ray against.
 		 * @param returnFirstHit if this function should return after the first collision has been detected.
 		 * @return bool if this ray has hit something.
 		 */
-		bool Hit(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end, Collider& collider, const bool& returnFirstHit = true);
+		bool Hit(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& direction, const float distance, Collider& collider, const bool& returnFirstHit = true);
 
 		/*
 		 * Provides access to the origin of the ray.

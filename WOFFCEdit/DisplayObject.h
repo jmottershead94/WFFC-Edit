@@ -26,14 +26,10 @@ class DisplayObject
 		void AddCollider();
 
 		/*
-		 * Provides a way to check if this object has been clicked on.
-		 * @param worldMatrix used to help calculate the cursor position in the world.
-		 * @param camPosition used to help determine the cursor position in the world.
-		 * @param camForward the direction the camera is looking.
-		 * @return bool if this object has been clicked on.
+		 * Called every frame.
 		 */
-		bool ClickedOn(DirectX::SimpleMath::Matrix& worldMatrix, DirectX::SimpleMath::Vector3& camPosition, DirectX::SimpleMath::Vector3& camForward);
-
+		void Update();
+		
 		/*
 		 * Allows us to set this object being in focus.
 		 * @param value if this object is in focus or not.
@@ -46,9 +42,14 @@ class DisplayObject
 		 */
 		inline bool& InFocus() { return _inFocus; }
 
+		/*
+		 * Provides access to the collider of this object.
+		 * @return const AABBCollider* the collider of this object.
+		 */
+		inline AABBCollider* const GetCollider() const { return static_cast<AABBCollider*>(_collider); }
+
 	private:
 		bool _inFocus = false;
 		Collider* _collider;
-		Raycast _ray;
 };
 

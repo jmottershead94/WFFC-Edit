@@ -52,13 +52,11 @@ class AABBCollider : public Collider
 		 */
 		bool const AABBCollision(const Collider& collider) override;
 
-	private:
-		DirectX::SimpleMath::Vector3 _vecMax, _vecMin;
-
 		/*
 		 * Used to update the bounds of the collider.
-		 * @param newPosition the new position of the collider.
-		 * @param newScale the new scale of the collider.
 		 */
-		void SetBounds(const DirectX::SimpleMath::Vector3& newPosition, const DirectX::SimpleMath::Vector3& newScale);
+		void SetBounds() override;
+
+	private:
+		DirectX::SimpleMath::Vector3 _vecMax, _vecMin;
 };

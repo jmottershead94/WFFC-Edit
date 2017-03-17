@@ -58,6 +58,13 @@ int CMyFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // fail to create
 	}
 	
+	if (!m_toolBar2.CreateEx(this, TBSTYLE_TRANSPARENT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+		!m_toolBar2.LoadToolBar(IDR_TOOLBAR2))
+	{
+		TRACE0("Failed to create toolbar\n");
+		return -1;      // fail to create
+	}
+
 	CRect rect;
 	GetClientRect(&rect);
 	if (!m_wndStatusBar.Create(this))

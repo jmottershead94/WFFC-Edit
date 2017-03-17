@@ -353,3 +353,8 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.resetText = false;
 }
+
+void ToolMain::onActionGenerateTerrain()
+{
+	m_d3dRenderer.GenerateRandomTerrain();
+}

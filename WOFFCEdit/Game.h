@@ -133,7 +133,8 @@ private:
     DirectX::SimpleMath::Matrix                                             m_view;
     DirectX::SimpleMath::Matrix                                             m_projection;
 
-	// Jason's Added Work.
+// Jason's Added Work.
+private:
 	bool _testingFocus = false;
 	bool _secondTest = false;
 	float _testingClick = 0.0f;
@@ -148,6 +149,12 @@ private:
 	 * Provides specific tool updates.
 	 */
 	void SceneUpdate();
+
+public:
+	/*
+	 * Generates random terrain.
+	 */
+	void GenerateRandomTerrain();
 };
 
 std::wstring StringToWCHART(std::string s);

@@ -18,6 +18,9 @@ public:
 	CToolBar		m_toolBar;
 	CChildRender	m_DirXView;
 
+	// Variables Jason has added.
+	CToolBar		m_toolBar2;
+
 public:
 	CMyFrame();
 	void SetCurrentSelectionID(int ID);

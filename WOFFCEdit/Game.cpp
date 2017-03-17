@@ -620,7 +620,7 @@ void Game::OnDeviceRestored()
 void Game::SceneControls()
 {
 	if (m_InputCommands.generateTerrain)
-		m_displayChunk.GenerateHeightmap();
+		GenerateRandomTerrain();
 
 	if (GetKeyState(VK_LBUTTON) < 0)
 	{
@@ -660,6 +660,11 @@ void Game::SceneUpdate()
 	}
 }
 
+void Game::GenerateRandomTerrain()
+{
+	m_displayChunk.GenerateHeightmap();
+}
+
 std::wstring StringToWCHART(std::string s)
 {
 
@@ -672,3 +677,4 @@ std::wstring StringToWCHART(std::string s)
 	delete[] buf;
 	return r;
 }
+

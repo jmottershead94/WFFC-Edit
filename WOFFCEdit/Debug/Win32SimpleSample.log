@@ -1,42 +1,82 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Win32SimpleSample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  pch.cpp
   ToolMain.cpp
   _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(90): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(91): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(92): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(93): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(94): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(95): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(97): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(98): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(99): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(100): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(102): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(103): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(105): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(106): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(107): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(108): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(109): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(110): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(111): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(112): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(113): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(114): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(116): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(117): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(118): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(119): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(120): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(121): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(122): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(123): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(124): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(125): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(126): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(127): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(129): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(156): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-d:\mydocs\development\wffc-edit\woffcedit\toolmain.cpp(157): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-  Win32SimpleSample.vcxproj -> D:\mydocs\Development\WFFC-Edit\WOFFCEdit\Debug\WoFEdit.exe
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(93): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(94): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(95): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(97): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(98): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(99): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(100): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(101): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(102): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(103): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(105): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(106): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(108): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(109): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(110): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(111): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(112): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(113): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(114): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(115): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(116): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(117): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(119): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(120): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(121): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(122): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(123): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(124): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(125): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(126): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(127): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(128): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(129): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(130): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(132): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(159): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(160): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+  SelectDialogue.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  SceneObject.cpp
+  Main.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  MFCRenderFrame.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  MFCMain.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  MFCFrame.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  Game.cpp
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\game.cpp(28): warning C4305: '=': truncation from 'double' to 'float'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\game.cpp(287): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\game.cpp(261): warning C4101: 'Buffer': unreferenced local variable
+  DisplayObject.cpp
+  DisplayChunk.cpp
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(14): warning C4305: '=': truncation from 'double' to 'float'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(74): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(94): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(152): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(195): warning C4101: 'index4': unreferenced local variable
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(195): warning C4101: 'index2': unreferenced local variable
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(195): warning C4101: 'index3': unreferenced local variable
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(195): warning C4101: 'index1': unreferenced local variable
+  DeviceResources.cpp
+  ChunkObject.cpp
+  Utils.cpp
+  Maths.cpp
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\1300455_mottersheadjason\utilities\maths\maths.cpp(59): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  Raycast.cpp
+  AABBCollider.cpp
+  Generating Code...
+  sqlite3.c
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\sqlite3.c(29693): warning C4996: 'GetVersionExW': was declared deprecated
+  c:\program files (x86)\windows kits\8.1\include\um\sysinfoapi.h(442): note: see declaration of 'GetVersionExW'
+  Win32SimpleSample.vcxproj -> C:\University\CGAD\4th_Year\Semester_2\Tools_Programming\Coursework\WFFCRepository\WOFFCEdit\Debug\WoFEdit.exe

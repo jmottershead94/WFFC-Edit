@@ -18,20 +18,10 @@ DisplayObject::DisplayObject()
 }
 
 DisplayObject::~DisplayObject()
-{
-	//if (_collider)
-	//{
-	//	delete _collider;
-	//}
-}
+{}
 
-void DisplayObject::AddCollider()
+void DisplayObject::OnLeftMouseClick()
 {
-	_collider = new AABBCollider();
-	_collider->Update(m_position, m_orientation, m_scale);
-}
-
-void DisplayObject::Update()
-{
-	_collider->Update(m_position, m_orientation, m_scale);
+	// Reverse the focus of this object.
+	_inFocus = !_inFocus;
 }

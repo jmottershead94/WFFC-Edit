@@ -13,7 +13,7 @@
 #include "InputCommands.h"
 #include <vector>
 
-#include "1300455_MottersheadJason/Utilities/Maths/Maths.h"
+#include "1300455_MottersheadJason/Events/EventSystem.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -136,9 +136,8 @@ private:
 // Jason's Added Work.
 private:
 	bool _testingFocus = false;
-	bool _secondTest = false;
 	float _testingClick = 0.0f;
-	Raycast _ray;
+	EventSystem _eventSystem;
 
 	/*
 	 * Provides specific tool controls.

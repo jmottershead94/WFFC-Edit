@@ -63,6 +63,8 @@
     <ClCompile Include="1300455_MottersheadJason\Utilities\Utils.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Physics\AABBCollider.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Physics\Raycast.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Events\EventSystem.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Objects\BaseObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -117,6 +119,10 @@
     <ClInclude Include="1300455_MottersheadJason\Physics\Collider.h" />
     <ClInclude Include="1300455_MottersheadJason\Physics\AABBCollider.h" />
     <ClInclude Include="1300455_MottersheadJason\Physics\Raycast.h" />
+    <ClInclude Include="1300455_MottersheadJason\Objects\Observer.h" />
+    <ClInclude Include="1300455_MottersheadJason\Events\EventTypes.h" />
+    <ClInclude Include="1300455_MottersheadJason\Events\EventSystem.h" />
+    <ClInclude Include="1300455_MottersheadJason\Objects\BaseObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

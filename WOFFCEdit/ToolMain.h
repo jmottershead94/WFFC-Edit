@@ -26,11 +26,7 @@ public: //methods
 	void	Tick(MSG *msg);
 	void	UpdateInput(MSG *msg);
 
-	// Methods Jason has added.
-	/*
-	 * Provides a way to generate random terrain.
-	 */
-	void onActionGenerateTerrain();
+	
 
 public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
@@ -39,8 +35,6 @@ public:	//variables
 
 private:	//methods
 	void	onContentAdded();
-
-
 		
 private:	//variables
 	HWND	m_toolHandle;		//Handle to the  window
@@ -54,8 +48,14 @@ private:	//variables
 	int m_height;
 	int m_currentChunk;			//the current chunk of thedatabase that we are operating on.  Dictates loading and saving. 
 	
-
-	// Jason's Added Variables.
+// Jason's Added Work.
+private:
 	Utils _utilities;
 	Maths _maths;
+
+public:
+	/*
+	* Provides a way to generate random terrain.
+	*/
+	void onActionGenerateTerrain();
 };

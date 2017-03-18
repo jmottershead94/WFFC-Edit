@@ -166,10 +166,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="1300455_MottersheadJason\Physics\AABBCollider.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Objects\BaseObject.cpp" />
     <ClCompile Include="ChunkObject.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DisplayChunk.cpp" />
     <ClCompile Include="DisplayObject.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Events\EventSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Utilities\Maths\Maths.cpp" />
@@ -185,17 +187,21 @@
     <ClCompile Include="1300455_MottersheadJason\Utilities\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="1300455_MottersheadJason\Events\EventTypes.h" />
     <ClInclude Include="1300455_MottersheadJason\Physics\AABBCollider.h" />
+    <ClInclude Include="1300455_MottersheadJason\Objects\BaseObject.h" />
     <ClInclude Include="ChunkObject.h" />
     <ClInclude Include="1300455_MottersheadJason\Physics\Collider.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DisplayChunk.h" />
     <ClInclude Include="DisplayObject.h" />
+    <ClInclude Include="1300455_MottersheadJason\Events\EventSystem.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputCommands.h" />
     <ClInclude Include="1300455_MottersheadJason\Utilities\Maths\Maths.h" />
     <ClInclude Include="MFCFrame.h" />
     <ClInclude Include="MFCRenderFrame.h" />
+    <ClInclude Include="1300455_MottersheadJason\Objects\Observer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="1300455_MottersheadJason\Physics\Raycast.h" />
     <ClInclude Include="resource.h" />

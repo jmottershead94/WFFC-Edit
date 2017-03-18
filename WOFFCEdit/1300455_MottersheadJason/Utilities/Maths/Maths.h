@@ -30,7 +30,7 @@ class Maths
 		 * @param end the second point we are calculating to.
 		 * @return float the distance between the two given points.
 		 */
-		static float Distance(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end);
+		static float Distance(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end);
 
 		/*
 		 * Checks to see if a given point is on a line between two given points.
@@ -39,7 +39,7 @@ class Maths
 		 * @param currentPoint the point we want to check and see if it is on the line.
 		 * @return bool if the current point is on the line.
 		 */
-		static bool IsPointBetween(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end, DirectX::SimpleMath::Vector3 currentPoint);
+		static bool IsPointBetween(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end, const DirectX::SimpleMath::Vector3& currentPoint);
 
 		/*
 		 * Converts radian value to degrees.
@@ -74,7 +74,7 @@ class Maths
 		 * @param point the Vector3 to round off.
 		 * @return DirectX::SimpleMath::Vector3 the rounded Vector3.
 		 */
-		static DirectX::SimpleMath::Vector3 RoundVector3(DirectX::SimpleMath::Vector3& point);
+		static DirectX::SimpleMath::Vector3 RoundVector3(const DirectX::SimpleMath::Vector3& point);
 
 		/*
 		 * Determines the points on a line given a start and end point.
@@ -82,5 +82,5 @@ class Maths
 		 * @param end the point to go to.
 		 * @return std::vector<DirectX::SimpleMath::Vector3> the data structure of points on the line.
 		 */
-		static std::vector<DirectX::SimpleMath::Vector3> BresenhamsLine(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end);
+		static std::vector<DirectX::SimpleMath::Vector3> BresenhamsLine(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end);
 };

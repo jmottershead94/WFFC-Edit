@@ -36,6 +36,7 @@ private:
 	afx_msg void MenuEditSelect();
 	afx_msg	void ToolBarButton1();
 
+	// Jason's Added Work.
 	/*
 	 * Generates random terrain with the tool bar button.
 	 */

@@ -188,7 +188,6 @@ void Game::Update(DX::StepTimer const& timer)
 	if (m_InputCommands.resetText)
 	{
 		_testingFocus = false;
-		_secondTest = false;
 	}
 
 	//update lookat point
@@ -474,10 +473,16 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		newDisplayObject.AddCollider();
 
 		m_displayList.push_back(newDisplayObject);
+	}		
+
+	if (m_displayList.size() < 0)
+		return;
+
+	for (size_t i = 0; i < m_displayList.size(); ++i)
+	{
+		// Add this display object into the event system to listen out for input.
+		_eventSystem.AddObserver(&m_displayList[i]);
 	}
-		
-		
-		
 }
 
 void Game::BuildDisplayChunk(ChunkObject * SceneChunk)
@@ -622,30 +627,12 @@ void Game::SceneControls()
 	if (m_InputCommands.generateTerrain)
 		GenerateRandomTerrain();
 
+	// If the left mouse button has been pressed, notify the event system.
 	if (GetKeyState(VK_LBUTTON) < 0)
-	{
-		if (!m_displayList.empty())
-		{
-			for (size_t i = 0; i < m_displayList.size(); ++i)
-			{
-				DisplayObject displayObject = m_displayList[i];
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_camPosition), m_camLookDirection);
 
-				DirectX::SimpleMath::Vector3 start(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
-				DirectX::SimpleMath::Vector3 end(m_camLookDirection);
-
-				// Cast a ray from the cursor to this object and see if it hits.
-				bool rayHit = _ray.Hit(Maths::RoundVector3(start), end, 10.0f, *displayObject.GetCollider(), true);
-
-				if (rayHit)
-				{
-					displayObject.SetFocus(!displayObject.InFocus());
-					_testingClick = displayObject.m_position.x;
-					_testingFocus = true;
-					break;
-				}
-			}
-		}
-	}
+	if (GetKeyState(VK_RBUTTON) < 0)
+		_eventSystem.Notify(EventType::EVENT_RIGHT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_camPosition), m_camLookDirection);
 }
 
 void Game::SceneUpdate()
@@ -656,6 +643,15 @@ void Game::SceneUpdate()
 		{
 			DisplayObject displayObject = m_displayList[i];
 			displayObject.Update();
+
+			if (!_testingFocus)
+			{
+				if (displayObject.InFocus())
+				{
+					_testingFocus = true;
+					_testingClick = displayObject.m_position.x;
+				}
+			}
 		}
 	}
 }

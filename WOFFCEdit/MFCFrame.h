@@ -18,7 +18,7 @@ public:
 	CToolBar		m_toolBar;
 	CChildRender	m_DirXView;
 
-	// Variables Jason has added.
+	// Jason's Added Work.
 	CToolBar		m_toolBar2;
 
 public:

@@ -12,7 +12,7 @@ Maths::Maths() :
 Maths::~Maths()
 {}
 
-float Maths::Distance(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end)
+float Maths::Distance(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end)
 {
 	float result = 0.0f;
 	float x = (end.x - start.x) * (end.x - start.x);
@@ -25,7 +25,7 @@ float Maths::Distance(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::V
 	return result;
 }
 
-bool Maths::IsPointBetween(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end, DirectX::SimpleMath::Vector3 currentPoint)
+bool Maths::IsPointBetween(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end, const DirectX::SimpleMath::Vector3& currentPoint)
 {
 	return (Distance(start, currentPoint) + Distance(end, currentPoint) == Distance(start, end));
 }
@@ -60,13 +60,13 @@ float Maths::RoundFloat(const float value)
 	return rounded;
 }
 
-DirectX::SimpleMath::Vector3 Maths::RoundVector3(DirectX::SimpleMath::Vector3& point)
+DirectX::SimpleMath::Vector3 Maths::RoundVector3(const DirectX::SimpleMath::Vector3& point)
 {
 	DirectX::SimpleMath::Vector3 roundedFloatValues(RoundFloat(point.x), RoundFloat(point.y), RoundFloat(point.z));
 	return roundedFloatValues;
 }
 
-std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(DirectX::SimpleMath::Vector3 start, DirectX::SimpleMath::Vector3 end)
+std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end)
 {
 	std::vector<DirectX::SimpleMath::Vector3> result;
 

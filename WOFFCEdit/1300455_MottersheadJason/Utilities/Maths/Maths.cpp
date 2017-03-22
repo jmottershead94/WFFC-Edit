@@ -1,6 +1,6 @@
 #include "Maths.h"
 
-std::unique_ptr<Maths> instance = nullptr;
+static std::unique_ptr<Maths> instance = nullptr;
 
 Maths::Maths() :
 	PI(3.1415f)

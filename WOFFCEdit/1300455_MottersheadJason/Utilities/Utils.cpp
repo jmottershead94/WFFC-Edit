@@ -1,6 +1,6 @@
 #include "Utils.h"
 
-std::unique_ptr<Utils> instance = nullptr;
+static std::unique_ptr<Utils> instance = nullptr;
 
 Utils::Utils()
 {

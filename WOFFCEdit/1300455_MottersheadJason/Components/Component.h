@@ -8,12 +8,6 @@ class Component
 {
 	public:
 		/**
-		 * Constructs this instance.
-		 */
-		explicit Component() 
-		{}
-
-		/**
 		 * Destructs this instance.
 		 */
 		virtual ~Component()

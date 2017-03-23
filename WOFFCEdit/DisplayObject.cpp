@@ -14,5 +14,5 @@ DisplayObject::~DisplayObject()
 void DisplayObject::OnLeftMouseClick()
 {
 	// Reverse the focus of this object.
-	_inFocus = !_inFocus;
+	inFocus = !inFocus;
 }

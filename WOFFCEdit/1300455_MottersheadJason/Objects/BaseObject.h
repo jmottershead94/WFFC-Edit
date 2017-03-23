@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Physics/AABBCollider.h"
 #include "../Physics/Raycast.h"
 #include "../Objects/Observer.h"
 #include "../Components/Transform/TransformComponent.h"
+#include "../Components/Physics/BoxColliderComponent.h"
 
 /**
  * A base object to be used for providing an interactable object
@@ -25,11 +25,6 @@ class BaseObject : public Observer
 		~BaseObject();
 
 		/**
-		 * Adds a collider to this object.
-		 */
-		void AddCollider();
-
-		/**
 		 * Called every frame.
 		 * @param dt the time passed since the last frame update.
 		 */
@@ -41,7 +36,7 @@ class BaseObject : public Observer
 		void RemoveAllComponents();
 
 		/**
-		 * Gets a requested component from this object with a given type.
+		 * Gets a component from this object with a given type.
 		 * @return const Component* the requested component.
 		 */
 		template <class T>
@@ -112,31 +107,25 @@ class BaseObject : public Observer
 		 * Allows us to set this object being in focus.
 		 * @param value if this object is in focus or not.
 		 */
-		inline void const SetFocus(const bool value) { _inFocus = value; }
+		inline void const SetFocus(const bool value) { inFocus = value; }
 
 		/**
 		 * Allows us to see if this object is in focus.
 		 * @return const bool if the object is in focus.
 		 */
-		inline bool const InFocus() { return _inFocus; }
-
-		/**
-		 * Provides access to the collider of this object.
-		 * @return const AABBCollider* the collider of this object.
-		 */
-		inline AABBCollider* const GetCollider() const { return static_cast<AABBCollider*>(_collider); }
+		inline bool const InFocus() { return inFocus; }
 
 		/**
 		 * Gets the transform component of this object.
 		 * @return TransformComponent& the transform associated with this object.
 		 */
 		inline TransformComponent& Transform() { return *transform; }
-
+		
 	protected:
-		bool _inFocus;
-		Collider* _collider;
-		Raycast _ray;
+		bool inFocus;
+		Raycast ray;
 		TransformComponent* transform;
+		ColliderComponent* collider;
 		std::vector<Component*> components;
 
 	private:

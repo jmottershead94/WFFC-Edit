@@ -9,7 +9,7 @@ Raycast::Raycast() :
 Raycast::~Raycast()
 {}
 
-bool Raycast::Hit(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& direction, const float distance, Collider& collider, const bool& returnFirstHit)
+bool Raycast::Hit(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& direction, const float distance, ColliderComponent& collider, const bool& returnFirstHit)
 {
 	// Calculate the end point of the ray.
 	DirectX::SimpleMath::Vector3 testEnd;

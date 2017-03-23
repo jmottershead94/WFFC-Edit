@@ -1,28 +1,24 @@
 #include "BaseObject.h"
 
 BaseObject::BaseObject() :
-	_inFocus(false),
-	_collider(nullptr)
+	inFocus(false)
 {
+	// Adding a standard transform component.
 	transform = AddComponent<TransformComponent>();
 	transform->SetPosition(DirectX::SimpleMath::Vector3::Zero);
 	transform->SetRotation(DirectX::SimpleMath::Vector3::Zero);
 	transform->SetScale(DirectX::SimpleMath::Vector3::Zero);
+
+	// Adding a standard collider component.
+	collider = AddComponent<BoxColliderComponent>();
 }
 
 BaseObject::~BaseObject()
 {}
 
-void BaseObject::AddCollider()
-{
-	_collider = new AABBCollider();
-	_collider->Update(transform->GetPosition(), transform->GetRotation(), transform->GetScale());
-}
-
 void BaseObject::Update(const double& dt)
 {
-	UNUSED(dt);
-	_collider->Update(transform->GetPosition(), transform->GetRotation(), transform->GetScale());
+	collider->Update(dt, transform->GetPosition(), transform->GetRotation(), transform->GetScale());
 }
 
 void BaseObject::RemoveAllComponents()
@@ -41,7 +37,7 @@ void BaseObject::OnNotify(const EventType currentEvent)
 
 void BaseObject::OnNotify(const EventType currentEvent, const DirectX::SimpleMath::Vector3& cursorPosition, const DirectX::SimpleMath::Vector3& cameraLookDirection)
 {
-	bool rayHit = _ray.Hit(Maths::RoundVector3(cursorPosition), cameraLookDirection, 10.0f, *_collider);
+	bool rayHit = ray.Hit(Maths::RoundVector3(cursorPosition), cameraLookDirection, 10.0f, *collider);
 
 	// If the cursor is "looking" at this object.
 	if (!rayHit)

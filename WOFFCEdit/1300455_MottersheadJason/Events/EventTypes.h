@@ -1,6 +1,6 @@
 #pragma once
 
-/*
+/**
  * The list of event types that can occur.
  */
 enum EventType

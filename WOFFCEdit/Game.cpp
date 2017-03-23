@@ -473,9 +473,6 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		newDisplayObject.m_render = SceneGraph->at(i).editor_render;
 		newDisplayObject.m_wireframe = SceneGraph->at(i).editor_wireframe;
 		
-		// Add a collider.
-		newDisplayObject.AddCollider();
-
 		m_displayList.push_back(newDisplayObject);
 	}		
 

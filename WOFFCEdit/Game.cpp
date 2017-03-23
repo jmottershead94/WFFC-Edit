@@ -64,6 +64,15 @@ Game::~Game()
         m_audEngine->Suspend();
     }
 #endif
+
+	if (m_displayList.size() > 0)
+	{
+		for (size_t i = 0; i < m_displayList.size(); ++i)
+		{
+			DisplayObject displayObject = m_displayList.at(i);
+			displayObject.RemoveAllComponents();
+		}
+	}
 }
 
 // Initialize the Direct3D resources required to run.
@@ -141,6 +150,7 @@ void Game::Update(DX::StepTimer const& timer)
 	//camera motion is on a plane, so kill the 7 component of the look direction
 	Vector3 planarMotionVector = m_camLookDirection;
 	planarMotionVector.y = 0.0;
+	_dt = timer.GetElapsedSeconds();
 
 	if (m_InputCommands.rotRight)
 	{
@@ -200,7 +210,6 @@ void Game::Update(DX::StepTimer const& timer)
     m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_view);
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
-
 	SceneControls();
 	SceneUpdate();
 
@@ -270,6 +279,9 @@ void Game::Render()
 		m_font->DrawString(m_sprites.get(), tranquility.c_str(), XMFLOAT2(100, 70), Colors::Chocolate);
 	}
 
+	std::wstring componentTest = L"Transform X: " + std::to_wstring(_testingComponent.x) + L"Y: " + std::to_wstring(_testingComponent.y) + L"Z: " + std::to_wstring(_testingComponent.z);
+	m_font->DrawString(m_sprites.get(), componentTest.c_str(), XMFLOAT2(100, 130), Colors::Yellow);
+
 	m_sprites->End();
 
 	//RENDER OBJECTS FROM SCENEGRAPH
@@ -277,13 +289,15 @@ void Game::Render()
 	for (int i = 0; i < numRenderObjects; i++)
 	{
 		m_deviceResources->PIXBeginEvent(L"Draw model");
-		const XMVECTORF32 scale = { m_displayList[i].m_scale.x, m_displayList[i].m_scale.y, m_displayList[i].m_scale.z };
-		const XMVECTORF32 translate = { m_displayList[i].m_position.x, m_displayList[i].m_position.y, m_displayList[i].m_position.z };
+		//const XMVECTORF32 scale = { m_displayList[i].m_scale.x, m_displayList[i].m_scale.y, m_displayList[i].m_scale.z };
+		//const XMVECTORF32 translate = { m_displayList[i].m_position.x, m_displayList[i].m_position.y, m_displayList[i].m_position.z };
+		const XMVECTORF32 scale = { m_displayList[i].Transform().GetScale().x, m_displayList[i].Transform().GetScale().y, m_displayList[i].Transform().GetScale().z };
+		const XMVECTORF32 translate = { m_displayList[i].Transform().GetPosition().x, m_displayList[i].Transform().GetPosition().y, m_displayList[i].Transform().GetPosition().z };
 
 		//convert degrees into radians for rotation matrix
-		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].m_orientation.y *3.1415 / 180,
-															m_displayList[i].m_orientation.x *3.1415 / 180,
-															m_displayList[i].m_orientation.z *3.1415 / 180);
+		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].Transform().GetRotation().y *3.1415 / 180,
+															m_displayList[i].Transform().GetRotation().x *3.1415 / 180,
+															m_displayList[i].Transform().GetRotation().z *3.1415 / 180);
 
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
@@ -450,20 +464,10 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 			}
 		});
 
-		//set position
-		newDisplayObject.m_position.x = SceneGraph->at(i).posX;
-		newDisplayObject.m_position.y = SceneGraph->at(i).posY;
-		newDisplayObject.m_position.z = SceneGraph->at(i).posZ;
-		
-		//setorientation
-		newDisplayObject.m_orientation.x = SceneGraph->at(i).rotX;
-		newDisplayObject.m_orientation.y = SceneGraph->at(i).rotY;
-		newDisplayObject.m_orientation.z = SceneGraph->at(i).rotZ;
-
-		//set scale
-		newDisplayObject.m_scale.x = SceneGraph->at(i).scaX;
-		newDisplayObject.m_scale.y = SceneGraph->at(i).scaY;
-		newDisplayObject.m_scale.z = SceneGraph->at(i).scaZ;
+		// Set the transform for this object (position, rotation and scale).
+		newDisplayObject.Transform().SetPosition(SceneGraph->at(i).posX, SceneGraph->at(i).posY, SceneGraph->at(i).posZ);
+		newDisplayObject.Transform().SetRotation(SceneGraph->at(i).rotX, SceneGraph->at(i).rotY, SceneGraph->at(i).rotZ);
+		newDisplayObject.Transform().SetScale(SceneGraph->at(i).scaX, SceneGraph->at(i).scaY, SceneGraph->at(i).scaZ);
 
 		//set wireframe / render flags
 		newDisplayObject.m_render = SceneGraph->at(i).editor_render;
@@ -477,6 +481,9 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 
 	if (m_displayList.size() < 0)
 		return;
+
+	DisplayObject testing = m_displayList.at(0);
+	_testingComponent = testing.GetComponent<TransformComponent>()->GetPosition();
 
 	for (size_t i = 0; i < m_displayList.size(); ++i)
 	{
@@ -637,20 +644,21 @@ void Game::SceneControls()
 
 void Game::SceneUpdate()
 {
-	if (!m_displayList.empty())
-	{
-		for (size_t i = 0; i < m_displayList.size(); ++i)
-		{
-			DisplayObject displayObject = m_displayList[i];
-			displayObject.Update();
+	if (m_displayList.empty())
+		return;
 
-			if (!_testingFocus)
+	for (size_t i = 0; i < m_displayList.size(); ++i)
+	{
+		DisplayObject displayObject = m_displayList[i];
+		displayObject.Update(_dt);
+
+		if (!_testingFocus)
+		{
+			if (displayObject.InFocus())
 			{
-				if (displayObject.InFocus())
-				{
-					_testingFocus = true;
-					_testingClick = displayObject.m_position.x;
-				}
+				_testingFocus = true;
+				//_testingClick = displayObject.m_position.x;
+				_testingClick = displayObject.Transform().GetPosition().x;
 			}
 		}
 	}

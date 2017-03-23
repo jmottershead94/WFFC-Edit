@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "1300455_MottersheadJason/Events/EventSystem.h"
+#include "1300455_MottersheadJason/Components/Transform/TransformComponent.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -86,7 +87,7 @@ private:
 	DirectX::SimpleMath::Vector3		m_camForward;
 
 	float m_camRotRate;
-
+	
 	//control variables
 	bool m_grid;							//grid rendering on / off
 	// Device resources.
@@ -136,8 +137,10 @@ private:
 // Jason's Added Work.
 private:
 	bool _testingFocus = false;
+	double _dt = 0.00;
 	float _testingClick = 0.0f;
 	EventSystem _eventSystem;
+	DirectX::SimpleMath::Vector3 _testingComponent;
 
 	/*
 	 * Provides specific tool controls.

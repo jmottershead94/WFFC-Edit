@@ -8,6 +8,8 @@
 
 using namespace std;
 
+#define UNUSED(x) (void)(x)
+
 /*
  * Provides quick an easy access to common header files,
  * and will provide access to common functionality.

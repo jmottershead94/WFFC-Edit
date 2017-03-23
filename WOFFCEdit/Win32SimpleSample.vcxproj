@@ -185,6 +185,7 @@
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="ToolMain.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Utilities\Utils.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Components\Transform\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="1300455_MottersheadJason\Events\EventTypes.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="1300455_MottersheadJason\Objects\BaseObject.h" />
     <ClInclude Include="ChunkObject.h" />
     <ClInclude Include="1300455_MottersheadJason\Physics\Collider.h" />
+    <ClInclude Include="1300455_MottersheadJason\Components\Component.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DisplayChunk.h" />
     <ClInclude Include="DisplayObject.h" />
@@ -213,6 +215,7 @@
     <ClInclude Include="MFCMain.h" />
     <ClInclude Include="ToolMain.h" />
     <ClInclude Include="1300455_MottersheadJason\Utilities\Utils.h" />
+    <ClInclude Include="1300455_MottersheadJason\Components\Transform\TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="database\data\Scene1.fbx">

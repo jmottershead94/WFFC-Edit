@@ -14,7 +14,7 @@ class DisplayObject : public BaseObject
 		bool									m_wireframe;
 
 	private:
-		/*
+		/**
 		 * What happens when the user left clicks on this object.
 		 */
 		void OnLeftMouseClick();

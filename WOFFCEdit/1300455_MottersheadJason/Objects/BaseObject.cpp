@@ -3,7 +3,12 @@
 BaseObject::BaseObject() :
 	_inFocus(false),
 	_collider(nullptr)
-{}
+{
+	transform = AddComponent<TransformComponent>();
+	transform->SetPosition(DirectX::SimpleMath::Vector3::Zero);
+	transform->SetRotation(DirectX::SimpleMath::Vector3::Zero);
+	transform->SetScale(DirectX::SimpleMath::Vector3::Zero);
+}
 
 BaseObject::~BaseObject()
 {}
@@ -11,12 +16,24 @@ BaseObject::~BaseObject()
 void BaseObject::AddCollider()
 {
 	_collider = new AABBCollider();
-	_collider->Update(m_position, m_orientation, m_scale);
+	_collider->Update(transform->GetPosition(), transform->GetRotation(), transform->GetScale());
 }
 
-void BaseObject::Update()
+void BaseObject::Update(const double& dt)
 {
-	_collider->Update(m_position, m_orientation, m_scale);
+	UNUSED(dt);
+	_collider->Update(transform->GetPosition(), transform->GetRotation(), transform->GetScale());
+}
+
+void BaseObject::RemoveAllComponents()
+{
+	if (components.size() > 0)
+	{
+		for (size_t i = 0; i < components.size(); ++i)
+			delete components[i];
+
+		components.clear();
+	}
 }
 
 void BaseObject::OnNotify(const EventType currentEvent)
@@ -64,4 +81,22 @@ void BaseObject::OnNotify(const EventType currentEvent, const DirectX::SimpleMat
 			break;
 		}
 	}
+}
+
+Component* BaseObject::SearchForComponent(const int id) const
+{
+	Component* result = nullptr;
+
+	if (components.size() <= 0)
+		return result;
+
+	for (size_t i = 0; i < components.size(); ++i)
+	{
+		Component* currentComponent = components.at(i);
+
+		if (currentComponent->GetID() == id)
+			result = currentComponent;
+	}
+
+	return result;
 }

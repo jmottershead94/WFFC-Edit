@@ -21,6 +21,7 @@ class Utils
 	private:
 		HWND _hwnd;
 		int _width, _height;
+		bool _wireframeMode;
 
 		/**
 		 * Constructs this instance.
@@ -60,4 +61,16 @@ class Utils
 		 * @return const DirectX::SimpleMath::Vector3 the position of the cursor in the game.
 		 */
 		static DirectX::SimpleMath::Vector3 const GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Vector3 camPosition);
+
+		/**
+		 * Provides a way to set wireframe mode for the application as a whole.
+		 * @param wireframeState if we are using wireframe mode or not.
+		 */
+		static void SetWireframe(const bool wireframeState);
+
+		/**
+		 * Provides access to the current status of wireframe for the application.
+		 * @return const bool if the application is using wireframe mode or not.
+		 */
+		static bool const WireframeMode();
 };

@@ -21,7 +21,8 @@ ToolMain::ToolMain()
 	m_toolInputCommands.down		= false;
 	
 	m_toolInputCommands.generateTerrain = false;
-	m_toolInputCommands.resetText = false;
+	m_toolInputCommands.resetText		= false;
+	m_toolInputCommands.wireframeMode	= false;
 }
 
 ToolMain::~ToolMain()
@@ -352,9 +353,19 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.resetText = true;
 	}
 	else m_toolInputCommands.resetText = false;
+	if (m_keyArray['1'])
+	{
+		m_toolInputCommands.wireframeMode = true;
+	}
+	else m_toolInputCommands.wireframeMode = false;
 }
 
 void ToolMain::onActionGenerateTerrain()
 {
 	m_d3dRenderer.GenerateRandomTerrain();
+}
+
+void ToolMain::onActionToggleWireframe()
+{
+	m_d3dRenderer.SetWireframeMode();
 }

@@ -28,7 +28,7 @@ void BaseObject::Update(const double& dt)
 	editorCollider->Update(dt, transform->GetPosition(), transform->GetRotation(), transform->GetScale());
 }
 
-void BaseObject::RemoveAllComponents()
+void BaseObject::CleanUpComponents()
 {
 	if (components.size() > 0)
 	{

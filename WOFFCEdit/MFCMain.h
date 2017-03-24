@@ -37,10 +37,15 @@ private:
 	afx_msg	void ToolBarButton1();
 
 	// Jason's Added Work.
-	/*
+	/**
 	 * Generates random terrain with the tool bar button.
 	 */
 	afx_msg void MenuGenerateRandomTerrain();
+
+	/**
+	 * Toggles wireframe mode.
+	 */
+	afx_msg void MenuToggleWireframe();
 
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };

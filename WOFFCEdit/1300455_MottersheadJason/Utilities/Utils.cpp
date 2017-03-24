@@ -2,7 +2,8 @@
 
 static std::unique_ptr<Utils> instance = nullptr;
 
-Utils::Utils()
+Utils::Utils() :
+	_wireframeMode(false)
 {
 	if (instance == nullptr)
 		instance = std::make_unique<Utils>(*this);
@@ -62,4 +63,14 @@ DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWorld(DirectX::Simp
 	position3D = position3D.CreateTranslation(camPosition.x - (cursorPosition.x * (1.0f / halfWidth)), camPosition.y - (cursorPosition.y * (1.0f / halfHeight)), camPosition.z - (cursorPosition.x * (1.0f / halfWidth)));
 	dir = worldMatrix * position3D;
 	return dir.Translation();
+}
+
+void Utils::SetWireframe(const bool wireframeState)
+{
+	instance->_wireframeMode = wireframeState;
+}
+
+bool const Utils::WireframeMode()
+{
+	return instance->_wireframeMode;
 }

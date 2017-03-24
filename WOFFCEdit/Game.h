@@ -142,21 +142,26 @@ private:
 	EventSystem _eventSystem;
 	DirectX::SimpleMath::Vector3 _testingComponent;
 
-	/*
+	/**
 	 * Provides specific tool controls.
 	 */
 	void SceneControls();
 
-	/*
+	/**
 	 * Provides specific tool updates.
 	 */
 	void SceneUpdate();
 
 public:
-	/*
+	/**
 	 * Generates random terrain.
 	 */
 	void GenerateRandomTerrain();
+
+	/**
+	 * Sets the wireframe mode of the application.
+	 */
+	void SetWireframeMode();
 };
 
 std::wstring StringToWCHART(std::string s);

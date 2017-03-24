@@ -54,8 +54,13 @@ private:
 	Maths _maths;
 
 public:
-	/*
-	* Provides a way to generate random terrain.
-	*/
+	/**
+	 * Provides a way to generate random terrain.
+	 */
 	void onActionGenerateTerrain();
+
+	/**
+	 * Provides a way to toggle wireframe.
+	 */
+	void onActionToggleWireframe();
 };

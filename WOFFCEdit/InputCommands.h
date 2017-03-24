@@ -14,4 +14,5 @@ struct InputCommands
 	bool rotDown;
 	bool generateTerrain;
 	bool resetText;
+	bool wireframeMode;
 };

@@ -70,7 +70,7 @@ Game::~Game()
 		for (size_t i = 0; i < m_displayList.size(); ++i)
 		{
 			DisplayObject displayObject = m_displayList.at(i);
-			displayObject.RemoveAllComponents();
+			displayObject.CleanUpComponents();
 		}
 	}
 }
@@ -199,6 +199,7 @@ void Game::Update(DX::StepTimer const& timer)
 	{
 		_testingFocus = false;
 	}
+	
 
 	//update lookat point
 	m_camLookAt = m_camPosition + m_camLookDirection;
@@ -289,8 +290,6 @@ void Game::Render()
 	for (int i = 0; i < numRenderObjects; i++)
 	{
 		m_deviceResources->PIXBeginEvent(L"Draw model");
-		//const XMVECTORF32 scale = { m_displayList[i].m_scale.x, m_displayList[i].m_scale.y, m_displayList[i].m_scale.z };
-		//const XMVECTORF32 translate = { m_displayList[i].m_position.x, m_displayList[i].m_position.y, m_displayList[i].m_position.z };
 		const XMVECTORF32 scale = { m_displayList[i].Transform().GetScale().x, m_displayList[i].Transform().GetScale().y, m_displayList[i].Transform().GetScale().z };
 		const XMVECTORF32 translate = { m_displayList[i].Transform().GetPosition().x, m_displayList[i].Transform().GetPosition().y, m_displayList[i].Transform().GetPosition().z };
 
@@ -298,10 +297,10 @@ void Game::Render()
 		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].Transform().GetRotation().y *3.1415 / 180,
 															m_displayList[i].Transform().GetRotation().x *3.1415 / 180,
 															m_displayList[i].Transform().GetRotation().z *3.1415 / 180);
-
+		
+		m_displayList[i].m_wireframe = Utils::WireframeMode();
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
-
-		m_displayList[i].m_model->Draw(context, *m_states, local, m_view, m_projection, false);	//last variable in draw,  make TRUE for wireframe
+		m_displayList[i].m_model->Draw(context, *m_states, local, m_view, m_projection, m_displayList[i].m_wireframe);	//last variable in draw,  make TRUE for wireframe
 
 		m_deviceResources->PIXEndEvent();
 	}
@@ -311,7 +310,9 @@ void Game::Render()
 	context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
 	context->OMSetDepthStencilState(m_states->DepthDefault(),0);
 	context->RSSetState(m_states->CullNone());
-//	context->RSSetState(m_states->Wireframe());		//uncomment for wireframe
+
+	if(Utils::WireframeMode())
+		context->RSSetState(m_states->Wireframe());		//uncomment for wireframe
 
 	//Render the batch,  This is handled in the Display chunk becuase it has the potential to get complex
 	m_displayChunk.RenderBatch(m_deviceResources);
@@ -631,6 +632,9 @@ void Game::SceneControls()
 	if (m_InputCommands.generateTerrain)
 		GenerateRandomTerrain();
 
+	if (m_InputCommands.wireframeMode)
+		SetWireframeMode();
+
 	// If the left mouse button has been pressed, notify the event system.
 	if (GetKeyState(VK_LBUTTON) < 0)
 		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_camPosition), m_camLookDirection);
@@ -664,6 +668,11 @@ void Game::SceneUpdate()
 void Game::GenerateRandomTerrain()
 {
 	m_displayChunk.GenerateHeightmap();
+}
+
+void Game::SetWireframeMode()
+{
+	Utils::SetWireframe(!Utils::WireframeMode());
 }
 
 std::wstring StringToWCHART(std::string s)

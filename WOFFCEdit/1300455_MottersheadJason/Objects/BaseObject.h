@@ -33,7 +33,7 @@ class BaseObject : public Observer
 		/**
 		 * Removes all of the components.
 		 */
-		void RemoveAllComponents();
+		void CleanUpComponents();
 
 		/**
 		 * Gets a component from this object with a given type.

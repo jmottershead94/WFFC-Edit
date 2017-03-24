@@ -125,6 +125,7 @@ class BaseObject : public Observer
 		bool inFocus;
 		Raycast ray;
 		TransformComponent* transform;
+		ColliderComponent* editorCollider;
 		ColliderComponent* collider;
 		std::vector<Component*> components;
 

@@ -1,6 +1,6 @@
 #include "BoxColliderComponent.h"
 
-BoxColliderComponent::BoxColliderComponent() : ColliderComponent()
+BoxColliderComponent::BoxColliderComponent()
 {
 	SetKinematic(true);
 	SetPosition(DirectX::SimpleMath::Vector3::Zero);
@@ -8,6 +8,17 @@ BoxColliderComponent::BoxColliderComponent() : ColliderComponent()
 	SetScale(DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
 	SetHalfScale();
 	SetOffset(DirectX::SimpleMath::Vector3::Zero);
+	SetBounds();
+}
+
+BoxColliderComponent::BoxColliderComponent(const BoxColliderComponent* collider)
+{
+	SetKinematic(collider->Kinematic());
+	SetPosition(collider->Position());
+	SetRotation(collider->Rotation());
+	SetScale(collider->Scale());
+	SetHalfScale();
+	SetOffset(collider->Offset());
 	SetBounds();
 }
 
@@ -27,6 +38,9 @@ BoxColliderComponent::~BoxColliderComponent()
 
 void BoxColliderComponent::Update(const double & dt, const DirectX::SimpleMath::Vector3 & newPosition, const DirectX::SimpleMath::Vector3 & newRotation, const DirectX::SimpleMath::Vector3 & newScale)
 {
+	if (!Enabled())
+		return;
+
 	UNUSED(dt);
 	position = newPosition;
 	rotation = newRotation;
@@ -36,6 +50,9 @@ void BoxColliderComponent::Update(const double & dt, const DirectX::SimpleMath::
 
 bool const BoxColliderComponent::PointCollision(const DirectX::SimpleMath::Vector3 & point)
 {
+	if (!Enabled())
+		return false;
+
 	return
 	(
 		(point.x >= _vecMin.x && point.x <= _vecMax.x) &&
@@ -46,11 +63,17 @@ bool const BoxColliderComponent::PointCollision(const DirectX::SimpleMath::Vecto
 
 bool const BoxColliderComponent::AABBCollision(const ColliderComponent & collider)
 {
+	if (!Enabled())
+		return false;
+
 	return false;
 }
 
 void BoxColliderComponent::SetBounds()
 {
+	if (!Enabled())
+		return;
+
 	// Setting up the maximum and minimum positions for the collider.
 	halfScale = (scale * 0.5f);
 	DirectX::SimpleMath::Vector3 objectMax(offset.x + position.x + halfScale.x, offset.y + position.y + halfScale.y, offset.z + position.z + halfScale.z);

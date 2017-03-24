@@ -50,7 +50,7 @@ class TransformComponent : public Component
 		inline void SetRotation(const float& x, const float& y, const float& z)	{ _rotation = DirectX::SimpleMath::Vector3(x, y, z); }
 
 		/**
-		 * Sets the rotation of this transform.
+		 * Sets the scale of this transform.
 		 * @param scale how much this transform has scaled.
 		 */
 		inline void SetScale(const DirectX::SimpleMath::Vector3& scale)			{ _scale = scale; }

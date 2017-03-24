@@ -34,33 +34,10 @@ class ColliderComponent : public Component
 		inline void SetKinematic(const bool value)									{ kinematic = value; }
 
 		/**
-		 * Sets the position of this collider.
-		 * @param newPosition the new position of this collider.
+		 * Provides access to the dynamic state of this collider.
+		 * @return const bool if this object is static or dynamic.
 		 */
-		inline void SetPosition(const DirectX::SimpleMath::Vector3& newPosition)	{ position = newPosition; }
-
-		/**
-		 * Sets the rotation of this collider.
-		 * @param newRotation the new rotation value of this collider.
-		 */
-		inline void SetRotation(const DirectX::SimpleMath::Vector3& newRotation)	{ rotation = newRotation; }
-
-		/**
-		 * Sets the scale of this collider.
-		 * @param newScale the new scale value of this collider.
-		 */
-		inline void SetScale(const DirectX::SimpleMath::Vector3& newScale)			{ scale = newScale; }
-
-		/**
-		 * Sets the half scale value of this collider.
-		 */
-		inline void SetHalfScale()													{ halfScale = scale * 0.5f; }
-
-		/**
-		 * Sets the offset position of this collider.
-		 * @param newOffset the new offset position of this collider.
-		 */
-		inline void SetOffset(const DirectX::SimpleMath::Vector3& newOffset)		{ offset = newOffset; }
+		inline bool const Kinematic() const								{ return kinematic; }
 
 	protected:
 		bool kinematic;
@@ -88,4 +65,58 @@ class ColliderComponent : public Component
 		 * Used to update the bounds of the collider.
 		 */
 		virtual void SetBounds() = 0;
+
+		/**
+		 * Sets the position of this collider.
+		 * @param newPosition the new position of this collider.
+		 */
+		inline void SetPosition(const DirectX::SimpleMath::Vector3& newPosition) { position = newPosition; }
+
+		/**
+		 * Sets the rotation of this collider.
+		 * @param newRotation the new rotation value of this collider.
+		 */
+		inline void SetRotation(const DirectX::SimpleMath::Vector3& newRotation) { rotation = newRotation; }
+
+		/**
+		 * Sets the scale of this collider.
+		 * @param newScale the new scale value of this collider.
+		 */
+		inline void SetScale(const DirectX::SimpleMath::Vector3& newScale) { scale = newScale; }
+
+		/**
+		 * Sets the half scale value of this collider.
+		 */
+		inline void SetHalfScale() { halfScale = scale * 0.5f; }
+
+		/**
+		 * Sets the offset position of this collider.
+		 * @param newOffset the new offset position of this collider.
+		 */
+		inline void SetOffset(const DirectX::SimpleMath::Vector3& newOffset) { offset = newOffset; }
+
+		/**
+		 * Provides access to the position of this collider.
+		 * @return const DirectX::SimpleMath::Vector3 the collider position.
+		 */
+		inline DirectX::SimpleMath::Vector3 const Position() const { return position; }
+
+		/**
+		 * Provides access to the rotation of this collider.
+		 * @return const DirectX::SimpleMath::Vector3 the collider rotation.
+		 */
+		inline DirectX::SimpleMath::Vector3 const Rotation() const { return rotation; }
+
+		/**
+		 * Provides access to the scale of this collider.
+		 * @return const DirectX::SimpleMath::Vector3 the collider scale.
+		 */
+		inline DirectX::SimpleMath::Vector3 const Scale() const { return scale; }
+
+		/**
+		 * Provides access to the offset of this collider.
+		 * @return const DirectX::SimpleMath::Vector3 the collider offset value.
+		 */
+		inline DirectX::SimpleMath::Vector3 const Offset() const { return offset; }
+
 };

@@ -17,6 +17,12 @@ class BoxColliderComponent : public ColliderComponent
 
 		/**
 		 * Constructs this instance.
+		 * @param collider the box collider to copy from.
+		 */
+		explicit BoxColliderComponent(const BoxColliderComponent* collider);
+
+		/**
+		 * Constructs this instance.
 		 * @param isKinematic if this collider is static or dynamic.
 		 * @param newPosition the position of this collider.
 		 * @param newRotation the rotation of this collider.

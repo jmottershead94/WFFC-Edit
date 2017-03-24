@@ -15,4 +15,7 @@ struct InputCommands
 	bool generateTerrain;
 	bool resetText;
 	bool wireframeMode;
+	bool leftMouseDown;
+	bool doubleLeftMouseClick;
+	bool rightMouseDown;
 };

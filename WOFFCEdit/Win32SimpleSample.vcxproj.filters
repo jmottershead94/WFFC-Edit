@@ -66,6 +66,7 @@
     <ClCompile Include="1300455_MottersheadJason\Objects\BaseObject.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Components\Transform\TransformComponent.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Components\Physics\BoxColliderComponent.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Objects\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -126,6 +127,7 @@
     <ClInclude Include="1300455_MottersheadJason\Components\Transform\TransformComponent.h" />
     <ClInclude Include="1300455_MottersheadJason\Components\Physics\ColliderComponent.h" />
     <ClInclude Include="1300455_MottersheadJason\Components\Physics\BoxColliderComponent.h" />
+    <ClInclude Include="1300455_MottersheadJason\Objects\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -16,3 +16,10 @@ void DisplayObject::OnLeftMouseClick()
 	// Reverse the focus of this object.
 	inFocus = !inFocus;
 }
+
+void DisplayObject::OnLeftMouseDoubleClick()
+{
+	// Move the camera to the position of this object.
+	// We need a pointer to the main camera.
+	// Make a camera class...
+}

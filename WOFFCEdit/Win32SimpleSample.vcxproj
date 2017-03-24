@@ -167,6 +167,7 @@
   <ItemGroup>
     <ClCompile Include="1300455_MottersheadJason\Objects\BaseObject.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Components\Physics\BoxColliderComponent.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Objects\Camera.cpp" />
     <ClCompile Include="ChunkObject.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DisplayChunk.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="1300455_MottersheadJason\Events\EventTypes.h" />
     <ClInclude Include="1300455_MottersheadJason\Objects\BaseObject.h" />
     <ClInclude Include="1300455_MottersheadJason\Components\Physics\BoxColliderComponent.h" />
+    <ClInclude Include="1300455_MottersheadJason\Objects\Camera.h" />
     <ClInclude Include="ChunkObject.h" />
     <ClInclude Include="1300455_MottersheadJason\Components\Component.h" />
     <ClInclude Include="1300455_MottersheadJason\Components\Physics\ColliderComponent.h" />

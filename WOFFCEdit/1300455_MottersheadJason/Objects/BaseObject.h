@@ -166,6 +166,11 @@ class BaseObject : public Observer
 		virtual void OnLeftMouseReleased() {};
 
 		/**
+		 * What happens when the user has double clicked on this object.
+		 */
+		virtual void OnLeftMouseDoubleClick() {};
+
+		/**
 		 * What happens when the user has pressed the right mouse button on this object.
 		 */
 		virtual void OnRightMouseClick() {};

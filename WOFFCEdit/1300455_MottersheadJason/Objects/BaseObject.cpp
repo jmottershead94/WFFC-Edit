@@ -14,8 +14,8 @@ BaseObject::BaseObject() :
 	editorCollider = new BoxColliderComponent(dynamic_cast<BoxColliderComponent*>(collider));
 
 	// Components can be enabled/disabled.
-	//collider->SetEnabled(true);
-	//editorCollider->SetEnabled(false);
+	collider->SetEnabled(true);
+	editorCollider->SetEnabled(true);
 	//editorCollider->Enabled();
 }
 
@@ -80,6 +80,11 @@ void BaseObject::OnNotify(const EventType currentEvent, const DirectX::SimpleMat
 		case (EventType::EVENT_LEFT_MOUSE_RELEASE) :
 		{
 			OnLeftMouseReleased();
+			break;
+		}
+		case (EventType::EVENT_LEFT_MOUSE_CLICK_DOUBLE) :
+		{
+			OnLeftMouseDoubleClick();
 			break;
 		}
 		// If the user has right clicked on this object.

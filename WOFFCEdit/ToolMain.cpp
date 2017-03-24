@@ -20,9 +20,12 @@ ToolMain::ToolMain()
 	m_toolInputCommands.up			= false;
 	m_toolInputCommands.down		= false;
 	
-	m_toolInputCommands.generateTerrain = false;
-	m_toolInputCommands.resetText		= false;
-	m_toolInputCommands.wireframeMode	= false;
+	m_toolInputCommands.generateTerrain			= false;
+	m_toolInputCommands.resetText				= false;
+	m_toolInputCommands.wireframeMode			= false;
+	m_toolInputCommands.leftMouseDown			= false;
+	m_toolInputCommands.doubleLeftMouseClick	= false;
+	m_toolInputCommands.rightMouseDown			= false;
 }
 
 ToolMain::~ToolMain()
@@ -274,17 +277,48 @@ void ToolMain::UpdateInput(MSG * msg)
 	switch (msg->message)
 	{
 		//Global inputs,  mouse position and keys etc
-	case WM_KEYDOWN:
-		m_keyArray[msg->wParam] = true;
-		break;
-
-	case WM_KEYUP:
-		m_keyArray[msg->wParam] = false;
-		break;
-
-	case WM_MOUSEMOVE:
-		break;
-
+		case WM_KEYDOWN:
+		{
+			m_keyArray[msg->wParam] = true;
+			break;
+		}
+		case WM_KEYUP:
+		{
+			m_keyArray[msg->wParam] = false;
+			break;
+		}
+		case WM_MOUSEMOVE:
+		{
+			break;
+		}
+		// Mouse clicks.
+		case WM_LBUTTONDOWN:
+		{
+			m_toolInputCommands.leftMouseDown = true;
+			break;
+		}
+		case WM_RBUTTONDOWN:
+		{
+			m_toolInputCommands.rightMouseDown = true;
+			break;
+		}
+		// Mouse releases.
+		case WM_LBUTTONUP:
+		{
+			m_toolInputCommands.leftMouseDown = false;
+			break;
+		}
+		case WM_RBUTTONUP:
+		{
+			m_toolInputCommands.rightMouseDown = false;
+			break;
+		}
+		// Mouse double clicks.
+		case WM_LBUTTONDBLCLK:
+		{
+			m_toolInputCommands.doubleLeftMouseClick = true;
+			break;
+		}
 	}
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
 	//WASD movement

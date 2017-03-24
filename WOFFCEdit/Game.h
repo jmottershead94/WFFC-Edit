@@ -15,6 +15,7 @@
 
 #include "1300455_MottersheadJason/Events/EventSystem.h"
 #include "1300455_MottersheadJason/Components/Transform/TransformComponent.h"
+#include "1300455_MottersheadJason/Objects/Camera.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -78,13 +79,13 @@ private:
 	float								m_movespeed;
 
 	//camera
-	DirectX::SimpleMath::Vector3		m_camPosition;
+	/*DirectX::SimpleMath::Vector3		m_camPosition;
 	DirectX::SimpleMath::Vector3		m_camOrientation;
 	DirectX::SimpleMath::Vector3		m_camLookAt;
 	DirectX::SimpleMath::Vector3		m_camLookDirection;
 	DirectX::SimpleMath::Vector3		m_camRight;
 	DirectX::SimpleMath::Vector3		m_camUp;
-	DirectX::SimpleMath::Vector3		m_camForward;
+	DirectX::SimpleMath::Vector3		m_camForward;*/
 
 	float m_camRotRate;
 	
@@ -140,6 +141,7 @@ private:
 	double _dt = 0.00;
 	float _testingClick = 0.0f;
 	EventSystem _eventSystem;
+	Camera _camera;
 	DirectX::SimpleMath::Vector3 _testingComponent;
 
 	/**

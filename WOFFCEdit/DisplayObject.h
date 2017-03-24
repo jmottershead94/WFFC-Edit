@@ -18,4 +18,9 @@ class DisplayObject : public BaseObject
 		 * What happens when the user left clicks on this object.
 		 */
 		void OnLeftMouseClick();
+
+		/**
+		 * What happens when the user has double clicked on this object.
+		 */
+		void OnLeftMouseDoubleClick();
 };

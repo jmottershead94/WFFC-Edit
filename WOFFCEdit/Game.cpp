@@ -28,30 +28,30 @@ Game::Game()
 	m_movespeed = 0.30;
 	m_camRotRate = 3.0;
 
-	//camera
-	m_camPosition.x = 0.0f;
-	m_camPosition.y = 3.7f;
-	m_camPosition.z = -3.5f;
+	////camera
+	//m_camPosition.x = 0.0f;
+	//m_camPosition.y = 3.7f;
+	//m_camPosition.z = -3.5f;
 
-	m_camOrientation.x = 0.0f;
-	m_camOrientation.y = 0.0f;
-	m_camOrientation.z = 0.0f;
+	//m_camOrientation.x = 0.0f;
+	//m_camOrientation.y = 0.0f;
+	//m_camOrientation.z = 0.0f;
 
-	m_camLookAt.x = 0.0f;
-	m_camLookAt.y = 0.0f;
-	m_camLookAt.z = 0.0f;
+	//m_camLookAt.x = 0.0f;
+	//m_camLookAt.y = 0.0f;
+	//m_camLookAt.z = 0.0f;
 
-	m_camLookDirection.x = 0.0f;
-	m_camLookDirection.y = 0.0f;
-	m_camLookDirection.z = 0.0f;
+	//m_camLookDirection.x = 0.0f;
+	//m_camLookDirection.y = 0.0f;
+	//m_camLookDirection.z = 0.0f;
 
-	m_camRight.x = 0.0f;
-	m_camRight.y = 0.0f;
-	m_camRight.z = 0.0f;
+	//m_camRight.x = 0.0f;
+	//m_camRight.y = 0.0f;
+	//m_camRight.z = 0.0f;
 
-	m_camUp.x = 0.0f;
-	m_camUp.y = 0.0f;
-	m_camUp.z = 0.0f;
+	//m_camUp.x = 0.0f;
+	//m_camUp.y = 0.0f;
+	//m_camUp.z = 0.0f;
 
 }
 
@@ -89,6 +89,9 @@ void Game::Initialize(HWND window, int width, int height)
 
     m_deviceResources->CreateWindowSizeDependentResources();
     CreateWindowSizeDependentResources();
+
+	// Initialise the camera.
+	_camera.Init(m_InputCommands, 0.3f, 3.0f);
 
 #ifdef DXTK_AUDIO
     // Create DirectXTK for Audio objects
@@ -148,71 +151,81 @@ void Game::Update(DX::StepTimer const& timer)
 {
 	//TODO  any more complex than this, and the camera should be abstracted out to somewhere else
 	//camera motion is on a plane, so kill the 7 component of the look direction
-	Vector3 planarMotionVector = m_camLookDirection;
-	planarMotionVector.y = 0.0;
+	/*Vector3 planarMotionVector = m_camLookDirection;
+	planarMotionVector.y = 0.0;*/
+	Vector3 planarMotionVector = _camera.Forward();
+	planarMotionVector.y = 0.0f;
+
 	_dt = timer.GetElapsedSeconds();
 
-	if (m_InputCommands.rotRight)
-	{
-		m_camOrientation.y -= m_camRotRate;
-	}
-	if (m_InputCommands.rotLeft)
-	{
-		m_camOrientation.y += m_camRotRate;
-	}
+	//_camera.Update(_dt);
 
-	//create look direction from Euler angles in m_camOrientation
-	m_camLookDirection.x = sin(Maths::DegreesToRadians(m_camOrientation.y));
-	m_camLookDirection.z = cos(Maths::DegreesToRadians(m_camOrientation.y));
-	m_camLookDirection.Normalize();
+	//if (m_InputCommands.rotRight)
+	//{
+	//	m_camOrientation.y -= m_camRotRate;
+	//}
+	//if (m_InputCommands.rotLeft)
+	//{
+	//	m_camOrientation.y += m_camRotRate;
+	//}
 
-	//create right vector from look Direction
-	m_camLookDirection.Cross(Vector3::UnitY, m_camRight);
-	m_camLookDirection.Cross(Vector3::UnitX, m_camUp);
+	////create look direction from Euler angles in m_camOrientation
+	//m_camLookDirection.x = sin(Maths::DegreesToRadians(m_camOrientation.y));
+	//m_camLookDirection.z = cos(Maths::DegreesToRadians(m_camOrientation.y));
+	//m_camLookDirection.Normalize();
 
-	//process input and update stuff
-	if (m_InputCommands.forward)
-	{	
-		m_camPosition += m_camLookDirection*m_movespeed;
-	}
-	if (m_InputCommands.back)
-	{
-		m_camPosition -= m_camLookDirection*m_movespeed;
-	}
-	if (m_InputCommands.right)
-	{
-		m_camPosition += m_camRight*m_movespeed;
-	}
-	if (m_InputCommands.left)
-	{
-		m_camPosition -= m_camRight*m_movespeed;
-	}
-	if (m_InputCommands.up)
-	{
-		m_camPosition += m_camUp*m_movespeed;
-	}
-	if (m_InputCommands.down)
-	{
-		m_camPosition -= m_camUp*m_movespeed;
-	}
-	if (m_InputCommands.resetText)
-	{
-		_testingFocus = false;
-	}
-	
+	////create right vector from look Direction
+	//m_camLookDirection.Cross(Vector3::UnitY, m_camRight);
+	//m_camLookDirection.Cross(Vector3::UnitX, m_camUp);
 
-	//update lookat point
-	m_camLookAt = m_camPosition + m_camLookDirection;
+	////process input and update stuff
+	//if (m_InputCommands.forward)
+	//{	
+	//	m_camPosition += m_camLookDirection*m_movespeed;
+	//}
+	//if (m_InputCommands.back)
+	//{
+	//	m_camPosition -= m_camLookDirection*m_movespeed;
+	//}
+	//if (m_InputCommands.right)
+	//{
+	//	m_camPosition += m_camRight*m_movespeed;
+	//}
+	//if (m_InputCommands.left)
+	//{
+	//	m_camPosition -= m_camRight*m_movespeed;
+	//}
+	//if (m_InputCommands.up)
+	//{
+	//	m_camPosition += m_camUp*m_movespeed;
+	//}
+	//if (m_InputCommands.down)
+	//{
+	//	m_camPosition -= m_camUp*m_movespeed;
+	//}
+	//if (m_InputCommands.resetText)
+	//{
+	//	_testingFocus = false;
+	//}
+	//
+
+	////update lookat point
+	//m_camLookAt = m_camPosition + m_camLookDirection;
+	//_camera.Update(_dt);
+
+	SceneControls();
+	SceneUpdate();
 
 	//apply camera vectors
-    m_view = Matrix::CreateLookAt(m_camPosition, m_camLookAt, Vector3::UnitY);
-	
+    //m_view = Matrix::CreateLookAt(m_camPosition, m_camLookAt, Vector3::UnitY);
+	m_view = Matrix::CreateLookAt(_camera.Position(), _camera.LookAt(), Vector3::UnitY);
+
     m_batchEffect->SetView(m_view);
     m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_view);
-	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
-	SceneControls();
-	SceneUpdate();
+	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);	
+	//SceneControls();
+	//SceneUpdate();
 
 #ifdef DXTK_AUDIO
     m_audioTimerAcc -= (float)timer.GetElapsedSeconds();
@@ -268,7 +281,8 @@ void Game::Render()
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
-	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
+	//DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
+	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, _camera.Position()));
 	mousePosition = Maths::RoundVector3(mousePosition);
 
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
@@ -635,16 +649,26 @@ void Game::SceneControls()
 	if (m_InputCommands.wireframeMode)
 		SetWireframeMode();
 
-	// If the left mouse button has been pressed, notify the event system.
-	if (GetKeyState(VK_LBUTTON) < 0)
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_camPosition), m_camLookDirection);
+	if (m_InputCommands.resetText)
+		_testingFocus = false;
 
-	if (GetKeyState(VK_RBUTTON) < 0)
+	// If the left mouse button has been pressed, notify the event system.
+	if (m_InputCommands.leftMouseDown)
+	{
+		//_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_camPosition), m_camLookDirection);
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, _camera.Position()), _camera.Forward());
+	}
+
+	/*if (GetKeyState(VK_RBUTTON) < 0)
+	{
 		_eventSystem.Notify(EventType::EVENT_RIGHT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_camPosition), m_camLookDirection);
+	}*/
 }
 
 void Game::SceneUpdate()
 {
+	_camera.Update(_dt);
+
 	if (m_displayList.empty())
 		return;
 

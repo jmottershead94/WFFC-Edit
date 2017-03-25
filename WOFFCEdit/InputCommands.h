@@ -29,5 +29,6 @@ struct InputCommands
 	bool rightMouseDragRight;
 	bool rightMouseDragLeft;
 	bool save;
+	bool saveOnce;
 	bool spawnTree;
 };

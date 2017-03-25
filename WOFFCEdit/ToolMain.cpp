@@ -33,6 +33,7 @@ ToolMain::ToolMain()
 	m_toolInputCommands.rightMouseDown			= false;
 	m_toolInputCommands.rightMouseDrag			= false;
 	m_toolInputCommands.save					= false;
+	m_toolInputCommands.saveOnce				= false;
 	m_toolInputCommands.spawnTree				= false;
 }
 
@@ -275,9 +276,15 @@ void ToolMain::Tick(MSG *msg)
 	
 	if (m_toolInputCommands.save)
 	{
-		onActionSave();
-		m_toolInputCommands.save = false;
-		m_keyArray['0'] = false;
+		if (!m_toolInputCommands.saveOnce)
+		{
+			m_toolInputCommands.saveOnce = true;
+			onActionSave();
+		}
+	}
+	else
+	{
+		m_toolInputCommands.saveOnce = false;
 	}
 
 	if (m_toolInputCommands.spawnTree)

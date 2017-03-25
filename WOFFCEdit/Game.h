@@ -74,21 +74,7 @@ private:
 	std::vector<DisplayObject>			m_displayList;
 	DisplayChunk						m_displayChunk;
 	InputCommands						m_InputCommands;
-
-	//functionality
-	float								m_movespeed;
-
-	//camera
-	/*DirectX::SimpleMath::Vector3		m_camPosition;
-	DirectX::SimpleMath::Vector3		m_camOrientation;
-	DirectX::SimpleMath::Vector3		m_camLookAt;
-	DirectX::SimpleMath::Vector3		m_camLookDirection;
-	DirectX::SimpleMath::Vector3		m_camRight;
-	DirectX::SimpleMath::Vector3		m_camUp;
-	DirectX::SimpleMath::Vector3		m_camForward;*/
-
-	float m_camRotRate;
-	
+		
 	//control variables
 	bool m_grid;							//grid rendering on / off
 	// Device resources.
@@ -164,6 +150,15 @@ public:
 	 * Sets the wireframe mode of the application.
 	 */
 	void SetWireframeMode();
+
+	/**
+	 * Spawns in a model.
+	 * @param modelFilePath the file path to the model we want to spawn in.
+	 * @param textureFilePath the file path to the texture for the model.
+	 * @param modelScale the scale offset for the model size.
+	 * @return DisplayObject* the new display object.
+	 */
+	DisplayObject* SpawnNewDisplayObject(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
 };
 
 std::wstring StringToWCHART(std::string s);

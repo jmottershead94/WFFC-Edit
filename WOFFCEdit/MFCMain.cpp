@@ -1,7 +1,6 @@
 #include "MFCMain.h"
 #include "resource.h"
 
-
 BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_FILE_QUIT,	&MFCMain::MenuFileQuit)
 	ON_COMMAND(ID_FILE_SAVETERRAIN, &MFCMain::MenuFileSaveTerrain)
@@ -9,6 +8,7 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_BUTTON40001,	&MFCMain::ToolBarButton1)
 	ON_COMMAND(ID_GENERATETERRAIN, &MFCMain::MenuGenerateRandomTerrain)
 	ON_COMMAND(ID_WIREFRAMEMODE, &MFCMain::MenuToggleWireframe)
+	ON_COMMAND(ID_SPAWNTREE, &MFCMain::MenuSpawnTree)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -105,8 +105,7 @@ void MFCMain::MenuEditSelect()
 }
 
 void MFCMain::ToolBarButton1()
-{
-	
+{	
 	m_ToolSystem.onActionSave();
 }
 
@@ -120,11 +119,13 @@ void MFCMain::MenuToggleWireframe()
 	m_ToolSystem.onActionToggleWireframe();
 }
 
-MFCMain::MFCMain()
+void MFCMain::MenuSpawnTree()
 {
+	m_ToolSystem.onActionSpawnModel("database/data/Lowpoly_tree_sample.cmo", "database/data/placeholder.dds", DirectX::SimpleMath::Vector3(3.0f, 3.0f, 3.0f));
 }
 
+MFCMain::MFCMain()
+{}
 
 MFCMain::~MFCMain()
-{
-}
+{}

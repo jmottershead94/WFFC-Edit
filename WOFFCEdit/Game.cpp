@@ -61,7 +61,8 @@ void Game::Initialize(HWND window, int width, int height)
     CreateWindowSizeDependentResources();
 
 	// Initialise the camera.
-	_camera = std::make_shared<Camera>(DirectX::SimpleMath::Vector3(0.0f, 3.7f, -3.5f), m_InputCommands, 0.3f, 1.5f);
+	_camera = std::make_shared<Camera>(DirectX::SimpleMath::Vector3(90.0f, 24.0f, 100.0f), m_InputCommands, 0.3f, 1.5f);
+	_camera->Transform().Rotate(0.0f, 180.0f, 0.0f);
 
 #ifdef DXTK_AUDIO
     // Create DirectXTK for Audio objects
@@ -460,6 +461,7 @@ void Game::CreateDeviceDependentResources()
 
     m_fxFactory = std::make_unique<EffectFactory>(device);
 	m_fxFactory->SetDirectory(L"database/data/"); //fx Factory will look in the database directory
+	m_fxFactory->SetSharing(false);
 
     m_sprites = std::make_unique<SpriteBatch>(context);
 
@@ -561,7 +563,7 @@ void Game::SceneControls()
 
 	if (m_InputCommands.resetText)
 		_testingFocus = false;
-
+	
 	if (m_InputCommands.leftMouseDown)
 		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
 
@@ -604,6 +606,48 @@ void Game::GenerateRandomTerrain()
 void Game::SetWireframeMode()
 {
 	Utils::SetWireframe(!Utils::WireframeMode());
+}
+
+DisplayObject* Game::SpawnNewDisplayObject(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
+{
+	auto device = m_deviceResources->GetD3DDevice();
+	auto devicecontext = m_deviceResources->GetD3DDeviceContext();
+
+	//create a temp display object that we will populate then append to the display list.
+	DisplayObject* newDisplayObject = new DisplayObject();
+	newDisplayObject->m_ID = m_displayList.size() + 1;
+	newDisplayObject->SetEditorCamera(_camera);
+
+	//load model
+	std::wstring modelwstr = StringToWCHART(modelFilePath);							
+	newDisplayObject->m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);
+																							
+	std::wstring texturewstr = StringToWCHART(textureFilePath);
+	HRESULT rs;
+	rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject->m_texture_diffuse);
+
+	if (rs)
+		CreateDDSTextureFromFile(device, L"database/data/Error.dds", nullptr, &newDisplayObject->m_texture_diffuse);
+
+	//apply new texture to models effect
+	newDisplayObject->m_model->UpdateEffects([&](IEffect* effect) //This uses a Lambda function,  if you dont understand it: Look it up.
+	{
+		auto lights = dynamic_cast<BasicEffect*>(effect);
+		if (lights)
+			lights->SetTexture(newDisplayObject->m_texture_diffuse);
+	});
+
+	// Set the transform for this object (position, rotation and scale).
+	newDisplayObject->Transform().SetPosition(_camera->Transform().LookAt());
+	newDisplayObject->Transform().SetRotation(DirectX::SimpleMath::Vector3::Zero);
+	newDisplayObject->Transform().SetScale(modelScale);
+
+	//set wireframe / render flags
+	newDisplayObject->m_render = true;
+	newDisplayObject->m_wireframe = Utils::WireframeMode();
+
+	m_displayList.push_back(*newDisplayObject);
+	return newDisplayObject;
 }
 
 std::wstring StringToWCHART(std::string s)

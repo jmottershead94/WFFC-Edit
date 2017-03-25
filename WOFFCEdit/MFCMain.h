@@ -47,5 +47,10 @@ private:
 	 */
 	afx_msg void MenuToggleWireframe();
 
+	/**
+	 * Spawns in a tree model.
+	 */
+	afx_msg void MenuSpawnTree();
+
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };

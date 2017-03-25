@@ -55,6 +55,16 @@ private:
 	Utils _utilities;
 	Maths _maths;
 
+	/**
+	 * Spawns in a new scene object.
+	 * @param displayObject the display object to copy variables from.
+	 * @param modelFilePath the file path to the model.
+	 * @param textureFilePath the file path to the texture.
+	 * @param modelScale the scaling offset for the model.
+	 * @return SceneObject* the new scene object.
+	 */
+	SceneObject* SpawnNewSceneObject(DisplayObject* displayObject, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
+
 public:
 	/**
 	 * Provides a way to generate random terrain.
@@ -65,6 +75,14 @@ public:
 	 * Provides a way to toggle wireframe.
 	 */
 	void onActionToggleWireframe();
+
+	/**
+	 * Spawns in a model.
+	 * @param modelFilePath the file path to the model we want to spawn in.
+	 * @param textureFilePath the file path to the texture for the model.
+	 * @param modelScale the scale offset for the model size.
+	 */
+	void onActionSpawnModel(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
 
 	/**
 	 * What happens when the left mouse has been pressed.

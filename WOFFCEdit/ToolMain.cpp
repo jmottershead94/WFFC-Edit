@@ -32,6 +32,8 @@ ToolMain::ToolMain()
 	m_toolInputCommands.doubleLeftMouseClick	= false;
 	m_toolInputCommands.rightMouseDown			= false;
 	m_toolInputCommands.rightMouseDrag			= false;
+	m_toolInputCommands.save					= false;
+	m_toolInputCommands.spawnTree				= false;
 }
 
 ToolMain::~ToolMain()
@@ -151,8 +153,7 @@ void ToolMain::onActionLoad()
 	sqlCommand = "SELECT * from Chunks";				//sql command which will return all records from  chunks table. There is only one tho.
 														//Send Command and fill result object
 	rc = sqlite3_prepare_v2(m_databaseConnection, sqlCommand, -1, &pResultsChunk, 0);
-
-
+	
 	sqlite3_step(pResultsChunk);
 	m_chunk.ID = sqlite3_column_int(pResultsChunk, 0);
 	m_chunk.name = reinterpret_cast<const char*>(sqlite3_column_text(pResultsChunk, 1));
@@ -190,7 +191,6 @@ void ToolMain::onActionSave()
 	char *ErrMSG = 0;
 	sqlite3_stmt *pResults;								//results of the query
 	
-
 	//OBJECTS IN THE WORLD Delete them all
 	//prepare SQL Text
 	sqlCommand = "DELETE FROM Objects";	 //will delete the whole object table.   Slightly risky but hey.
@@ -272,6 +272,20 @@ void ToolMain::Tick(MSG *msg)
 		//update Scenegraph
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
+	
+	if (m_toolInputCommands.save)
+	{
+		onActionSave();
+		m_toolInputCommands.save = false;
+		m_keyArray['0'] = false;
+	}
+
+	if (m_toolInputCommands.spawnTree)
+	{
+		onActionSpawnModel("database/data/Lowpoly_tree_sample.cmo", "database/data/placeholder.dds", DirectX::SimpleMath::Vector3(3.0f, 3.0f, 3.0f));
+		m_toolInputCommands.spawnTree = false;
+		m_keyArray['P'] = false;
+	}
 
 	//Renderer Update Call
 	m_d3dRenderer.Tick(&m_toolInputCommands);
@@ -396,6 +410,65 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.wireframeMode = true;
 	}
 	else m_toolInputCommands.wireframeMode = false;
+
+	if (m_keyArray['0'])
+		m_toolInputCommands.save = true;
+	else m_toolInputCommands.save = false;
+
+	if (m_keyArray['P'])
+		m_toolInputCommands.spawnTree = true;
+	else m_toolInputCommands.spawnTree = false;
+}
+
+SceneObject* ToolMain::SpawnNewSceneObject(DisplayObject* displayObject, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
+{
+	SceneObject* newObject = new SceneObject();
+	newObject->ID = displayObject->m_ID;
+	newObject->chunk_ID = 0;
+	newObject->model_path = modelFilePath;
+	newObject->tex_diffuse_path = textureFilePath;
+	newObject->posX = displayObject->Transform().Position().x;
+	newObject->posY = displayObject->Transform().Position().y;
+	newObject->posZ = displayObject->Transform().Position().z;
+	newObject->rotX = displayObject->Transform().Rotation().x;
+	newObject->rotY = displayObject->Transform().Rotation().y;
+	newObject->rotZ = displayObject->Transform().Rotation().z;
+	newObject->scaX = modelScale.x;
+	newObject->scaY = modelScale.y;
+	newObject->scaZ = modelScale.z;
+	newObject->render = false;
+	newObject->collision = false;
+	newObject->collision_mesh = "";
+	newObject->collectable = false;
+	newObject->destructable = false;
+	newObject->health_amount = 0;
+	newObject->editor_render = true;
+	newObject->editor_texture_vis = true;
+	newObject->editor_normals_vis = false;
+	newObject->editor_collision_vis = false;
+	newObject->editor_pivot_vis = false;
+	newObject->pivotX = 0.0f;
+	newObject->pivotY = 0.0f;
+	newObject->pivotZ = 0.0f;
+	newObject->snapToGround = false;
+	newObject->AINode = false;
+	newObject->audio_path = "";
+	newObject->volume = 0.0f;
+	newObject->pitch = 0.0f;
+	newObject->pan = 0.0f;
+	newObject->one_shot = false;
+	newObject->play_on_init = false;
+	newObject->play_in_editor = false;
+	newObject->min_dist = 0.0f;
+	newObject->max_dist = 0.0f;
+	newObject->camera = false;
+	newObject->path_node = false;
+	newObject->path_node_start = false;
+	newObject->path_node_end = false;
+	newObject->parent_id = 0;
+	newObject->editor_wireframe = false;
+	newObject->name = "Name";
+	return newObject;
 }
 
 void ToolMain::onActionGenerateTerrain()
@@ -406,6 +479,11 @@ void ToolMain::onActionGenerateTerrain()
 void ToolMain::onActionToggleWireframe()
 {
 	m_d3dRenderer.SetWireframeMode();
+}
+
+void ToolMain::onActionSpawnModel(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
+{
+	m_sceneGraph.push_back(*SpawnNewSceneObject(m_d3dRenderer.SpawnNewDisplayObject(modelFilePath, textureFilePath, modelScale), modelFilePath, textureFilePath, modelScale));
 }
 
 void ToolMain::onLeftMouseDown(MSG* msg)

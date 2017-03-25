@@ -28,4 +28,6 @@ struct InputCommands
 	bool rightMouseDragDown;
 	bool rightMouseDragRight;
 	bool rightMouseDragLeft;
+	bool save;
+	bool spawnTree;
 };

@@ -141,7 +141,7 @@ private:
 	double _dt = 0.00;
 	float _testingClick = 0.0f;
 	EventSystem _eventSystem;
-	Camera _camera;
+	std::shared_ptr<Camera> _camera;
 	DirectX::SimpleMath::Vector3 _testingComponent;
 
 	/**

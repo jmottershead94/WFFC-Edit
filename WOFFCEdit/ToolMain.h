@@ -50,6 +50,8 @@ private:	//variables
 	
 // Jason's Added Work.
 private:
+	const float mouseDragDeadCentre = 100.0f;
+	POINT previousMouse;
 	Utils _utilities;
 	Maths _maths;
 
@@ -63,4 +65,46 @@ public:
 	 * Provides a way to toggle wireframe.
 	 */
 	void onActionToggleWireframe();
+
+	/**
+	 * What happens when the left mouse has been pressed.
+	 * @param msg the message with the lParam and wParam for windows parameters.
+	 */
+	void onLeftMouseDown(MSG* msg);
+
+	/**
+	 * What happens when the left mouse button has been released.
+	 */
+	void onLeftMouseUp();
+
+	/**
+	 * What happens when the right mouse has ben pressed.
+	 * @param msg the message with the lParam and wParam for windows parameters.
+	 */
+	void onRightMouseDown(MSG* msg);
+
+	/**
+	 * What happens when the right mouse button has been released.
+	 */
+	void onRightMouseUp();
+
+	/**
+	 * Defines what happens when we move the mouse.
+	 * @param msg the message with the lParam and wParam for windows parameters.
+	 */
+	void onMouseMove(MSG* msg);
+
+	/**
+	 * What happens when we hold down the right mouse button and drag the mouse.
+	 * @param mouseX the delta x position of the mouse.
+	 * @param mouseY the delta y position of the mouse.
+	 */
+	void onRightButtonMouseDrag(int mouseX, int mouseY);
+
+	/**
+	 * What happens when we hold down the left mouse button and drag the mouse.
+	 * @param mouseX the delta x position of the mouse.
+	 * @param mouseY the delta y position of the mouse.
+	 */
+	void onLeftButtonMouseDrag(int mouseX, int mouseY);
 };

@@ -83,4 +83,13 @@ class Maths
 		 * @return std::vector<DirectX::SimpleMath::Vector3> the data structure of points on the line.
 		 */
 		static std::vector<DirectX::SimpleMath::Vector3> BresenhamsLine(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end);
+
+		/**
+		 * Linear interpolation between a start and end point over time.
+		 * @param start the point to go from.
+		 * @param end the point to go to.
+		 * @param speed how fast to move between the start and end point.
+		 * @return const DirectX::SimpleMath::Vector3 the new lerped position.
+		 */
+		static DirectX::SimpleMath::Vector3 Lerp(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end, const float speed);
 };

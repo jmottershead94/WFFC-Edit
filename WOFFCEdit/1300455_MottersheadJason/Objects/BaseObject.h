@@ -4,6 +4,7 @@
 #include "../Objects/Observer.h"
 #include "../Components/Transform/TransformComponent.h"
 #include "../Components/Physics/BoxColliderComponent.h"
+#include "Camera.h"
 
 /**
  * A base object to be used for providing an interactable object
@@ -93,7 +94,7 @@ class BaseObject : public Observer
 		 * Notifies this object about an event.
 		 * @param currentEvent what event has occured (i.e. left mouse click).
 		 */
-		void OnNotify(const EventType currentEvent) override;
+		void OnNotify(EventType& currentEvent) override;
 
 		/**
 		 * Notifies this object about an event.
@@ -101,25 +102,31 @@ class BaseObject : public Observer
 		 * @param cursorPosition the position of the cursor in the world.
 		 * @param cameraLookDirection the direction the camera is facing.
 		 */
-		void OnNotify(const EventType currentEvent, const DirectX::SimpleMath::Vector3& cursorPosition, const DirectX::SimpleMath::Vector3& cameraLookDirection) override;
+		void OnNotify(EventType& currentEvent, const DirectX::SimpleMath::Vector3& cursorPosition, const DirectX::SimpleMath::Vector3& cameraLookDirection) override;
 
 		/**
 		 * Allows us to set this object being in focus.
 		 * @param value if this object is in focus or not.
 		 */
-		inline void const SetFocus(const bool value) { inFocus = value; }
+		inline void SetFocus(const bool value)							{ inFocus = value; }
+
+		/**
+		 * Provides a way to set the main camera for editor use.
+		 * @param mainCamera points to the main editor camera.
+		 */
+		inline void SetEditorCamera(std::shared_ptr<Camera> mainCamera) { camera = mainCamera; };
 
 		/**
 		 * Allows us to see if this object is in focus.
 		 * @return const bool if the object is in focus.
 		 */
-		inline bool const InFocus() { return inFocus; }
+		inline bool const Focus()										{ return inFocus; }
 
 		/**
 		 * Gets the transform component of this object.
 		 * @return TransformComponent& the transform associated with this object.
 		 */
-		inline TransformComponent& Transform() { return *transform; }
+		inline TransformComponent& Transform()							{ return *transform; }
 		
 	protected:
 		bool inFocus;
@@ -128,6 +135,7 @@ class BaseObject : public Observer
 		ColliderComponent* editorCollider;
 		ColliderComponent* collider;
 		std::vector<Component*> components;
+		std::shared_ptr<Camera> camera;
 
 	private:
 		/**
@@ -174,4 +182,9 @@ class BaseObject : public Observer
 		 * What happens when the user has pressed the right mouse button on this object.
 		 */
 		virtual void OnRightMouseClick() {};
+
+		/**
+		 * What happens when the user right clicks and drags the mouse on this object.
+		 */
+		virtual void OnRightMouseDrag() {};
 };

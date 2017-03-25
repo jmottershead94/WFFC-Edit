@@ -186,3 +186,9 @@ std::vector<DirectX::SimpleMath::Vector3> Maths::BresenhamsLine(const DirectX::S
 
 	return result;
 }
+
+DirectX::SimpleMath::Vector3 Maths::Lerp(const DirectX::SimpleMath::Vector3& start, const DirectX::SimpleMath::Vector3& end, const float speed)
+{
+	DirectX::SimpleMath::Vector3 result(start + (speed * (end - start)));
+	return result;
+}

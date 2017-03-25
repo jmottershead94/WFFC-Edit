@@ -19,7 +19,6 @@ void DisplayObject::OnLeftMouseClick()
 
 void DisplayObject::OnLeftMouseDoubleClick()
 {
-	// Move the camera to the position of this object.
-	// We need a pointer to the main camera.
-	// Make a camera class...
+	// Move the camera over to this object.
+	camera->Transform().SetPosition(Maths::Lerp(camera->Transform().Position(), transform->Position(), 0.2f));
 }

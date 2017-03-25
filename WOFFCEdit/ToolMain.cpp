@@ -19,13 +19,19 @@ ToolMain::ToolMain()
 	m_toolInputCommands.right		= false;
 	m_toolInputCommands.up			= false;
 	m_toolInputCommands.down		= false;
+	m_toolInputCommands.rotRight	= false;
+	m_toolInputCommands.rotLeft		= false;
+	m_toolInputCommands.rotUp		= false;
+	m_toolInputCommands.rotDown		= false;
 	
 	m_toolInputCommands.generateTerrain			= false;
 	m_toolInputCommands.resetText				= false;
 	m_toolInputCommands.wireframeMode			= false;
 	m_toolInputCommands.leftMouseDown			= false;
+	m_toolInputCommands.leftMouseDrag			= false;
 	m_toolInputCommands.doubleLeftMouseClick	= false;
 	m_toolInputCommands.rightMouseDown			= false;
+	m_toolInputCommands.rightMouseDrag			= false;
 }
 
 ToolMain::~ToolMain()
@@ -289,28 +295,29 @@ void ToolMain::UpdateInput(MSG * msg)
 		}
 		case WM_MOUSEMOVE:
 		{
+			onMouseMove(msg);
 			break;
 		}
 		// Mouse clicks.
 		case WM_LBUTTONDOWN:
 		{
-			m_toolInputCommands.leftMouseDown = true;
+			onLeftMouseDown(msg);
 			break;
 		}
 		case WM_RBUTTONDOWN:
 		{
-			m_toolInputCommands.rightMouseDown = true;
+			onRightMouseDown(msg);
 			break;
 		}
 		// Mouse releases.
 		case WM_LBUTTONUP:
 		{
-			m_toolInputCommands.leftMouseDown = false;
+			onLeftMouseUp();
 			break;
 		}
 		case WM_RBUTTONUP:
 		{
-			m_toolInputCommands.rightMouseDown = false;
+			onRightMouseUp();
 			break;
 		}
 		// Mouse double clicks.
@@ -327,7 +334,6 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.forward = true;
 	}
 	else m_toolInputCommands.forward = false;
-	
 	if (m_keyArray['S'])
 	{
 		m_toolInputCommands.back = true;
@@ -338,23 +344,21 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.left = true;
 	}
 	else m_toolInputCommands.left = false;
-
 	if (m_keyArray['D'])
 	{
 		m_toolInputCommands.right = true;
 	}
 	else m_toolInputCommands.right = false;
-	// Y axis movement.
 	if (m_keyArray['Q'])
-	{
-		m_toolInputCommands.up = true;
-	}
-	else m_toolInputCommands.up = false;
-	if (m_keyArray['E'])
 	{
 		m_toolInputCommands.down = true;
 	}
 	else m_toolInputCommands.down = false;
+	if (m_keyArray['E'])
+	{
+		m_toolInputCommands.up = true;
+	}
+	else m_toolInputCommands.up = false;
 	//rotation
 	if (m_keyArray['L'])
 	{
@@ -402,4 +406,153 @@ void ToolMain::onActionGenerateTerrain()
 void ToolMain::onActionToggleWireframe()
 {
 	m_d3dRenderer.SetWireframeMode();
+}
+
+void ToolMain::onLeftMouseDown(MSG* msg)
+{
+	int xPos = GET_X_LPARAM(msg->lParam);
+	int yPos = GET_Y_LPARAM(msg->lParam);
+
+	POINT cursorPoint;
+	cursorPoint.x = xPos;
+	cursorPoint.y = yPos;
+	previousMouse = cursorPoint;
+
+	m_toolInputCommands.leftMouseDown = true;
+}
+
+void ToolMain::onLeftMouseUp()
+{
+	m_toolInputCommands.leftMouseDown = false;
+	m_toolInputCommands.leftMouseDrag = false;
+	m_toolInputCommands.leftMouseDragUp = false;
+	m_toolInputCommands.leftMouseDragRight = false;
+	m_toolInputCommands.leftMouseDragDown = false;
+	m_toolInputCommands.leftMouseDragLeft = false;
+	m_toolInputCommands.doubleLeftMouseClick = false;
+}
+
+void ToolMain::onRightMouseDown(MSG* msg)
+{
+	int xPos = GET_X_LPARAM(msg->lParam);
+	int yPos = GET_Y_LPARAM(msg->lParam);
+
+	POINT cursorPoint;
+	cursorPoint.x = xPos;
+	cursorPoint.y = yPos;
+	previousMouse = cursorPoint;
+
+	m_toolInputCommands.rightMouseDown = true;
+}
+
+void ToolMain::onRightMouseUp()
+{
+	m_toolInputCommands.rightMouseDown = false;
+	m_toolInputCommands.rightMouseDrag = false;
+	m_toolInputCommands.rightMouseDragUp = false;
+	m_toolInputCommands.rightMouseDragRight = false;
+	m_toolInputCommands.rightMouseDragDown = false;
+	m_toolInputCommands.rightMouseDragLeft = false;
+}
+
+void ToolMain::onMouseMove(MSG* msg)
+{
+	int xPos = GET_X_LPARAM(msg->lParam);
+	int yPos = GET_Y_LPARAM(msg->lParam);
+
+	POINT deltaPosition;
+	deltaPosition.x = xPos - previousMouse.x;
+	deltaPosition.y = yPos - previousMouse.y;
+	
+	// Handles right mouse button drags.
+	if (MK_RBUTTON & msg->wParam)
+		onRightButtonMouseDrag(deltaPosition.x, deltaPosition.y);
+
+	// Handles left mouse button drags.
+	if (MK_LBUTTON & msg->wParam)
+		onLeftButtonMouseDrag(deltaPosition.x, deltaPosition.y);
+}
+
+void ToolMain::onRightButtonMouseDrag(int mouseX, int mouseY)
+{
+	if (!m_toolInputCommands.rightMouseDown)
+		return;
+
+	m_toolInputCommands.rightMouseDrag = true;
+
+	// Checking x axis drag.
+	if (mouseX >= mouseDragDeadCentre)
+	{
+		m_toolInputCommands.rightMouseDragRight = true;
+		m_toolInputCommands.rightMouseDragLeft = false;
+	}
+	else if (mouseX <= -mouseDragDeadCentre)
+	{
+		m_toolInputCommands.rightMouseDragRight = false;
+		m_toolInputCommands.rightMouseDragLeft = true;
+	}
+	else
+	{
+		m_toolInputCommands.rightMouseDragRight = false;
+		m_toolInputCommands.rightMouseDragLeft = false;
+	}
+
+	// Checking y axis drag.
+	if (mouseY >= mouseDragDeadCentre)
+	{
+		m_toolInputCommands.rightMouseDragUp = false;
+		m_toolInputCommands.rightMouseDragDown = true;
+	}
+	else if (mouseY <= -mouseDragDeadCentre)
+	{
+		m_toolInputCommands.rightMouseDragUp = true;
+		m_toolInputCommands.rightMouseDragDown = false;
+	}
+	else
+	{
+		m_toolInputCommands.rightMouseDragUp = false;
+		m_toolInputCommands.rightMouseDragDown = false;
+	}
+}
+
+void ToolMain::onLeftButtonMouseDrag(int mouseX, int mouseY)
+{
+	if (!m_toolInputCommands.leftMouseDown)
+		return;
+
+	m_toolInputCommands.leftMouseDrag = true;
+
+	// Checking x axis drag.
+	if (mouseX >= mouseDragDeadCentre)
+	{
+		m_toolInputCommands.leftMouseDragRight = true;
+		m_toolInputCommands.leftMouseDragLeft = false;
+	}
+	else if (mouseX <= -mouseDragDeadCentre)
+	{
+		m_toolInputCommands.leftMouseDragRight = false;
+		m_toolInputCommands.leftMouseDragLeft = true;
+	}
+	else
+	{
+		m_toolInputCommands.leftMouseDragRight = false;
+		m_toolInputCommands.leftMouseDragLeft = false;
+	}
+
+	// Checking y axis drag.
+	if (mouseY >= mouseDragDeadCentre)
+	{
+		m_toolInputCommands.leftMouseDragUp = false;
+		m_toolInputCommands.leftMouseDragDown = true;
+	}
+	else if (mouseY <= -mouseDragDeadCentre)
+	{
+		m_toolInputCommands.leftMouseDragUp = true;
+		m_toolInputCommands.leftMouseDragDown = false;
+	}
+	else
+	{
+		m_toolInputCommands.leftMouseDragUp = false;
+		m_toolInputCommands.leftMouseDragDown = false;
+	}
 }

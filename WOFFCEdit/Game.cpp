@@ -23,36 +23,6 @@ Game::Game()
 	//initial Settings
 	//modes
 	m_grid = false;
-
-	//functional
-	m_movespeed = 0.30;
-	m_camRotRate = 3.0;
-
-	////camera
-	//m_camPosition.x = 0.0f;
-	//m_camPosition.y = 3.7f;
-	//m_camPosition.z = -3.5f;
-
-	//m_camOrientation.x = 0.0f;
-	//m_camOrientation.y = 0.0f;
-	//m_camOrientation.z = 0.0f;
-
-	//m_camLookAt.x = 0.0f;
-	//m_camLookAt.y = 0.0f;
-	//m_camLookAt.z = 0.0f;
-
-	//m_camLookDirection.x = 0.0f;
-	//m_camLookDirection.y = 0.0f;
-	//m_camLookDirection.z = 0.0f;
-
-	//m_camRight.x = 0.0f;
-	//m_camRight.y = 0.0f;
-	//m_camRight.z = 0.0f;
-
-	//m_camUp.x = 0.0f;
-	//m_camUp.y = 0.0f;
-	//m_camUp.z = 0.0f;
-
 }
 
 Game::~Game()
@@ -91,7 +61,7 @@ void Game::Initialize(HWND window, int width, int height)
     CreateWindowSizeDependentResources();
 
 	// Initialise the camera.
-	_camera.Init(m_InputCommands, 0.3f, 3.0f);
+	_camera = std::make_shared<Camera>(DirectX::SimpleMath::Vector3(0.0f, 3.7f, -3.5f), m_InputCommands, 0.3f, 1.5f);
 
 #ifdef DXTK_AUDIO
     // Create DirectXTK for Audio objects
@@ -151,81 +121,20 @@ void Game::Update(DX::StepTimer const& timer)
 {
 	//TODO  any more complex than this, and the camera should be abstracted out to somewhere else
 	//camera motion is on a plane, so kill the 7 component of the look direction
-	/*Vector3 planarMotionVector = m_camLookDirection;
-	planarMotionVector.y = 0.0;*/
-	Vector3 planarMotionVector = _camera.Forward();
+	Vector3 planarMotionVector = _camera->Transform().Forward();
 	planarMotionVector.y = 0.0f;
 
 	_dt = timer.GetElapsedSeconds();
-
-	//_camera.Update(_dt);
-
-	//if (m_InputCommands.rotRight)
-	//{
-	//	m_camOrientation.y -= m_camRotRate;
-	//}
-	//if (m_InputCommands.rotLeft)
-	//{
-	//	m_camOrientation.y += m_camRotRate;
-	//}
-
-	////create look direction from Euler angles in m_camOrientation
-	//m_camLookDirection.x = sin(Maths::DegreesToRadians(m_camOrientation.y));
-	//m_camLookDirection.z = cos(Maths::DegreesToRadians(m_camOrientation.y));
-	//m_camLookDirection.Normalize();
-
-	////create right vector from look Direction
-	//m_camLookDirection.Cross(Vector3::UnitY, m_camRight);
-	//m_camLookDirection.Cross(Vector3::UnitX, m_camUp);
-
-	////process input and update stuff
-	//if (m_InputCommands.forward)
-	//{	
-	//	m_camPosition += m_camLookDirection*m_movespeed;
-	//}
-	//if (m_InputCommands.back)
-	//{
-	//	m_camPosition -= m_camLookDirection*m_movespeed;
-	//}
-	//if (m_InputCommands.right)
-	//{
-	//	m_camPosition += m_camRight*m_movespeed;
-	//}
-	//if (m_InputCommands.left)
-	//{
-	//	m_camPosition -= m_camRight*m_movespeed;
-	//}
-	//if (m_InputCommands.up)
-	//{
-	//	m_camPosition += m_camUp*m_movespeed;
-	//}
-	//if (m_InputCommands.down)
-	//{
-	//	m_camPosition -= m_camUp*m_movespeed;
-	//}
-	//if (m_InputCommands.resetText)
-	//{
-	//	_testingFocus = false;
-	//}
-	//
-
-	////update lookat point
-	//m_camLookAt = m_camPosition + m_camLookDirection;
-	//_camera.Update(_dt);
-
 	SceneControls();
 	SceneUpdate();
 
 	//apply camera vectors
-    //m_view = Matrix::CreateLookAt(m_camPosition, m_camLookAt, Vector3::UnitY);
-	m_view = Matrix::CreateLookAt(_camera.Position(), _camera.LookAt(), Vector3::UnitY);
+	m_view = Matrix::CreateLookAt(_camera->Transform().Position(), _camera->Transform().LookAt(), Vector3::UnitY);
 
     m_batchEffect->SetView(m_view);
     m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_view);
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);	
-	//SceneControls();
-	//SceneUpdate();
 
 #ifdef DXTK_AUDIO
     m_audioTimerAcc -= (float)timer.GetElapsedSeconds();
@@ -282,7 +191,7 @@ void Game::Render()
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
 	//DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
-	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, _camera.Position()));
+	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()));
 	mousePosition = Maths::RoundVector3(mousePosition);
 
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
@@ -304,13 +213,13 @@ void Game::Render()
 	for (int i = 0; i < numRenderObjects; i++)
 	{
 		m_deviceResources->PIXBeginEvent(L"Draw model");
-		const XMVECTORF32 scale = { m_displayList[i].Transform().GetScale().x, m_displayList[i].Transform().GetScale().y, m_displayList[i].Transform().GetScale().z };
-		const XMVECTORF32 translate = { m_displayList[i].Transform().GetPosition().x, m_displayList[i].Transform().GetPosition().y, m_displayList[i].Transform().GetPosition().z };
+		const XMVECTORF32 scale = { m_displayList[i].Transform().Scale().x, m_displayList[i].Transform().Scale().y, m_displayList[i].Transform().Scale().z };
+		const XMVECTORF32 translate = { m_displayList[i].Transform().Position().x, m_displayList[i].Transform().Position().y, m_displayList[i].Transform().Position().z };
 
 		//convert degrees into radians for rotation matrix
-		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].Transform().GetRotation().y *3.1415 / 180,
-															m_displayList[i].Transform().GetRotation().x *3.1415 / 180,
-															m_displayList[i].Transform().GetRotation().z *3.1415 / 180);
+		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].Transform().Rotation().y *3.1415 / 180,
+															m_displayList[i].Transform().Rotation().x *3.1415 / 180,
+															m_displayList[i].Transform().Rotation().z *3.1415 / 180);
 		
 		m_displayList[i].m_wireframe = Utils::WireframeMode();
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
@@ -453,7 +362,8 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 	{
 		//create a temp display object that we will populate then append to the display list.
 		DisplayObject newDisplayObject;
-		
+		newDisplayObject.SetEditorCamera(_camera);
+
 		//load model
 		std::wstring modelwstr = StringToWCHART(SceneGraph->at(i).model_path);							//convect string to Wchar
 		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);	//get DXSDK to load model "False" for LH coordinate system (maya)
@@ -495,7 +405,7 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		return;
 
 	DisplayObject testing = m_displayList.at(0);
-	_testingComponent = testing.GetComponent<TransformComponent>()->GetPosition();
+	_testingComponent = testing.GetComponent<TransformComponent>()->Position();
 
 	for (size_t i = 0; i < m_displayList.size(); ++i)
 	{
@@ -652,22 +562,19 @@ void Game::SceneControls()
 	if (m_InputCommands.resetText)
 		_testingFocus = false;
 
-	// If the left mouse button has been pressed, notify the event system.
 	if (m_InputCommands.leftMouseDown)
-	{
-		//_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_camPosition), m_camLookDirection);
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, _camera.Position()), _camera.Forward());
-	}
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
 
-	/*if (GetKeyState(VK_RBUTTON) < 0)
-	{
-		_eventSystem.Notify(EventType::EVENT_RIGHT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_camPosition), m_camLookDirection);
-	}*/
+	if(m_InputCommands.leftMouseDrag)
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_DRAG, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
+	
+	if(m_InputCommands.doubleLeftMouseClick)
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK_DOUBLE, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
 }
 
 void Game::SceneUpdate()
 {
-	_camera.Update(_dt);
+	_camera->Update(_dt);
 
 	if (m_displayList.empty())
 		return;
@@ -679,11 +586,11 @@ void Game::SceneUpdate()
 
 		if (!_testingFocus)
 		{
-			if (displayObject.InFocus())
+			if (displayObject.Focus())
 			{
 				_testingFocus = true;
 				//_testingClick = displayObject.m_position.x;
-				_testingClick = displayObject.Transform().GetPosition().x;
+				_testingClick = displayObject.Transform().Position().x;
 			}
 		}
 	}

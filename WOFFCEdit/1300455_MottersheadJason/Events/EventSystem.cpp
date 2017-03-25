@@ -7,7 +7,7 @@ EventSystem::EventSystem() :
 EventSystem::~EventSystem()
 {}
 
-void EventSystem::Notify(const EventType currentEvent)
+void EventSystem::Notify(EventType currentEvent)
 {
 	// If there are no observers in our event system, or if the event system is disabled, just return.
 	if (_observers.empty() || !_enabled)
@@ -18,7 +18,7 @@ void EventSystem::Notify(const EventType currentEvent)
 		_observers.at(i)->OnNotify(currentEvent);
 }
 
-void EventSystem::Notify(const EventType currentEvent, const DirectX::SimpleMath::Vector3 & cursorPosition, const DirectX::SimpleMath::Vector3 & cameraLookDirection)
+void EventSystem::Notify(EventType currentEvent, const DirectX::SimpleMath::Vector3 & cursorPosition, const DirectX::SimpleMath::Vector3 & cameraLookDirection)
 {
 	// If there are no observers in our event system, or if the event system is disabled, just return.
 	if (_observers.empty() || !_enabled)

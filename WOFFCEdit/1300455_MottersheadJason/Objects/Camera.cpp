@@ -1,67 +1,68 @@
 #include "Camera.h"
 
-Camera::Camera() :
-	_speed(0.0f),
-	_rotateRate(0.0f),
-	_position(0.0f, 3.7f, -3.5f),
-	_rotation(DirectX::SimpleMath::Vector3::Zero),
-	_lookAt(DirectX::SimpleMath::Vector3::Zero),
-	_right(DirectX::SimpleMath::Vector3::UnitX),
-	_up(DirectX::SimpleMath::Vector3::UnitY),
-	_forward(DirectX::SimpleMath::Vector3::UnitZ),
-	_input(nullptr)
-{}
+Camera::Camera(const DirectX::SimpleMath::Vector3 position, InputCommands& input, const float speed, const float rotateRate) :
+	_speed(speed),
+	_rotateRate(rotateRate),
+	_input(&input)
+{
+	_transform.SetPosition(position);
+	_transform.SetLookAt(DirectX::SimpleMath::Vector3::Zero);
+}
 
 Camera::~Camera()
 {}
 
-void Camera::Init(InputCommands& input, const float speed, const float rotateRate)
-{
-	_input = &input;
-	_speed = speed;
-	_rotateRate = rotateRate;
-}
-
-void Camera::Controls(const double & dt)
+void Camera::Controls(const double& dt)
 {
 	UNUSED(dt);
 
-	// Rotating left and right.
-	if (/*_input->rightMouseDown && */_input->rotRight)
-		_rotation.y -= _rotateRate;
-	if (/*_input->rightMouseDown && */_input->rotLeft)
-		_rotation.y += _rotateRate;
+	if (_input->rightMouseDown)
+	{
+		// Rotating the camera right and left.
+		if (_input->rightMouseDragRight || _input->rotRight)
+			_transform.Rotate(0.0f, -_rotateRate, 0.0f);
+		else if (_input->rightMouseDragLeft || _input->rotLeft)
+			_transform.Rotate(0.0f, _rotateRate, 0.0f);
 
-	// Calculate the forward vector.
-	_forward.x = sin(Maths::DegreesToRadians(_rotation.y));
-	_forward.z = cos(Maths::DegreesToRadians(_rotation.y));
+		// Clamping the x rotation.
+		if (_transform.Rotation().x >= _rotationXClamp)
+			_transform.SetRotation(_rotationXClamp - _rotateRate, _transform.Rotation().y, _transform.Rotation().z);
+		if (_transform.Rotation().x <= -_rotationXClamp)
+			_transform.SetRotation(-_rotationXClamp + _rotateRate, _transform.Rotation().y, _transform.Rotation().z);
 
-	// Calculating the right and up vectors from the forward vector.
-	// right = forward: (x, y, z) cross unit y: (0, 1, 0)
-	// up = forward: (x, y, z) cross right: (x, y, z)
-	_forward.Cross(DirectX::SimpleMath::Vector3::UnitY, _right);
-	_forward.Cross(_right, _up);
+		// Rotating the camera up and down.
+		if ((_input->rotUp || _input->rightMouseDragUp) && _transform.Rotation().x < 90.0f)
+			_transform.Rotate(_rotateRate, 0.0f, 0.0f);
+		if ((_input->rotDown || _input->rightMouseDragDown) && _transform.Rotation().x > -90.0f)
+			_transform.Rotate(-_rotateRate, 0.0f, 0.0f);
+	}
 
-	// Moving forward and backward.
-	if (/*_input->rightMouseDown && */_input->forward)
-		_position += (_forward * _speed);
-	if (/*_input->rightMouseDown && */_input->back)
-		_position -= (_forward * _speed);
+	// Setup the right, up and forward vectors for this transform.
+	_transform.CalculateVectors();
 
-	// Moving right and left.
-	if (/*_input->rightMouseDown && */_input->right)
-		_position += (_right * _speed);
-	if (/*_input->rightMouseDown && */_input->left)
-		_position -= (_right * _speed);
+	if (_input->rightMouseDown)
+	{
+		// Moving forward and backward.
+		if (_input->forward)
+			_transform.Translate(_transform.Forward() * _speed);
+		if (_input->back)
+			_transform.Translate(_transform.Forward() * -_speed);
 
-	// Moving up and down.
-	if (/*_input->rightMouseDown && */_input->up)
-		_position += (_up * _speed);
-	if (/*_input->rightMouseDown && */_input->down)
-		_position -= (_up * _speed);
+		// Moving right and left.
+		if (_input->right)
+			_transform.Translate(_transform.Right() * _speed);
+		if (_input->left)
+			_transform.Translate(_transform.Right() * -_speed);
 
-	// Update the look at point.
-	_lookAt = _position + _forward;
+		// Moving up and down.
+		if (_input->up)
+			_transform.Translate(DirectX::SimpleMath::Vector3::UnitY * _speed);
+		if (_input->down)
+			_transform.Translate(DirectX::SimpleMath::Vector3::UnitY * -_speed);
+	}
+
+	// Update the look at point with the new position and forward vector.
+	_transform.CalculateLookAt();
 }
 
 void Camera::Update(const double& dt)

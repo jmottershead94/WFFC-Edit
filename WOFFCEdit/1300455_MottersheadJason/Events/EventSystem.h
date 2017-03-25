@@ -27,7 +27,7 @@ class EventSystem
 		 * Notifies the event system that something interesting has happened, notify all of the observers.
 		 * @param currentEvent what event has occured (i.e. left mouse click).
 		 */
-		void Notify(const EventType currentEvent);
+		void Notify(EventType currentEvent);
 
 		/**
 		 * Notifies the event system that something interesting has happened, notify all of the observers.
@@ -35,7 +35,7 @@ class EventSystem
 		 * @param cursorPosition the position of the cursor in the world.
 		 * @param cameraLookDirection the direction the camera is facing.
 		 */
-		void Notify(const EventType currentEvent, const DirectX::SimpleMath::Vector3& cursorPosition, const DirectX::SimpleMath::Vector3& cameraLookDirection);
+		void Notify(EventType currentEvent, const DirectX::SimpleMath::Vector3& cursorPosition, const DirectX::SimpleMath::Vector3& cameraLookDirection);
 
 	public:
 		/**

@@ -140,7 +140,26 @@ private:
 	 */
 	void SceneUpdate();
 
+	/**
+	 * Manipulates objects based on the current editor state.
+	 * @param displayObject the current object to manipulate.
+	 */
+	void ObjectManipulation(DisplayObject& displayObject);
+
+	/**
+	 * Provides a quick and easy way to manipulate vector3's based on the same control scheme.
+	 * @param manipulationVector the current vector to manipulate.
+	 */
+	void Manipulate(DirectX::SimpleMath::Vector3& manipulationVector);
+
 public:
+	enum EditorState
+	{
+		TRANSLATE,
+		ROTATE,
+		SCALE
+	};
+
 	/**
 	 * Generates random terrain.
 	 */
@@ -167,6 +186,21 @@ public:
 	// * @return DisplayObject* the new display object.
 	// */
 	//DisplayObject* SpawnNewDisplayObject(const DirectX::GeometricPrimitive primitive, DirectX::XMVECTORF32 colour);
+
+	/**
+	 * Changes the state of the editor.
+	 * @param newState the new state of the editor.
+	 */
+	void ChangeEditorState(const EditorState newState);
+
+	/**
+	 * Provides access to the current state of the editor.
+	 * @return const EditorState the current editor state.
+	 */
+	inline EditorState const CurrentEditorState() const { return _editorState; }
+
+	private:
+		EditorState _editorState;
 };
 
 std::wstring StringToWCHART(std::string s);

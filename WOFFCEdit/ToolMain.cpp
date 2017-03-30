@@ -57,7 +57,7 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	m_d3dRenderer.GetDefaultSize(m_width, m_height);
 	m_d3dRenderer.Initialize(handle, m_width, m_height);
 	Utils::Initialize(handle, width, height);
-
+	
 	//database connection establish
 	int rc;
 	rc = sqlite3_open("database/test.db", &m_databaseConnection);
@@ -274,7 +274,7 @@ void ToolMain::Tick(MSG *msg)
 		//update Scenegraph
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
-	
+
 	if (m_toolInputCommands.save)
 	{
 		if (!m_toolInputCommands.saveOnce)
@@ -493,6 +493,11 @@ void ToolMain::onActionToggleWireframe()
 void ToolMain::onActionSpawnModel(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
 {
 	m_sceneGraph.push_back(*SpawnNewSceneObject(m_d3dRenderer.SpawnNewDisplayObject(modelFilePath, textureFilePath, modelScale), modelFilePath, textureFilePath, modelScale));
+}
+
+void ToolMain::onActionChangeEditorState(const Game::EditorState newState)
+{
+	m_d3dRenderer.ChangeEditorState(newState);
 }
 
 void ToolMain::onLeftMouseDown(MSG* msg)

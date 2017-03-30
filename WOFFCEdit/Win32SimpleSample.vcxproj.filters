@@ -144,6 +144,15 @@
     <Image Include="toolbar2.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\Assets\Art\SPR_Translation.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Assets\Art\SPR_Rotation.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Assets\Art\SPR_Scale.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="database\data\Scene1.fbx" />

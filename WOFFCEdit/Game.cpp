@@ -63,6 +63,7 @@ void Game::Initialize(HWND window, int width, int height)
 	// Initialise the camera.
 	_camera = std::make_shared<Camera>(DirectX::SimpleMath::Vector3(30.0f, 10.0f, 10.0f), m_InputCommands, 0.3f, 1.5f);
 	_camera->Transform().Rotate(0.0f, 180.0f, 0.0f);
+	_editorState = EditorState::TRANSLATE;
 
 #ifdef DXTK_AUDIO
     // Create DirectXTK for Audio objects
@@ -188,6 +189,7 @@ void Game::Render()
 		const XMVECTORF32 yaxis = { 0.f, 0.f, 512.f };
 		DrawGrid(xaxis, yaxis, g_XMZero, 512, 512, Colors::Gray);
 	}
+
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
@@ -196,15 +198,23 @@ void Game::Render()
 
 	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
 	m_font->DrawString(m_sprites.get(), var.c_str() , XMFLOAT2(100, 10), Colors::Yellow);
-	
-	if (_testingFocus)
-	{
-		std::wstring tranquility = L"Experience tranquility with object X = " + std::to_wstring(_testingClick);
-		m_font->DrawString(m_sprites.get(), tranquility.c_str(), XMFLOAT2(100, 70), Colors::Chocolate);
-	}
 
-	std::wstring componentTest = L"Transform X: " + std::to_wstring(_testingComponent.x) + L"Y: " + std::to_wstring(_testingComponent.y) + L"Z: " + std::to_wstring(_testingComponent.z);
-	m_font->DrawString(m_sprites.get(), componentTest.c_str(), XMFLOAT2(100, 130), Colors::Yellow);
+	std::wstring currentState = L" ";
+	if (_editorState == EditorState::TRANSLATE)
+	{
+		currentState = L"TRANSLATE";
+		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 400), Colors::Yellow);
+	}
+	else if (_editorState == EditorState::TRANSLATE)
+	{
+		currentState = L"ROTATE";
+		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 400), Colors::Yellow);
+	}
+	else if (_editorState == EditorState::TRANSLATE)
+	{
+		currentState = L"SCALE";
+		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 400), Colors::Yellow);
+	}
 
 	m_sprites->End();
 
@@ -573,15 +583,85 @@ void Game::SceneUpdate()
 		DisplayObject displayObject = m_displayList[i];
 		displayObject.Update(_dt);
 
-		if (!_testingFocus)
+		// If the user isn't moving the camera, assume they are manipulating an object for now.
+		if (displayObject.Focus() && !m_InputCommands.rightMouseDown)
+			ObjectManipulation(displayObject);
+
+		/*if (!_testingFocus)
 		{
 			if (displayObject.Focus())
 			{
 				_testingFocus = true;
 				_testingClick = displayObject.Transform().Position().x;
 			}
-		}
+		}*/
 	}
+}
+
+void Game::ObjectManipulation(DisplayObject& displayObject)
+{
+	switch (_editorState)
+	{
+		case EditorState::TRANSLATE:
+		{
+			DirectX::SimpleMath::Vector3 translation;
+			Manipulate(translation);
+			displayObject.Transform().Translate(translation);
+
+			break;
+		}
+		case EditorState::ROTATE:
+		{
+			DirectX::SimpleMath::Vector3 rotation;
+
+			if (m_InputCommands.right)
+				rotation += DirectX::SimpleMath::Vector3::UnitY;
+			if (m_InputCommands.left)
+				rotation -= DirectX::SimpleMath::Vector3::UnitY;
+
+			if (m_InputCommands.up)
+				rotation -= DirectX::SimpleMath::Vector3::UnitZ;
+			if (m_InputCommands.down)
+				rotation += DirectX::SimpleMath::Vector3::UnitZ;
+
+			if (m_InputCommands.forward)
+				rotation -= DirectX::SimpleMath::Vector3::UnitX;
+			if (m_InputCommands.back)
+				rotation += DirectX::SimpleMath::Vector3::UnitX;
+
+			displayObject.Transform().Rotate(rotation);
+
+			break;
+		}
+		case EditorState::SCALE:
+		{
+			DirectX::SimpleMath::Vector3 scale = displayObject.Transform().Scale();
+			Manipulate(scale);
+			displayObject.Transform().SetScale(scale);
+
+			break;
+		}
+		default:
+			break;
+	}
+}
+
+void Game::Manipulate(DirectX::SimpleMath::Vector3& manipulationVector)
+{
+	if (m_InputCommands.right)
+		manipulationVector += DirectX::SimpleMath::Vector3::UnitX;
+	if (m_InputCommands.left)
+		manipulationVector -= DirectX::SimpleMath::Vector3::UnitX;
+
+	if (m_InputCommands.up)
+		manipulationVector += DirectX::SimpleMath::Vector3::UnitY;
+	if (m_InputCommands.down)
+		manipulationVector -= DirectX::SimpleMath::Vector3::UnitY;
+
+	if (m_InputCommands.forward)
+		manipulationVector -= DirectX::SimpleMath::Vector3::UnitZ;
+	if (m_InputCommands.back)
+		manipulationVector += DirectX::SimpleMath::Vector3::UnitZ;
 }
 
 void Game::GenerateRandomTerrain()
@@ -625,6 +705,12 @@ DisplayObject* Game::SpawnNewDisplayObject(const std::string modelFilePath, cons
 
 	m_displayList.push_back(*newDisplayObject);
 	return newDisplayObject;
+}
+
+void Game::ChangeEditorState(const EditorState newState)
+{
+	if(_editorState != newState)
+		_editorState = newState;
 }
 
 std::wstring StringToWCHART(std::string s)

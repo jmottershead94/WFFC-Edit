@@ -26,6 +26,7 @@ private:
 	ToolMain m_ToolSystem;	//Instance of Tool System that we interface to. 
 	CRect WindowRECT;	//Window area rectangle. 
 	SelectDialogue m_ToolSelectDialogue;			//for modeless dialogue, declare it here
+	CDialogEx _editorStateDialogue;
 
 	int m_width;		
 	int m_height;
@@ -51,6 +52,21 @@ private:
 	 * Spawns in a tree model.
 	 */
 	afx_msg void MenuSpawnTree();
+
+	/**
+	 * Allows the user to translate selected objects.
+	 */
+	afx_msg void MenuTranslate();
+
+	/**
+	 * Allows the user to rotate selected objects.
+	 */
+	afx_msg void MenuRotate();
+
+	/**
+	 * Allows the user to scale selected objects.
+	 */
+	afx_msg void MenuScale();
 
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };

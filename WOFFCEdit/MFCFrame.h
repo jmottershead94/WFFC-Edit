@@ -26,7 +26,6 @@ public:
 	void SetCurrentSelectionID(int ID);
 	afx_msg void OnUpdatePage(CCmdUI *pCmdUI);
 
-
 private:	//overrides
 	int		m_selectionID;	//
 

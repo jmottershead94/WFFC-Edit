@@ -85,6 +85,13 @@ public:
 	void onActionSpawnModel(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
 
 	/**
+	 * Changes the editor state.
+	 * @param newState the new state to change to.
+	 * @param newIcon the new icon to use for the editor state.
+	 */
+	void onActionChangeEditorState(const Game::EditorState newState);
+
+	/**
 	 * What happens when the left mouse has been pressed.
 	 * @param msg the message with the lParam and wParam for windows parameters.
 	 */

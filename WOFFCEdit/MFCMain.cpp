@@ -10,6 +10,9 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_WIREFRAMEMODE, &MFCMain::MenuToggleWireframe)
 	ON_COMMAND(ID_SPAWNTREE, &MFCMain::MenuSpawnTree)
 	ON_COMMAND(ID_CREATE_TREE, &MFCMain::MenuSpawnTree)
+	ON_COMMAND(ID_TRANSLATE, &MFCMain::MenuTranslate)
+	ON_COMMAND(ID_ROTATE, &MFCMain::MenuRotate)
+	ON_COMMAND(ID_SCALE, &MFCMain::MenuScale)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -123,6 +126,21 @@ void MFCMain::MenuToggleWireframe()
 void MFCMain::MenuSpawnTree()
 {
 	m_ToolSystem.onActionSpawnModel("database/data/Lowpoly_tree_sample.cmo", "database/data/placeholder.dds", DirectX::SimpleMath::Vector3(3.0f, 3.0f, 3.0f));
+}
+
+void MFCMain::MenuTranslate()
+{
+	m_ToolSystem.onActionChangeEditorState(Game::EditorState::TRANSLATE);
+}
+
+void MFCMain::MenuRotate()
+{
+	m_ToolSystem.onActionChangeEditorState(Game::EditorState::ROTATE);
+}
+
+void MFCMain::MenuScale()
+{
+	m_ToolSystem.onActionChangeEditorState(Game::EditorState::SCALE);
 }
 
 MFCMain::MFCMain()

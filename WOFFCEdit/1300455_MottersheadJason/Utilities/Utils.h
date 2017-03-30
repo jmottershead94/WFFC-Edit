@@ -73,4 +73,16 @@ class Utils
 		 * @return const bool if the application is using wireframe mode or not.
 		 */
 		static bool const WireframeMode();
+
+		/**
+		 * Provides a way to convert a string to a wstring.
+		 * @param s the string to convert.
+		 */
+		static std::wstring const StringToWCHART(std::string s);
+
+		/**
+		 * Provides access to the file path and location of the highlighted texture.
+		 * @return const std::string the file path and location of the highlighted texture.
+		 */
+		static std::string const HighlightedTexturePath();
 };

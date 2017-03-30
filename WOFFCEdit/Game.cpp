@@ -61,7 +61,7 @@ void Game::Initialize(HWND window, int width, int height)
     CreateWindowSizeDependentResources();
 
 	// Initialise the camera.
-	_camera = std::make_shared<Camera>(DirectX::SimpleMath::Vector3(90.0f, 24.0f, 100.0f), m_InputCommands, 0.3f, 1.5f);
+	_camera = std::make_shared<Camera>(DirectX::SimpleMath::Vector3(30.0f, 10.0f, 10.0f), m_InputCommands, 0.3f, 1.5f);
 	_camera->Transform().Rotate(0.0f, 180.0f, 0.0f);
 
 #ifdef DXTK_AUDIO
@@ -191,7 +191,6 @@ void Game::Render()
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
-	//DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, m_camPosition));
 	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()));
 	mousePosition = Maths::RoundVector3(mousePosition);
 
@@ -362,33 +361,18 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 	for (int i = 0; i < numObjects; i++)
 	{
 		//create a temp display object that we will populate then append to the display list.
-		DisplayObject newDisplayObject;
+		DisplayObject newDisplayObject(device);
 		newDisplayObject.SetEditorCamera(_camera);
 
 		//load model
 		std::wstring modelwstr = StringToWCHART(SceneGraph->at(i).model_path);							//convect string to Wchar
 		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);	//get DXSDK to load model "False" for LH coordinate system (maya)
-
-		//Load Texture
-		std::wstring texturewstr = StringToWCHART(SceneGraph->at(i).tex_diffuse_path);								//convect string to Wchar
-		HRESULT rs;
-		rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
-
-		//if texture fails.  load error default
-		if (rs)
-		{
-			CreateDDSTextureFromFile(device, L"database/data/Error.dds", nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
-		}
-
-		//apply new texture to models effect
-		newDisplayObject.m_model->UpdateEffects([&](IEffect* effect) //This uses a Lambda function,  if you dont understand it: Look it up.
-		{	
-			auto lights = dynamic_cast<BasicEffect*>(effect);
-			if (lights)
-			{
-				lights->SetTexture(newDisplayObject.m_texture_diffuse);			
-			}
-		});
+		
+		// Loading the necessary textures (textures for object selection too).
+		newDisplayObject.LoadTexture(SceneGraph->at(i).tex_diffuse_path, newDisplayObject.OriginalTexture());
+		newDisplayObject.LoadTexture(SceneGraph->at(i).tex_diffuse_path, newDisplayObject.Texture());
+		newDisplayObject.LoadTexture(Utils::HighlightedTexturePath(), newDisplayObject.HighlightedTexture());
+		newDisplayObject.SetTexture(*newDisplayObject.Texture());
 
 		// Set the transform for this object (position, rotation and scale).
 		newDisplayObject.Transform().SetPosition(SceneGraph->at(i).posX, SceneGraph->at(i).posY, SceneGraph->at(i).posZ);
@@ -566,6 +550,9 @@ void Game::SceneControls()
 	
 	if (m_InputCommands.leftMouseDown)
 		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
+	
+	if(m_InputCommands.leftMouseRelease)
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_RELEASE, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
 
 	if(m_InputCommands.leftMouseDrag)
 		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_DRAG, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
@@ -591,7 +578,6 @@ void Game::SceneUpdate()
 			if (displayObject.Focus())
 			{
 				_testingFocus = true;
-				//_testingClick = displayObject.m_position.x;
 				_testingClick = displayObject.Transform().Position().x;
 			}
 		}
@@ -614,28 +600,19 @@ DisplayObject* Game::SpawnNewDisplayObject(const std::string modelFilePath, cons
 	auto devicecontext = m_deviceResources->GetD3DDeviceContext();
 
 	//create a temp display object that we will populate then append to the display list.
-	DisplayObject* newDisplayObject = new DisplayObject();
+	DisplayObject* newDisplayObject = new DisplayObject(device);
 	newDisplayObject->m_ID = m_displayList.size() + 1;
 	newDisplayObject->SetEditorCamera(_camera);
 
 	//load model
 	std::wstring modelwstr = StringToWCHART(modelFilePath);							
 	newDisplayObject->m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);
-																							
-	std::wstring texturewstr = StringToWCHART(textureFilePath);
-	HRESULT rs;
-	rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject->m_texture_diffuse);
-
-	if (rs)
-		CreateDDSTextureFromFile(device, L"database/data/Error.dds", nullptr, &newDisplayObject->m_texture_diffuse);
-
-	//apply new texture to models effect
-	newDisplayObject->m_model->UpdateEffects([&](IEffect* effect) //This uses a Lambda function,  if you dont understand it: Look it up.
-	{
-		auto lights = dynamic_cast<BasicEffect*>(effect);
-		if (lights)
-			lights->SetTexture(newDisplayObject->m_texture_diffuse);
-	});
+		
+	// Loading the necessary textures (textures for object selection too).
+	newDisplayObject->LoadTexture(textureFilePath, newDisplayObject->OriginalTexture());
+	newDisplayObject->LoadTexture(textureFilePath, newDisplayObject->Texture());
+	newDisplayObject->LoadTexture(Utils::HighlightedTexturePath(), newDisplayObject->HighlightedTexture());
+	newDisplayObject->SetTexture(*newDisplayObject->Texture());
 
 	// Set the transform for this object (position, rotation and scale).
 	newDisplayObject->Transform().SetPosition(_camera->Transform().LookAt());

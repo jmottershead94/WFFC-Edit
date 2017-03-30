@@ -5,7 +5,9 @@ BaseObject::BaseObject() :
 	transform(nullptr),
 	collider(nullptr),
 	editorCollider(nullptr),
-	camera(nullptr)
+	camera(nullptr),
+	_leftMouseOnce(true),
+	_rightMouseOnce(true)
 {
 	// Adding a standard transform component.
 	transform = AddComponent<TransformComponent>();
@@ -68,53 +70,52 @@ void BaseObject::OnNotify(EventType& currentEvent, const DirectX::SimpleMath::Ve
 		// If the user has left clicked on this object.
 		case (EventType::EVENT_LEFT_MOUSE_CLICK) :
 		{
-			OnLeftMouseClick();
-			currentEvent = EventType::EVENT_NULL;
+			if (_leftMouseOnce)
+			{
+				OnLeftMouseClick();
+				_leftMouseOnce = false;
+			}
+
 			break;
 		}
 		// If the user has clicked and is dragging their mouse on this object.
 		case (EventType::EVENT_LEFT_MOUSE_DRAG) :
 		{
 			OnLeftMouseDrag();
-			currentEvent = EventType::EVENT_NULL;
 			break;
 		}
 		// If the user is holding the left mouse button down on this object.
 		case (EventType::EVENT_LEFT_MOUSE_HOLD) :
 		{
 			OnLeftMouseHeld();
-			currentEvent = EventType::EVENT_NULL;
 			break;
 		}
 		// If the user has released the left mouse on this object.
 		case (EventType::EVENT_LEFT_MOUSE_RELEASE) :
 		{
-			OnLeftMouseReleased();
-			currentEvent = EventType::EVENT_NULL;
+			if (!_leftMouseOnce)
+			{
+				OnLeftMouseReleased();
+				_leftMouseOnce = true;
+			}
 			break;
 		}
 		case (EventType::EVENT_LEFT_MOUSE_CLICK_DOUBLE) :
 		{
 			OnLeftMouseDoubleClick();
-			currentEvent = EventType::EVENT_NULL;
+			_leftMouseOnce = true;
 			break;
 		}
 		// If the user has right clicked on this object.
 		case (EventType::EVENT_RIGHT_MOUSE_CLICK) :
 		{
 			OnRightMouseClick();
-			currentEvent = EventType::EVENT_NULL;
 			break;
 		}
 		// If the user has right clicked and dragged the mouse on this object.
 		case (EventType::EVENT_RIGHT_MOUSE_DRAG) :
 		{
 			OnRightMouseDrag();
-			currentEvent = EventType::EVENT_NULL;
-			break;
-		}
-		case (EventType::EVENT_NULL):
-		{
 			break;
 		}
 		default:

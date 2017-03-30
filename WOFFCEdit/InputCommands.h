@@ -16,6 +16,7 @@ struct InputCommands
 	bool resetText;
 	bool wireframeMode;
 	bool leftMouseDown;
+	bool leftMouseRelease;
 	bool leftMouseDrag;
 	bool leftMouseDragUp;
 	bool leftMouseDragDown;

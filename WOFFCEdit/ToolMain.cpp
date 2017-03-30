@@ -28,6 +28,7 @@ ToolMain::ToolMain()
 	m_toolInputCommands.resetText				= false;
 	m_toolInputCommands.wireframeMode			= false;
 	m_toolInputCommands.leftMouseDown			= false;
+	m_toolInputCommands.leftMouseRelease		= false;
 	m_toolInputCommands.leftMouseDrag			= false;
 	m_toolInputCommands.doubleLeftMouseClick	= false;
 	m_toolInputCommands.rightMouseDown			= false;
@@ -345,6 +346,7 @@ void ToolMain::UpdateInput(MSG * msg)
 		case WM_LBUTTONDBLCLK:
 		{
 			m_toolInputCommands.doubleLeftMouseClick = true;
+			m_toolInputCommands.leftMouseRelease = false;
 			break;
 		}
 	}
@@ -504,10 +506,12 @@ void ToolMain::onLeftMouseDown(MSG* msg)
 	previousMouse = cursorPoint;
 
 	m_toolInputCommands.leftMouseDown = true;
+	m_toolInputCommands.leftMouseRelease = false;
 }
 
 void ToolMain::onLeftMouseUp()
 {
+	m_toolInputCommands.leftMouseRelease = true;
 	m_toolInputCommands.leftMouseDown = false;
 	m_toolInputCommands.leftMouseDrag = false;
 	m_toolInputCommands.leftMouseDragUp = false;
@@ -515,6 +519,7 @@ void ToolMain::onLeftMouseUp()
 	m_toolInputCommands.leftMouseDragDown = false;
 	m_toolInputCommands.leftMouseDragLeft = false;
 	m_toolInputCommands.doubleLeftMouseClick = false;
+	
 }
 
 void ToolMain::onRightMouseDown(MSG* msg)
@@ -606,6 +611,7 @@ void ToolMain::onLeftButtonMouseDrag(int mouseX, int mouseY)
 		return;
 
 	m_toolInputCommands.leftMouseDrag = true;
+	m_toolInputCommands.leftMouseRelease = false;
 
 	// Checking x axis drag.
 	if (mouseX >= mouseDragDeadCentre)

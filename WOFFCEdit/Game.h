@@ -159,6 +159,14 @@ public:
 	 * @return DisplayObject* the new display object.
 	 */
 	DisplayObject* SpawnNewDisplayObject(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
+
+	///**
+	// * Spawns in a primitive.
+	// * @param modelFilePath the file path to the model we want to spawn in.
+	// * @param colour the colour of the primitive.
+	// * @return DisplayObject* the new display object.
+	// */
+	//DisplayObject* SpawnNewDisplayObject(const DirectX::GeometricPrimitive primitive, DirectX::XMVECTORF32 colour);
 };
 
 std::wstring StringToWCHART(std::string s);

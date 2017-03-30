@@ -153,6 +153,9 @@ class BaseObject : public Observer
 		 * for any inheriting classes.
 		 */
 
+		bool _leftMouseOnce;
+		bool _rightMouseOnce;
+
 		/**
 		 * What happens when the user left clicks on this object.
 		 */

@@ -50,8 +50,11 @@ private:	//variables
 	
 // Jason's Added Work.
 private:
-	const float mouseDragDeadCentre = 100.0f;
-	POINT previousMouse;
+	const float _mouseDragDeadCentre = 100.0f;
+	int _popUpMenuResult = -1;
+	POINT _previousMouse;
+	//CMenu _testMenu;
+	HMENU _topLevelMenu, _popUpMenu;
 	Utils _utilities;
 	Maths _maths;
 
@@ -65,7 +68,19 @@ private:
 	 */
 	SceneObject* SpawnNewSceneObject(DisplayObject* displayObject, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
 
+	void PopUpMenu(MSG* msg);
+
 public:
+	/**
+	 * Copies all of the selected items.
+	 */
+	void onActionCopyItems();
+
+	/**
+	 * Pastes all of the selected items.
+	 */
+	void onActionPasteItems();
+
 	/**
 	 * Provides a way to generate random terrain.
 	 */

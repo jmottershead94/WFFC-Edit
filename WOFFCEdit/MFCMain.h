@@ -26,8 +26,7 @@ private:
 	ToolMain m_ToolSystem;	//Instance of Tool System that we interface to. 
 	CRect WindowRECT;	//Window area rectangle. 
 	SelectDialogue m_ToolSelectDialogue;			//for modeless dialogue, declare it here
-	CDialogEx _editorStateDialogue;
-
+	
 	int m_width;		
 	int m_height;
 	
@@ -38,6 +37,23 @@ private:
 	afx_msg	void ToolBarButton1();
 
 	// Jason's Added Work.
+	CDialogEx _editorSettings;
+
+	/**
+	 * Allows the user to copy selected items.
+	 */
+	afx_msg void MenuEditCopy();
+
+	/**
+	 * Allows the user to paste copied items.
+	 */
+	afx_msg void MenuEditPaste();
+
+	/**
+	 * Allows the user to edit tool settings.
+	 */
+	afx_msg void MenuEditSettings();
+
 	/**
 	 * Generates random terrain with the tool bar button.
 	 */

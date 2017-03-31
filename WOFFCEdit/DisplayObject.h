@@ -4,11 +4,27 @@
 #include "DDSTextureLoader.h"
 #include "Effects.h"
 
+/**
+ * This is a standard object with a model.
+ */
 class DisplayObject : public BaseObject
 {
 	public:
-		DisplayObject(ID3D11Device* device);
+		/**
+		 * Constructs this instance.
+		 */
+		explicit DisplayObject();
+
+		/**
+		 * Destructs this instance.
+		 */
 		~DisplayObject();
+
+		/**
+		 * Provides a copy of this object.
+		 * @return the copied object.
+		 */
+		DisplayObject* Copy();
 
 		std::shared_ptr<DirectX::Model>		m_model;	//main Mesh
 		bool								m_render;
@@ -19,7 +35,7 @@ class DisplayObject : public BaseObject
 		 * @param filePath the file path to this texture.
 		 * @param texture the texture to load this file into.
 		 */
-		void LoadTexture(const std::string filePath, ID3D11ShaderResourceView** texture);
+		void LoadTexture(const std::string filePath, ID3D11Device* device, ID3D11ShaderResourceView** texture);
 
 		/**
 		 * Sets a new texture, and then immediately updates it.
@@ -46,7 +62,6 @@ class DisplayObject : public BaseObject
 		inline ID3D11ShaderResourceView** HighlightedTexture()		{ return &_highlightedTexture; }
 
 	private:
-		ID3D11Device* _device;
 		ID3D11ShaderResourceView* _currentTexture;
 		ID3D11ShaderResourceView* _originalTexture;
 		ID3D11ShaderResourceView* _highlightedTexture;

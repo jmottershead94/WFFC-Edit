@@ -58,6 +58,12 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	m_d3dRenderer.Initialize(handle, m_width, m_height);
 	Utils::Initialize(handle, width, height);
 	
+	//_testMenu.LoadMenuW(IDR_MENU1);
+	//_topLevelMenu = GetMenu(handle);
+	/*_topLevelMenu = LoadMenu(AfxGetInstanceHandle(), L"IDR_MENU1");
+	if (_topLevelMenu != NULL)
+		_popUpMenu = GetSubMenu(_topLevelMenu, 0);*/
+
 	//database connection establish
 	int rc;
 	rc = sqlite3_open("database/test.db", &m_databaseConnection);
@@ -297,16 +303,56 @@ void ToolMain::Tick(MSG *msg)
 
 	//Renderer Update Call
 	m_d3dRenderer.Tick(&m_toolInputCommands);
+
+	//CMenu* menu = (CMenu*)(_topLevelMenu);
+
+	//if (!menu)
+	//	return;
+
+	//if (m_toolInputCommands.leftMouseDown)
+	//{
+	//	if (m_d3dRenderer.IsCopyEnabled())
+	//	{
+	//		menu->EnableMenuItem(ID_EDIT_COPY, MF_GRAYED);
+	//		//DrawMenuBar(msg->hwnd);
+	//	}
+	//	else
+	//	{
+	//		menu->EnableMenuItem(ID_EDIT_COPY, MF_DISABLED);
+	//		//DrawMenuBar(msg->hwnd);
+	//	}
+
+	//	//if (m_d3dRenderer.IsPasteEnabled())
+	//	//{
+	//	//	menu->EnableMenuItem(ID_EDIT_PASTE, MF_GRAYED);
+	//	//	//DrawMenuBar(msg->hwnd);
+	//	//}
+	//	//else
+	//	//{
+	//	//	menu->EnableMenuItem(ID_EDIT_PASTE, MF_DISABLED);
+	//	//	//DrawMenuBar(msg->hwnd);
+	//	//}
+	//}
 }
 
 void ToolMain::UpdateInput(MSG * msg)
 {
-
 	switch (msg->message)
 	{
 		//Global inputs,  mouse position and keys etc
 		case WM_KEYDOWN:
 		{
+			if (msg->wParam == VK_ESCAPE) 
+			{
+				int userInput = MessageBoxW(msg->hwnd, L"Are you sure to quit?", L"Exit", MB_OKCANCEL);
+
+				if (userInput == IDOK)
+				{
+					SendMessage(msg->hwnd, WM_CLOSE, 0, 0);
+					PostQuitMessage(0);
+				}
+			}
+
 			m_keyArray[msg->wParam] = true;
 			break;
 		}
@@ -347,6 +393,11 @@ void ToolMain::UpdateInput(MSG * msg)
 		{
 			m_toolInputCommands.doubleLeftMouseClick = true;
 			m_toolInputCommands.leftMouseRelease = false;
+			break;
+		}
+		case WM_RBUTTONDBLCLK:
+		{
+			PopUpMenu(msg);
 			break;
 		}
 	}
@@ -426,7 +477,7 @@ void ToolMain::UpdateInput(MSG * msg)
 
 	if (m_keyArray['P'])
 		m_toolInputCommands.spawnTree = true;
-	else m_toolInputCommands.spawnTree = false;
+	else m_toolInputCommands.spawnTree = false;	
 }
 
 SceneObject* ToolMain::SpawnNewSceneObject(DisplayObject* displayObject, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
@@ -480,6 +531,38 @@ SceneObject* ToolMain::SpawnNewSceneObject(DisplayObject* displayObject, const s
 	return newObject;
 }
 
+void ToolMain::PopUpMenu(MSG* msg)
+{
+	int xPos = GET_X_LPARAM(msg->lParam);
+	int yPos = GET_Y_LPARAM(msg->lParam);
+
+	POINT cursorPoint;
+	cursorPoint.x = xPos;
+	cursorPoint.y = yPos;
+	GetCursorPos(&cursorPoint);
+	_previousMouse = cursorPoint;
+
+	_popUpMenu = CreatePopupMenu();
+	InsertMenu(_popUpMenu, 0, MF_BYPOSITION | MF_STRING, 0, L"Edit");
+
+	//MENUITEMINFO subMenuInfo;
+	//subMenuInfo = 
+	//InsertMenuItem(_popUpMenu, 0, MF_BYPOSITION | MF_STRING, )
+	//InsertMenu(_popUpMenu, 1, MF_BYPOSITION | MF_STRING, 1, L"Hello2");
+	SetForegroundWindow(msg->hwnd);
+	_popUpMenuResult = TrackPopupMenu(_popUpMenu, TPM_RETURNCMD | TPM_TOPALIGN | TPM_LEFTALIGN, cursorPoint.x, cursorPoint.y, 0, msg->hwnd, 0);
+}
+
+void ToolMain::onActionCopyItems()
+{
+	m_d3dRenderer.CopyObjects();
+}
+
+void ToolMain::onActionPasteItems()
+{
+	m_d3dRenderer.PasteObjects();
+}
+
 void ToolMain::onActionGenerateTerrain()
 {
 	m_d3dRenderer.GenerateRandomTerrain();
@@ -508,10 +591,12 @@ void ToolMain::onLeftMouseDown(MSG* msg)
 	POINT cursorPoint;
 	cursorPoint.x = xPos;
 	cursorPoint.y = yPos;
-	previousMouse = cursorPoint;
+	_previousMouse = cursorPoint;
 
 	m_toolInputCommands.leftMouseDown = true;
 	m_toolInputCommands.leftMouseRelease = false;
+
+	
 }
 
 void ToolMain::onLeftMouseUp()
@@ -535,8 +620,8 @@ void ToolMain::onRightMouseDown(MSG* msg)
 	POINT cursorPoint;
 	cursorPoint.x = xPos;
 	cursorPoint.y = yPos;
-	previousMouse = cursorPoint;
-
+	_previousMouse = cursorPoint;
+	
 	m_toolInputCommands.rightMouseDown = true;
 }
 
@@ -556,8 +641,8 @@ void ToolMain::onMouseMove(MSG* msg)
 	int yPos = GET_Y_LPARAM(msg->lParam);
 
 	POINT deltaPosition;
-	deltaPosition.x = xPos - previousMouse.x;
-	deltaPosition.y = yPos - previousMouse.y;
+	deltaPosition.x = xPos - _previousMouse.x;
+	deltaPosition.y = yPos - _previousMouse.y;
 	
 	// Handles right mouse button drags.
 	if (MK_RBUTTON & msg->wParam)
@@ -576,12 +661,12 @@ void ToolMain::onRightButtonMouseDrag(int mouseX, int mouseY)
 	m_toolInputCommands.rightMouseDrag = true;
 
 	// Checking x axis drag.
-	if (mouseX >= mouseDragDeadCentre)
+	if (mouseX >= _mouseDragDeadCentre)
 	{
 		m_toolInputCommands.rightMouseDragRight = true;
 		m_toolInputCommands.rightMouseDragLeft = false;
 	}
-	else if (mouseX <= -mouseDragDeadCentre)
+	else if (mouseX <= -_mouseDragDeadCentre)
 	{
 		m_toolInputCommands.rightMouseDragRight = false;
 		m_toolInputCommands.rightMouseDragLeft = true;
@@ -593,12 +678,12 @@ void ToolMain::onRightButtonMouseDrag(int mouseX, int mouseY)
 	}
 
 	// Checking y axis drag.
-	if (mouseY >= mouseDragDeadCentre)
+	if (mouseY >= _mouseDragDeadCentre)
 	{
 		m_toolInputCommands.rightMouseDragUp = false;
 		m_toolInputCommands.rightMouseDragDown = true;
 	}
-	else if (mouseY <= -mouseDragDeadCentre)
+	else if (mouseY <= -_mouseDragDeadCentre)
 	{
 		m_toolInputCommands.rightMouseDragUp = true;
 		m_toolInputCommands.rightMouseDragDown = false;
@@ -619,12 +704,12 @@ void ToolMain::onLeftButtonMouseDrag(int mouseX, int mouseY)
 	m_toolInputCommands.leftMouseRelease = false;
 
 	// Checking x axis drag.
-	if (mouseX >= mouseDragDeadCentre)
+	if (mouseX >= _mouseDragDeadCentre)
 	{
 		m_toolInputCommands.leftMouseDragRight = true;
 		m_toolInputCommands.leftMouseDragLeft = false;
 	}
-	else if (mouseX <= -mouseDragDeadCentre)
+	else if (mouseX <= -_mouseDragDeadCentre)
 	{
 		m_toolInputCommands.leftMouseDragRight = false;
 		m_toolInputCommands.leftMouseDragLeft = true;
@@ -636,12 +721,12 @@ void ToolMain::onLeftButtonMouseDrag(int mouseX, int mouseY)
 	}
 
 	// Checking y axis drag.
-	if (mouseY >= mouseDragDeadCentre)
+	if (mouseY >= _mouseDragDeadCentre)
 	{
 		m_toolInputCommands.leftMouseDragUp = false;
 		m_toolInputCommands.leftMouseDragDown = true;
 	}
-	else if (mouseY <= -mouseDragDeadCentre)
+	else if (mouseY <= -_mouseDragDeadCentre)
 	{
 		m_toolInputCommands.leftMouseDragUp = true;
 		m_toolInputCommands.leftMouseDragDown = false;

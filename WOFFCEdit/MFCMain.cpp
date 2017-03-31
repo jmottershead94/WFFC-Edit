@@ -5,6 +5,9 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_FILE_QUIT,	&MFCMain::MenuFileQuit)
 	ON_COMMAND(ID_FILE_SAVETERRAIN, &MFCMain::MenuFileSaveTerrain)
 	ON_COMMAND(ID_EDIT_SELECT, &MFCMain::MenuEditSelect)
+	ON_COMMAND(ID_EDIT_COPY40079, &MFCMain::MenuEditCopy)
+	ON_COMMAND(ID_EDIT_PASTE40079, &MFCMain::MenuEditPaste)
+	ON_COMMAND(ID_EDIT_SETTINGS, &MFCMain::MenuEditSettings)
 	ON_COMMAND(ID_BUTTON40001,	&MFCMain::ToolBarButton1)
 	ON_COMMAND(ID_GENERATETERRAIN, &MFCMain::MenuGenerateRandomTerrain)
 	ON_COMMAND(ID_WIREFRAMEMODE, &MFCMain::MenuToggleWireframe)
@@ -42,6 +45,7 @@ BOOL MFCMain::InitInstance()
 	m_frame->ShowWindow(SW_SHOW);
 	m_frame->UpdateWindow();
 
+	_editorSettings.Create(IDD_DIALOG2);
 	m_ToolSystem.onActionInitialise(m_toolHandle, 800, 600);
 
 	return TRUE;
@@ -111,6 +115,21 @@ void MFCMain::MenuEditSelect()
 void MFCMain::ToolBarButton1()
 {	
 	m_ToolSystem.onActionSave();
+}
+
+void MFCMain::MenuEditCopy()
+{
+	m_ToolSystem.onActionCopyItems();
+}
+
+void MFCMain::MenuEditPaste()
+{
+	m_ToolSystem.onActionPasteItems();
+}
+
+void MFCMain::MenuEditSettings()
+{
+	_editorSettings.ShowWindow(SW_SHOW);
 }
 
 void MFCMain::MenuGenerateRandomTerrain()

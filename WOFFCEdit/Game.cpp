@@ -371,7 +371,7 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 	for (int i = 0; i < numObjects; i++)
 	{
 		//create a temp display object that we will populate then append to the display list.
-		DisplayObject newDisplayObject(device);
+		DisplayObject newDisplayObject;
 		newDisplayObject.SetEditorCamera(_camera);
 
 		//load model
@@ -379,9 +379,9 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);	//get DXSDK to load model "False" for LH coordinate system (maya)
 		
 		// Loading the necessary textures (textures for object selection too).
-		newDisplayObject.LoadTexture(SceneGraph->at(i).tex_diffuse_path, newDisplayObject.OriginalTexture());
-		newDisplayObject.LoadTexture(SceneGraph->at(i).tex_diffuse_path, newDisplayObject.Texture());
-		newDisplayObject.LoadTexture(Utils::HighlightedTexturePath(), newDisplayObject.HighlightedTexture());
+		newDisplayObject.LoadTexture(SceneGraph->at(i).tex_diffuse_path, device, newDisplayObject.OriginalTexture());
+		newDisplayObject.LoadTexture(SceneGraph->at(i).tex_diffuse_path, device, newDisplayObject.Texture());
+		newDisplayObject.LoadTexture(Utils::HighlightedTexturePath(), device, newDisplayObject.HighlightedTexture());
 		newDisplayObject.SetTexture(*newDisplayObject.Texture());
 
 		// Set the transform for this object (position, rotation and scale).
@@ -578,14 +578,23 @@ void Game::SceneUpdate()
 	if (m_displayList.empty())
 		return;
 
+	// Resetting the enabled status for copy.
+	_copyEnabled = false;
+
 	for (size_t i = 0; i < m_displayList.size(); ++i)
 	{
 		DisplayObject displayObject = m_displayList[i];
 		displayObject.Update(_dt);
 
-		// If the user isn't moving the camera, assume they are manipulating an object for now.
-		if (displayObject.Focus() && !m_InputCommands.rightMouseDown)
-			ObjectManipulation(displayObject);
+		if (displayObject.Focus())
+		{
+			// The copy option for the menus should be available now.
+			_copyEnabled = true;
+
+			// If the user isn't moving the camera, assume they are manipulating an object for now.
+			if (!m_InputCommands.rightMouseDown)
+				ObjectManipulation(displayObject);
+		}
 
 		/*if (!_testingFocus)
 		{
@@ -680,7 +689,7 @@ DisplayObject* Game::SpawnNewDisplayObject(const std::string modelFilePath, cons
 	auto devicecontext = m_deviceResources->GetD3DDeviceContext();
 
 	//create a temp display object that we will populate then append to the display list.
-	DisplayObject* newDisplayObject = new DisplayObject(device);
+	DisplayObject* newDisplayObject = new DisplayObject();
 	newDisplayObject->m_ID = m_displayList.size() + 1;
 	newDisplayObject->SetEditorCamera(_camera);
 
@@ -689,9 +698,9 @@ DisplayObject* Game::SpawnNewDisplayObject(const std::string modelFilePath, cons
 	newDisplayObject->m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);
 		
 	// Loading the necessary textures (textures for object selection too).
-	newDisplayObject->LoadTexture(textureFilePath, newDisplayObject->OriginalTexture());
-	newDisplayObject->LoadTexture(textureFilePath, newDisplayObject->Texture());
-	newDisplayObject->LoadTexture(Utils::HighlightedTexturePath(), newDisplayObject->HighlightedTexture());
+	newDisplayObject->LoadTexture(textureFilePath, device, newDisplayObject->OriginalTexture());
+	newDisplayObject->LoadTexture(textureFilePath, device, newDisplayObject->Texture());
+	newDisplayObject->LoadTexture(Utils::HighlightedTexturePath(), device, newDisplayObject->HighlightedTexture());
 	newDisplayObject->SetTexture(*newDisplayObject->Texture());
 
 	// Set the transform for this object (position, rotation and scale).
@@ -711,6 +720,57 @@ void Game::ChangeEditorState(const EditorState newState)
 {
 	if(_editorState != newState)
 		_editorState = newState;
+}
+
+void Game::CopyObjects()
+{
+	_pasteEnabled = false;
+
+	for (size_t i = 0; i < m_displayList.size(); ++i)
+	{
+		DisplayObject currentObject = m_displayList.at(i);
+
+		if (currentObject.Focus())
+		{
+			DisplayObject* newObject = currentObject.Copy();
+			_copiedObjects.push_back(newObject);
+			_pasteEnabled = true;
+		}
+	}
+}
+
+void Game::PasteObjects()
+{
+	if (!_pasteEnabled || _copiedObjects.size() < 1)
+		return;
+
+	// Deselecting all of the current display list objects.
+	for (size_t i = 0; i < m_displayList.size(); ++i)
+	{
+		DisplayObject currentObject = m_displayList.at(i);
+
+		if (currentObject.Focus())
+		{
+			currentObject.SetFocus(false);
+			currentObject.SetTexture(*currentObject.OriginalTexture());
+		}
+	}
+
+	// Pasting and selecting all of the new display list objects.
+	for (size_t i = 0; i < _copiedObjects.size(); ++i)
+	{
+		DisplayObject* currentObject = (DisplayObject*)(_copiedObjects.at(i));
+
+		currentObject->m_ID = m_displayList.size() + (i + 1);
+		currentObject->SetTexture(*currentObject->OriginalTexture());
+
+		m_displayList.push_back(*currentObject);
+	}
+
+	_copiedObjects.clear();
+
+	_copyEnabled = true;
+	_pasteEnabled = false;
 }
 
 std::wstring StringToWCHART(std::string s)

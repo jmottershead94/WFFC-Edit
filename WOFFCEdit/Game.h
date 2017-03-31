@@ -124,11 +124,14 @@ private:
 // Jason's Added Work.
 private:
 	bool _testingFocus = false;
+	bool _copyEnabled = true;
+	bool _pasteEnabled = true;
 	double _dt = 0.00;
 	float _testingClick = 0.0f;
 	EventSystem _eventSystem;
 	std::shared_ptr<Camera> _camera;
 	DirectX::SimpleMath::Vector3 _testingComponent;
+	std::vector<BaseObject*> _copiedObjects;
 
 	/**
 	 * Provides specific tool controls.
@@ -194,10 +197,26 @@ public:
 	void ChangeEditorState(const EditorState newState);
 
 	/**
+	 * Provides a copy of all selected objects.
+	 */
+	void CopyObjects();
+
+	/**
+	 * Provides a way to paste the copied objects into the scene.
+	 */
+	void PasteObjects();
+
+	/**
 	 * Provides access to the current state of the editor.
 	 * @return const EditorState the current editor state.
 	 */
 	inline EditorState const CurrentEditorState() const { return _editorState; }
+
+	inline void ToggleCopy(const bool value)	{ _copyEnabled = value; }
+	inline void TogglePaste(const bool value)	{ _pasteEnabled = value; }
+
+	inline bool const IsCopyEnabled() const		{ return _copyEnabled; }
+	inline bool const IsPasteEnabled() const	{ return _pasteEnabled; }
 
 	private:
 		EditorState _editorState;

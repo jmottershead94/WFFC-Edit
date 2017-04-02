@@ -759,7 +759,7 @@ void Game::PasteObjects()
 	// Pasting and selecting all of the new display list objects.
 	for (size_t i = 0; i < _copiedObjects.size(); ++i)
 	{
-		DisplayObject* currentObject = (DisplayObject*)(_copiedObjects.at(i));
+		DisplayObject* currentObject = new DisplayObject(*(DisplayObject*)(_copiedObjects.at(i)));
 
 		currentObject->m_ID = m_displayList.size() + (i + 1);
 		currentObject->SetTexture(*currentObject->OriginalTexture());

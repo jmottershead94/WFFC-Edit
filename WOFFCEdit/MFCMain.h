@@ -37,6 +37,12 @@ private:
 
 	// Jason's Added Work.
 	CDialogEx _editorSettings;
+	CButton* invertedCamCheckBox = nullptr;
+
+	/**
+	 * Allows the user to save the scene.
+	 */
+	afx_msg void MenuSaveAll();
 
 	/**
 	 * Allows the user to copy selected items.
@@ -82,6 +88,11 @@ private:
 	 * Allows the user to scale selected objects.
 	 */
 	afx_msg void MenuScale();
+
+	/**
+	 * Allows the user to invert camera controls.
+	 */
+	afx_msg void MenuInvertCamera();
 
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };

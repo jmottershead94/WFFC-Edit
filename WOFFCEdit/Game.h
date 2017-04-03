@@ -130,6 +130,7 @@ private:
 	std::shared_ptr<Camera> _camera;
 	DirectX::SimpleMath::Vector3 _testingComponent;
 	std::vector<BaseObject*> _copiedObjects;
+	DirectX::SimpleMath::Vector3 _mouseWorldPosition;
 
 	/**
 	 * Provides specific tool controls.

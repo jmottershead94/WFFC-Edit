@@ -3,7 +3,7 @@
 
 BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_FILE_QUIT,	&MFCMain::MenuFileQuit)
-	ON_COMMAND(ID_FILE_SAVETERRAIN, &MFCMain::MenuFileSaveTerrain)
+	ON_COMMAND(ID_FILE_SAVEALL, &MFCMain::MenuSaveAll)
 	ON_COMMAND(ID_EDIT_SELECT, &MFCMain::MenuEditSelect)
 	ON_COMMAND(ID_EDIT_COPY40079, &MFCMain::MenuEditCopy)
 	ON_COMMAND(ID_EDIT_PASTE40079, &MFCMain::MenuEditPaste)
@@ -16,6 +16,7 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_TRANSLATE, &MFCMain::MenuTranslate)
 	ON_COMMAND(ID_ROTATE, &MFCMain::MenuRotate)
 	ON_COMMAND(ID_SCALE, &MFCMain::MenuScale)
+	ON_COMMAND(IDC_CHECK3, &MFCMain::MenuInvertCamera)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -77,7 +78,7 @@ int MFCMain::Run()
 			m_ToolSystem.UpdateInput(&msg);
 		}
 		else
-		{	
+		{
 			int ID = m_ToolSystem.getCurrentSelectionID();
 			std::wstring statusString = L"Selected Object: " + std::to_wstring(ID);
 			m_ToolSystem.Tick(&msg);
@@ -98,6 +99,12 @@ void MFCMain::MenuFileQuit()
 
 void MFCMain::MenuFileSaveTerrain()
 {
+	m_ToolSystem.onActionSaveTerrain();
+}
+
+void MFCMain::MenuSaveAll()
+{
+	m_ToolSystem.onActionSave();
 	m_ToolSystem.onActionSaveTerrain();
 }
 
@@ -130,6 +137,9 @@ void MFCMain::MenuEditPaste()
 void MFCMain::MenuEditSettings()
 {
 	_editorSettings.ShowWindow(SW_SHOW);
+
+	if(invertedCamCheckBox == nullptr)
+		invertedCamCheckBox = (CButton*)GetDlgItem(m_toolHandle, IDC_CHECK3);
 }
 
 void MFCMain::MenuGenerateRandomTerrain()
@@ -160,6 +170,11 @@ void MFCMain::MenuRotate()
 void MFCMain::MenuScale()
 {
 	m_ToolSystem.onActionChangeEditorState(Game::EditorState::SCALE);
+}
+
+void MFCMain::MenuInvertCamera()
+{
+	//m_ToolSystem.onActionToggleInvertedCamera();
 }
 
 MFCMain::MFCMain()

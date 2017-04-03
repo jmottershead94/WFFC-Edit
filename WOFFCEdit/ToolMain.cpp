@@ -264,6 +264,11 @@ void ToolMain::onActionExit(MSG* msg)
 	}
 }
 
+void ToolMain::onActionToggleInvertedCamera()
+{
+	//Utils::SetInvertedCamera(true);
+}
+
 void ToolMain::Tick(MSG *msg)
 {
 	//do we have a selection

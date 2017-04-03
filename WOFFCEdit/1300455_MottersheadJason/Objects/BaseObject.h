@@ -100,9 +100,9 @@ class BaseObject : public Observer
 		 * Notifies this object about an event.
 		 * @param currentEvent what event has occured (i.e. left mouse click).
 		 * @param cursorPosition the position of the cursor in the world.
-		 * @param cameraLookDirection the direction the camera is facing.
+		 * @param direction the direction for raycasting.
 		 */
-		void OnNotify(EventType& currentEvent, const DirectX::SimpleMath::Vector3& cursorPosition, const DirectX::SimpleMath::Vector3& cameraLookDirection) override;
+		void OnNotify(EventType& currentEvent, const DirectX::SimpleMath::Vector3& cursorPosition, const DirectX::SimpleMath::Vector3& direction) override;
 
 		/**
 		 * Allows us to set this object being in focus.

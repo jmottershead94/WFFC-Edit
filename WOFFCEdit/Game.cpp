@@ -52,6 +52,7 @@ void Game::Initialize(HWND window, int width, int height)
     m_keyboard = std::make_unique<Keyboard>();
     m_mouse = std::make_unique<Mouse>();
     m_mouse->SetWindow(window);
+	m_mouse->SetMode(Mouse::Mode::MODE_RELATIVE);
 
     m_deviceResources->SetWindow(window, width, height);
     m_deviceResources->CreateDeviceResources();
@@ -195,27 +196,22 @@ void Game::Render()
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
-	DirectX::SimpleMath::Vector3 mousePosition(Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()));
-	mousePosition = Maths::RoundVector3(mousePosition);
-
-	std::wstring var = L"Mouse X: " + std::to_wstring(mousePosition.x) + L"Mouse Y: " + std::to_wstring(mousePosition.y) + L"Mouse Z: " + std::to_wstring(mousePosition.z);
-	m_font->DrawString(m_sprites.get(), var.c_str() , XMFLOAT2(100, 10), Colors::Yellow);
 
 	std::wstring currentState = L" ";
 	if (_editorState == EditorState::TRANSLATE)
 	{
 		currentState = L"TRANSLATE";
-		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 400), Colors::Yellow);
+		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 10), Colors::Yellow);
 	}
-	else if (_editorState == EditorState::TRANSLATE)
+	else if (_editorState == EditorState::ROTATE)
 	{
 		currentState = L"ROTATE";
-		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 400), Colors::Yellow);
+		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 10), Colors::Yellow);
 	}
-	else if (_editorState == EditorState::TRANSLATE)
+	else if (_editorState == EditorState::SCALE)
 	{
 		currentState = L"SCALE";
-		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 400), Colors::Yellow);
+		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 10), Colors::Yellow);
 	}
 
 	m_sprites->End();
@@ -563,13 +559,13 @@ void Game::SceneControls()
 #endif
 
 	if (CrossPlatformInput::SelectPressed())
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_projection, m_view, m_deviceResources->GetScreenViewport()), Utils::GetCursorDirectionInWorld());
 
 	if (CrossPlatformInput::SelectReleased())
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_RELEASE, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
-	
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_RELEASE, Utils::GetCursorPositionInWorld(m_world, m_projection, m_view, m_deviceResources->GetScreenViewport()), Utils::GetCursorDirectionInWorld());
+
 	if (CrossPlatformInput::SelectDoublePressed())
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK_DOUBLE, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK_DOUBLE, Utils::GetCursorPositionInWorld(m_world, m_projection, m_view, m_deviceResources->GetScreenViewport()), Utils::GetCursorDirectionInWorld());
 }
 
 void Game::SceneUpdate()

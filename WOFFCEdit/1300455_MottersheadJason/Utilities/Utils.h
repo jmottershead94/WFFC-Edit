@@ -25,6 +25,8 @@ class Utils
 		HWND _hwnd;
 		int _width, _height;
 		bool _wireframeMode;
+		bool _invertedCameraControls;
+		DirectX::SimpleMath::Vector3 _cursorWorldDirection;
 
 		/**
 		 * Constructs this instance.
@@ -56,14 +58,22 @@ class Utils
 		 * @return const DirectX::SimpleMath::Vector3 the position of the cursor on screen.
 		 */
 		static DirectX::SimpleMath::Vector3 const GetCursorPositionInWindow();
-
+		
 		/**
 		 * Provides access to the cursor position in the game world.
 		 * @param worldMatrix the world matrix from the game.
-		 * @param camPosition the position of the game camera.
-		 * @return const DirectX::SimpleMath::Vector3 the position of the cursor in the game.
+		 * @param projectionMatrix the projection matrix from the game.
+		 * @param viewMatrix the view matrix from the game.
+		 * @param viewPort the viewport used for the game.
+		 * @return const DirectX::SimpleMath::Vector3 the position of the cursor in the game world.
 		 */
-		static DirectX::SimpleMath::Vector3 const GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Vector3 camPosition);
+		static DirectX::SimpleMath::Vector3 const GetCursorPositionInWorld(const DirectX::SimpleMath::Matrix& worldMatrix, const DirectX::SimpleMath::Matrix& projectionMatrix, const DirectX::SimpleMath::Matrix& viewMatrix, const D3D11_VIEWPORT& viewPort);
+
+		/**
+		 * Provides access to the direction of the cursor in terms of game world space.
+		 * @return const DirectX::SimpleMath::Vector3 the direction the cursor is looking in relative to the game world.
+		 */
+		static DirectX::SimpleMath::Vector3 const GetCursorDirectionInWorld();
 
 		/**
 		 * Provides a way to set wireframe mode for the application as a whole.
@@ -76,6 +86,18 @@ class Utils
 		 * @return const bool if the application is using wireframe mode or not.
 		 */
 		static bool const WireframeMode();
+
+		/**
+		 * Provides a way to set the inverted camera controls.
+		 * @param invertedState if the camera should use inverted controls.
+		 */
+		static void SetInvertedCamera(const bool invertedState);
+
+		/**
+		 * Provides a way to access the settings for an inverted camera.
+		 * @return const bool if the camera should use inverted controls.
+		 */
+		static bool const InvertCamera();
 
 		/**
 		 * Provides a way to convert a string to a wstring.

@@ -27,10 +27,20 @@ void Camera::Controls(const double& dt)
 		_transform.SetRotationX(Maths::ClampFloat(_transform.Rotation().x, -_rotationXClamp, _rotationXClamp));
 
 		// Rotating the camera up and down.
-		if (CrossPlatformInput::RotateUp() && _transform.Rotation().x < 90.0f)
-			_transform.Rotate(_rotateRate, 0.0f, 0.0f);
-		if (CrossPlatformInput::RotateDown() && _transform.Rotation().x > -90.0f)
-			_transform.Rotate(-_rotateRate, 0.0f, 0.0f);
+		if (Utils::InvertCamera())
+		{
+			if (CrossPlatformInput::RotateDown() && _transform.Rotation().x < 90.0f)
+				_transform.Rotate(_rotateRate, 0.0f, 0.0f);
+			if (CrossPlatformInput::RotateUp() && _transform.Rotation().x > -90.0f)
+				_transform.Rotate(-_rotateRate, 0.0f, 0.0f);
+		}
+		else
+		{
+			if (CrossPlatformInput::RotateUp() && _transform.Rotation().x < 90.0f)
+				_transform.Rotate(_rotateRate, 0.0f, 0.0f);
+			if (CrossPlatformInput::RotateDown() && _transform.Rotation().x > -90.0f)
+				_transform.Rotate(-_rotateRate, 0.0f, 0.0f);
+		}
 	}
 #endif
 

@@ -3,7 +3,8 @@
 static std::unique_ptr<Utils> instance = nullptr;
 
 Utils::Utils() :
-	_wireframeMode(false)
+	_wireframeMode(false),
+	_invertedCameraControls(false)
 {
 	if (instance == nullptr)
 		instance = std::make_unique<Utils>(*this);
@@ -33,36 +34,52 @@ DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWindow()
 	{
 		cursorPosition.x = static_cast<float>(p.x);
 		cursorPosition.y = static_cast<float>(p.y);
-		cursorPosition.z = 1.0f;
+		cursorPosition.z = 0.0f;
 	}
 
 	if (ScreenToClient(instance->_hwnd, &p))
 	{
 		cursorPosition.x = static_cast<float>(p.x);
 		cursorPosition.y = static_cast<float>(p.y);
-		cursorPosition.z = 1.0f;
+		cursorPosition.z = 0.0f;
 	}
 
 	return cursorPosition;
 }
 
-DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWorld(DirectX::SimpleMath::Matrix worldMatrix, DirectX::SimpleMath::Vector3 camPosition)
+DirectX::SimpleMath::Vector3 const Utils::GetCursorPositionInWorld(const DirectX::SimpleMath::Matrix& worldMatrix, const DirectX::SimpleMath::Matrix& projectionMatrix, const DirectX::SimpleMath::Matrix& viewMatrix, const D3D11_VIEWPORT& viewPort)
 {
-	// Converting cursor coordinates into a matrix for operations later on.
+	// Accessing the cursor position in terms of the client window.
+	// Calculating offsets for cursor position based on screen width/height.
 	DirectX::SimpleMath::Vector3 cursorPosition(GetCursorPositionInWindow());
-	DirectX::SimpleMath::Matrix dir;
-	float halfWidth = instance->_width * 0.5f;
-	float halfHeight = instance->_height * 0.5f;
+	cursorPosition.x -= ((instance->_width / 2) / instance->_width);
+	cursorPosition.y -= ((instance->_height / 2) / instance->_height);
 
-	// Calculate the current cursor position based on the screen width and height.
-	cursorPosition.x = (cursorPosition.x / halfWidth) - 1.0f;
-	cursorPosition.y = (cursorPosition.y / halfHeight) - 1.0f;
+	// worldCursorPosition provides the mouse position in 3D space.
+	// pointOne and pointTwo provide a way to cast a ray for this cursor point - we can calculate direction with these.
+	DirectX::SimpleMath::Vector3 worldCursorPosition;
+	DirectX::SimpleMath::Vector3 pointOne, pointTwo;
 
-	// Calculate the position of the cursor in the 3D world and return it.
-	DirectX::SimpleMath::Matrix position3D;
-	position3D = position3D.CreateTranslation(camPosition.x - (cursorPosition.x * (1.0f / halfWidth)), camPosition.y - (cursorPosition.y * (1.0f / halfHeight)), camPosition.z - (cursorPosition.x * (1.0f / halfWidth)));
-	dir = worldMatrix * position3D;
-	return dir.Translation();
+	// Cursor at the minimum depth distance.
+	// Unprojecting from screen space to world space.
+	pointOne = DirectX::XMVector3Unproject(cursorPosition, viewPort.TopLeftX, viewPort.TopLeftY, viewPort.Width, viewPort.Height, viewPort.MinDepth, viewPort.MaxDepth, projectionMatrix, viewMatrix, worldMatrix);
+
+	// Cursor at the maximum depth distance.
+	// Unprojecting from screen space to world space.
+	cursorPosition.z = 1.0f;
+	pointTwo = DirectX::XMVector3Unproject(cursorPosition, viewPort.TopLeftX, viewPort.TopLeftY, viewPort.Width, viewPort.Height, viewPort.MinDepth, viewPort.MaxDepth, projectionMatrix, viewMatrix, worldMatrix);
+	
+	// Starting point from the cursor on screen, in the direction of the cursor "ray" based on viewport depth.
+	worldCursorPosition = pointOne;
+	instance->_cursorWorldDirection = pointTwo - pointOne;
+	instance->_cursorWorldDirection.Normalize();
+
+	return worldCursorPosition;
+}
+
+DirectX::SimpleMath::Vector3 const Utils::GetCursorDirectionInWorld()
+{
+	return instance->_cursorWorldDirection;
 }
 
 void Utils::SetWireframe(const bool wireframeState)
@@ -73,6 +90,16 @@ void Utils::SetWireframe(const bool wireframeState)
 bool const Utils::WireframeMode()
 {
 	return instance->_wireframeMode;
+}
+
+void Utils::SetInvertedCamera(const bool invertedState)
+{
+	instance->_invertedCameraControls = invertedState;
+}
+
+bool const Utils::InvertCamera()
+{
+	return instance->_invertedCameraControls;
 }
 
 std::wstring const Utils::StringToWCHART(std::string s)

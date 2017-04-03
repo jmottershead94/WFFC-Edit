@@ -56,9 +56,9 @@ void BaseObject::CleanUpComponents()
 void BaseObject::OnNotify(EventType& currentEvent)
 {}
 
-void BaseObject::OnNotify(EventType& currentEvent, const DirectX::SimpleMath::Vector3& cursorPosition, const DirectX::SimpleMath::Vector3& cameraLookDirection)
+void BaseObject::OnNotify(EventType& currentEvent, const DirectX::SimpleMath::Vector3& cursorPosition, const DirectX::SimpleMath::Vector3& direction)
 {
-	bool rayHit = ray.Hit(Maths::RoundVector3(cursorPosition), cameraLookDirection, 50.0f, *editorCollider);
+	bool rayHit = ray.Hit(Maths::RoundVector3(cursorPosition), direction, 50.0f, *editorCollider);
 
 	// If the cursor is "looking" at this object.
 	if (!rayHit)

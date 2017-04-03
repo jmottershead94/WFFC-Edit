@@ -95,6 +95,11 @@ public:
 	void onActionToggleWireframe();
 
 	/**
+	 * Provides a way to toggle camera controls.
+	 */
+	void onActionToggleInvertedCamera();
+
+	/**
 	 * Spawns in a model.
 	 * @param modelFilePath the file path to the model we want to spawn in.
 	 * @param textureFilePath the file path to the texture for the model.

@@ -6,142 +6,222 @@ Input::Input()
 {
 	if (instance == nullptr)
 		instance = std::make_unique<Input>(*this);
+
+	instance->SetLeftMousePressed(false);
+	instance->SetRightMousePressed(false);
+	instance->SetLeftMouseReleased(false);
+	instance->SetRightMouseReleased(false);
+	instance->SetLeftMouseDrag(false);
+	instance->SetRightMouseDrag(false);
+	instance->SetLeftMouseDouble(false);
+	instance->SetRightMouseDouble(false);
+	instance->SetMouseDragAxisX(0.0f);
+	instance->SetMouseDragAxisY(0.0f);
 }
 
 Input::~Input()
 {}
 
-void Input::SetKeyDown(const int key)
+void Input::SetKeyDown(WPARAM key)
 {
-	instance->_pc._keyboard._keys[key] = true;
+	instance->_keyboard._keys[key] = true;
 }
 
-void Input::SetKeyUp(const int key)
+void Input::SetKeyUp(WPARAM key)
 {
-	instance->_pc._keyboard._keys[key] = false;
+	instance->_keyboard._keys[key] = false;
 }
 
 void Input::SetLeftMousePressed(const bool value)
 {
-	instance->_pc._mouse._left = value;
+	instance->_mouse._left = value;
 }
 
 void Input::SetRightMousePressed(const bool value)
 {
-	instance->_pc._mouse._right = value;
+	instance->_mouse._right = value;
 }
 
 void Input::SetLeftMouseReleased(const bool value)
 {
-	instance->_pc._mouse._leftRelease = value;
+	instance->_mouse._leftRelease = value;
 }
 
 void Input::SetRightMouseReleased(const bool value)
 {
-	instance->_pc._mouse._rightRelease = value;
+	instance->_mouse._rightRelease = value;
 }
 
 void Input::SetLeftMouseDrag(const bool value)
 {
-	instance->_pc._mouse._leftDrag = value;
+	instance->_mouse._leftDrag = value;
 }
 
 void Input::SetRightMouseDrag(const bool value)
 {
-	instance->_pc._mouse._rightDrag = value;
+	instance->_mouse._rightDrag = value;
 }
 
 void Input::SetLeftMouseDouble(const bool value)
 {
-	instance->_pc._mouse._leftDoubleClick = value;
+	instance->_mouse._leftDoubleClick = value;
 }
 
 void Input::SetRightMouseDouble(const bool value)
 {
-	instance->_pc._mouse._rightDoubleClick = value;
+	instance->_mouse._rightDoubleClick = value;
 }
 
-void Input::SetLeftDragAxis(const float drag)
+void Input::SetMouseDragAxisX(const float drag)
 {
-	instance->_pc._mouse._leftDragAxis = drag;
+	instance->_mouse._dragX = drag;
 }
 
-void Input::SetRightDragAxis(const float drag)
+void Input::SetMouseDragAxisY(const float drag)
 {
-	instance->_pc._mouse._rightDragAxis = drag;
+	instance->_mouse._dragY = drag;
 }
 
 void Input::SetMouseX(const int x)
 {
-	instance->_pc._mouse._x = x;
+	instance->_mouse._x = x;
 }
 
 void Input::SetMouseY(const int y)
 {
-	instance->_pc._mouse._y = y;
+	instance->_mouse._y = y;
 }
 
-bool Input::LeftMousePressed()
+bool const Input::LeftMousePressed()
 {
-	return instance->_pc._mouse._left;
+	return instance->_mouse._left;
 }
 
-bool Input::RightMousePressed()
+bool const Input::RightMousePressed()
 {
-	return instance->_pc._mouse._right;
+	return instance->_mouse._right;
 }
 
-bool Input::LeftMouseReleased()
+bool const Input::LeftMouseReleased()
 {
-	return instance->_pc._mouse._leftRelease;
+	return instance->_mouse._leftRelease;
 }
 
-bool Input::RightMouseReleased()
+bool const Input::RightMouseReleased()
 {
-	return instance->_pc._mouse._rightRelease;
+	return instance->_mouse._rightRelease;
 }
 
-bool Input::LeftMouseDrag()
+bool const Input::LeftMouseDrag()
 {
-	return instance->_pc._mouse._leftDrag;
+	return instance->_mouse._leftDrag;
 }
 
-bool Input::RightMouseDrag()
+bool const Input::RightMouseDrag()
 {
-	return instance->_pc._mouse._rightDrag;
+	return instance->_mouse._rightDrag;
 }
 
-bool Input::LeftMouseDouble()
+bool const Input::LeftMouseDouble()
 {
-	return instance->_pc._mouse._leftDoubleClick;
+	return instance->_mouse._leftDoubleClick;
 }
 
-bool Input::RightMouseDouble()
+bool const Input::RightMouseDouble()
 {
-	return instance->_pc._mouse._rightDoubleClick;
+	return instance->_mouse._rightDoubleClick;
 }
 
-float Input::LeftMouseDragAxis()
+float const Input::MouseDragAxisX()
 {
-	return instance->_pc._mouse._leftDragAxis;
+	return instance->_mouse._dragX;
 }
 
-float Input::RightMouseDragAxis()
+float const Input::MouseDragAxisY()
 {
-	return instance->_pc._mouse._rightDragAxis;
+	return instance->_mouse._dragY;
 }
 
-bool Input::IsKeyDown(WPARAM key)
+int const Input::GetMouseX()
 {
-	return instance->_pc._keyboard._keys[key];
+	return instance->_mouse._x;
 }
 
-int Input::GetMouseX()
+int const Input::GetMouseY()
 {
-	return instance->_pc._mouse._x;
+	return instance->_mouse._y;
 }
 
-int Input::GetMouseY()
+bool const Input::IsKeyDown(WPARAM key)
 {
-	return instance->_pc._mouse._y;
+	return instance->_keyboard._keys[key];
 }
+
+bool const Input::IsKeyPressed(WPARAM key)
+{
+	bool keyPressed = instance->_keyboard._keys[key];
+	instance->SetKeyUp(key);
+	return keyPressed;
+}
+
+//void Input::GamePadSuspend()
+//{
+//	instance->_gamePad->Suspend();
+//}
+//
+//void Input::GamePadResume()
+//{
+//	instance->_gamePad->Resume();
+//}
+//
+//bool const Input::GamePadLeftStickUp()
+//{
+//	auto state = instance->_gamePad->GetState(0);
+//
+//	if (!state.IsConnected())
+//		return false;
+//
+//	if (state.IsViewPressed())
+//		PostQuitMessage(0);
+//	else
+//		return state.IsLeftThumbStickUp();
+//}
+//
+//bool const Input::GamePadLeftStickDown()
+//{
+//	auto state = instance->_gamePad->GetState(0);
+//
+//	if (!state.IsConnected())
+//		return false;
+//
+//	if (state.IsViewPressed())
+//		PostQuitMessage(0);
+//	else
+//		return state.IsLeftThumbStickDown();
+//}
+//
+//bool const Input::GamePadLeftStickRight()
+//{
+//	auto state = instance->_gamePad->GetState(0);
+//
+//	if (!state.IsConnected())
+//		return false;
+//
+//	if (state.IsViewPressed())
+//		PostQuitMessage(0);
+//	else
+//		return state.IsLeftThumbStickRight();
+//}
+//
+//bool const Input::GamePadLeftStickLeft()
+//{
+//	auto state = instance->_gamePad->GetState(0);
+//
+//	if (!state.IsConnected())
+//		return false;
+//
+//	if (state.IsViewPressed())
+//		PostQuitMessage(0);
+//	else
+//		return state.IsLeftThumbStickLeft();
+//}

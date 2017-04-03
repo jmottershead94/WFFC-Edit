@@ -10,7 +10,6 @@
 #include "DisplayObject.h"
 #include "DisplayChunk.h"
 #include "ChunkObject.h"
-#include "InputCommands.h"
 #include <vector>
 
 #include "1300455_MottersheadJason/Events/EventSystem.h"
@@ -31,7 +30,7 @@ public:
 	void SetGridState(bool state);
 
 	// Basic game loop
-	void Tick(InputCommands * Input);
+	void Tick();
 	void Render();
 
 	// Rendering helpers
@@ -73,7 +72,6 @@ private:
 	//tool specific
 	std::vector<DisplayObject>			m_displayList;
 	DisplayChunk						m_displayChunk;
-	InputCommands						m_InputCommands;
 		
 	//control variables
 	bool m_grid;							//grid rendering on / off

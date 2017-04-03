@@ -74,6 +74,12 @@ class TransformComponent : public Component
 		inline void SetRotation(const float& x, const float& y, const float& z)		{ _rotation = DirectX::SimpleMath::Vector3(x, y, z); }
 
 		/**
+		 * Sets the x rotation of this transform.
+		 * @param x the x axis rotation value.
+		 */
+		inline void SetRotationX(const float& x)									{ _rotation.x = x; }
+
+		/**
 		 * Rotate this transform to a new orientation.
 		 * @param rotation how far to rotate this transform.
 		 */

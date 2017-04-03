@@ -5,7 +5,6 @@
 #include "Game.h"
 #include "sqlite3.h"
 #include "SceneObject.h"
-#include "InputCommands.h"
 #include <vector>
 
 class ToolMain
@@ -21,12 +20,8 @@ public: //methods
 	void	onActionLoad();													//load the current chunk
 	afx_msg	void	onActionSave();											//save the current chunk
 	afx_msg void	onActionSaveTerrain();									//save chunk geometry
-	
-
 	void	Tick(MSG *msg);
 	void	UpdateInput(MSG *msg);
-
-	
 
 public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
@@ -39,9 +34,7 @@ private:	//methods
 private:	//variables
 	HWND	m_toolHandle;		//Handle to the  window
 	Game	m_d3dRenderer;		//Instance of D3D rendering system for our tool
-	InputCommands m_toolInputCommands;		//input commands that we want to use and possibly pass over to the renderer
 	CRect	WindowRECT;		//Window area rectangle. 
-	char	m_keyArray[256];
 	sqlite3 *m_databaseConnection;	//sqldatabase handle
 
 	int m_width;		//dimensions passed to directX
@@ -53,8 +46,8 @@ private:
 	const float _mouseDragDeadCentre = 100.0f;
 	int _popUpMenuResult = -1;
 	POINT _previousMouse;
-	//CMenu _testMenu;
 	HMENU _topLevelMenu, _popUpMenu;
+	Input _input;
 	Utils _utilities;
 	Maths _maths;
 
@@ -68,9 +61,19 @@ private:
 	 */
 	SceneObject* SpawnNewSceneObject(DisplayObject* displayObject, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
 
+	/**
+	 * Creates a new pop up menu.
+	 * @param msg the message with the lParam and wParam for windows parameters.
+	 */
 	void PopUpMenu(MSG* msg);
 
 public:
+	/**
+	 * Performs appropriate exit actions.
+	 * @param msg the message with the lParam and wParam for windows parameters.
+	 */
+	void onActionExit(MSG* msg);
+
 	/**
 	 * Copies all of the selected items.
 	 */
@@ -102,7 +105,6 @@ public:
 	/**
 	 * Changes the editor state.
 	 * @param newState the new state to change to.
-	 * @param newIcon the new icon to use for the editor state.
 	 */
 	void onActionChangeEditorState(const Game::EditorState newState);
 

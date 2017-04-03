@@ -6,36 +6,10 @@
 //ToolMain Class
 ToolMain::ToolMain()
 {
-
 	m_currentChunk = 0;		//default value
 	m_selectedObject = 0;	//initial selection ID
 	m_sceneGraph.clear();	//clear the vector for the scenegraph
 	m_databaseConnection = NULL;
-
-	//zero input commands
-	m_toolInputCommands.forward		= false;
-	m_toolInputCommands.back		= false;
-	m_toolInputCommands.left		= false;
-	m_toolInputCommands.right		= false;
-	m_toolInputCommands.up			= false;
-	m_toolInputCommands.down		= false;
-	m_toolInputCommands.rotRight	= false;
-	m_toolInputCommands.rotLeft		= false;
-	m_toolInputCommands.rotUp		= false;
-	m_toolInputCommands.rotDown		= false;
-	
-	m_toolInputCommands.generateTerrain			= false;
-	m_toolInputCommands.resetText				= false;
-	m_toolInputCommands.wireframeMode			= false;
-	m_toolInputCommands.leftMouseDown			= false;
-	m_toolInputCommands.leftMouseRelease		= false;
-	m_toolInputCommands.leftMouseDrag			= false;
-	m_toolInputCommands.doubleLeftMouseClick	= false;
-	m_toolInputCommands.rightMouseDown			= false;
-	m_toolInputCommands.rightMouseDrag			= false;
-	m_toolInputCommands.save					= false;
-	m_toolInputCommands.saveOnce				= false;
-	m_toolInputCommands.spawnTree				= false;
 }
 
 ToolMain::~ToolMain()
@@ -271,6 +245,25 @@ void ToolMain::onActionSaveTerrain()
 	m_d3dRenderer.SaveDisplayChunk(&m_chunk);
 }
 
+void ToolMain::onActionExit(MSG* msg)
+{
+	int savingUserInput = MessageBoxW(msg->hwnd, L"Would you like to save before quitting?", L"Save and Exit", MB_YESNOCANCEL);
+
+	if (savingUserInput == IDYES)
+	{
+		onActionSave();
+		onActionSaveTerrain();
+
+		SendMessage(msg->hwnd, WM_CLOSE, 0, 0);
+		PostQuitMessage(0);
+	}
+	else if (savingUserInput == IDNO)
+	{
+		SendMessage(msg->hwnd, WM_CLOSE, 0, 0);
+		PostQuitMessage(0);
+	}
+}
+
 void ToolMain::Tick(MSG *msg)
 {
 	//do we have a selection
@@ -281,58 +274,28 @@ void ToolMain::Tick(MSG *msg)
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
 
-	if (m_toolInputCommands.save)
+#if TOOL_EDITOR
+	if (CrossPlatformInput::SavePressed())
 	{
-		if (!m_toolInputCommands.saveOnce)
-		{
-			m_toolInputCommands.saveOnce = true;
-			onActionSave();
-		}
-	}
-	else
-	{
-		m_toolInputCommands.saveOnce = false;
+		onActionSave();
+		onActionSaveTerrain();
 	}
 
-	if (m_toolInputCommands.spawnTree)
-	{
+	if (CrossPlatformInput::SpawnTreePressed())
 		onActionSpawnModel("database/data/Lowpoly_tree_sample.cmo", "database/data/placeholder.dds", DirectX::SimpleMath::Vector3(3.0f, 3.0f, 3.0f));
-		m_toolInputCommands.spawnTree = false;
-		m_keyArray['P'] = false;
-	}
+
+	if (CrossPlatformInput::TranslateHotKeyPressed())
+		onActionChangeEditorState(Game::EditorState::TRANSLATE);
+
+	if (CrossPlatformInput::RotateHotKeyPressed())
+		onActionChangeEditorState(Game::EditorState::ROTATE);
+
+	if (CrossPlatformInput::ScaleHotKeyPressed())
+		onActionChangeEditorState(Game::EditorState::SCALE);
+#endif
 
 	//Renderer Update Call
-	m_d3dRenderer.Tick(&m_toolInputCommands);
-
-	//CMenu* menu = (CMenu*)(_topLevelMenu);
-
-	//if (!menu)
-	//	return;
-
-	//if (m_toolInputCommands.leftMouseDown)
-	//{
-	//	if (m_d3dRenderer.IsCopyEnabled())
-	//	{
-	//		menu->EnableMenuItem(ID_EDIT_COPY, MF_GRAYED);
-	//		//DrawMenuBar(msg->hwnd);
-	//	}
-	//	else
-	//	{
-	//		menu->EnableMenuItem(ID_EDIT_COPY, MF_DISABLED);
-	//		//DrawMenuBar(msg->hwnd);
-	//	}
-
-	//	//if (m_d3dRenderer.IsPasteEnabled())
-	//	//{
-	//	//	menu->EnableMenuItem(ID_EDIT_PASTE, MF_GRAYED);
-	//	//	//DrawMenuBar(msg->hwnd);
-	//	//}
-	//	//else
-	//	//{
-	//	//	menu->EnableMenuItem(ID_EDIT_PASTE, MF_DISABLED);
-	//	//	//DrawMenuBar(msg->hwnd);
-	//	//}
-	//}
+	m_d3dRenderer.Tick();
 }
 
 void ToolMain::UpdateInput(MSG * msg)
@@ -343,22 +306,14 @@ void ToolMain::UpdateInput(MSG * msg)
 		case WM_KEYDOWN:
 		{
 			if (msg->wParam == VK_ESCAPE) 
-			{
-				int userInput = MessageBoxW(msg->hwnd, L"Are you sure to quit?", L"Exit", MB_OKCANCEL);
+				onActionExit(msg);
 
-				if (userInput == IDOK)
-				{
-					SendMessage(msg->hwnd, WM_CLOSE, 0, 0);
-					PostQuitMessage(0);
-				}
-			}
-
-			m_keyArray[msg->wParam] = true;
+			Input::SetKeyDown(msg->wParam);
 			break;
 		}
 		case WM_KEYUP:
 		{
-			m_keyArray[msg->wParam] = false;
+			Input::SetKeyUp(msg->wParam);
 			break;
 		}
 		case WM_MOUSEMOVE:
@@ -391,93 +346,18 @@ void ToolMain::UpdateInput(MSG * msg)
 		// Mouse double clicks.
 		case WM_LBUTTONDBLCLK:
 		{
-			m_toolInputCommands.doubleLeftMouseClick = true;
-			m_toolInputCommands.leftMouseRelease = false;
+			Input::SetLeftMouseDouble(true);
+			Input::SetLeftMouseReleased(false);
 			break;
 		}
 		case WM_RBUTTONDBLCLK:
 		{
 			PopUpMenu(msg);
+			Input::SetRightMouseDouble(true);
+			Input::SetRightMouseReleased(false);
 			break;
 		}
 	}
-	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
-	//WASD movement
-	if (m_keyArray['W'])
-	{
-		m_toolInputCommands.forward = true;
-	}
-	else m_toolInputCommands.forward = false;
-	if (m_keyArray['S'])
-	{
-		m_toolInputCommands.back = true;
-	}
-	else m_toolInputCommands.back = false;
-	if (m_keyArray['A'])
-	{
-		m_toolInputCommands.left = true;
-	}
-	else m_toolInputCommands.left = false;
-	if (m_keyArray['D'])
-	{
-		m_toolInputCommands.right = true;
-	}
-	else m_toolInputCommands.right = false;
-	if (m_keyArray['Q'])
-	{
-		m_toolInputCommands.down = true;
-	}
-	else m_toolInputCommands.down = false;
-	if (m_keyArray['E'])
-	{
-		m_toolInputCommands.up = true;
-	}
-	else m_toolInputCommands.up = false;
-	//rotation
-	if (m_keyArray['L'])
-	{
-		m_toolInputCommands.rotRight = true;
-	}
-	else m_toolInputCommands.rotRight = false;
-	if (m_keyArray['J'])
-	{
-		m_toolInputCommands.rotLeft = true;
-	}
-	else m_toolInputCommands.rotLeft = false;
-	if (m_keyArray['I'])
-	{
-		m_toolInputCommands.rotUp = true;
-	}
-	else m_toolInputCommands.rotUp = false;
-	if (m_keyArray['K'])
-	{
-		m_toolInputCommands.rotDown = true;
-	}
-	else m_toolInputCommands.rotDown = false;
-	// Generating Terrain.
-	if (m_keyArray['G'])
-	{
-		m_toolInputCommands.generateTerrain = true;
-	}
-	else m_toolInputCommands.generateTerrain = false;
-	if (m_keyArray['T'])
-	{
-		m_toolInputCommands.resetText = true;
-	}
-	else m_toolInputCommands.resetText = false;
-	if (m_keyArray['1'])
-	{
-		m_toolInputCommands.wireframeMode = true;
-	}
-	else m_toolInputCommands.wireframeMode = false;
-
-	if (m_keyArray['0'])
-		m_toolInputCommands.save = true;
-	else m_toolInputCommands.save = false;
-
-	if (m_keyArray['P'])
-		m_toolInputCommands.spawnTree = true;
-	else m_toolInputCommands.spawnTree = false;	
 }
 
 SceneObject* ToolMain::SpawnNewSceneObject(DisplayObject* displayObject, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
@@ -588,28 +468,24 @@ void ToolMain::onLeftMouseDown(MSG* msg)
 	int xPos = GET_X_LPARAM(msg->lParam);
 	int yPos = GET_Y_LPARAM(msg->lParam);
 
+	Input::SetMouseX(xPos);
+	Input::SetMouseY(yPos);
+
 	POINT cursorPoint;
 	cursorPoint.x = xPos;
 	cursorPoint.y = yPos;
 	_previousMouse = cursorPoint;
 
-	m_toolInputCommands.leftMouseDown = true;
-	m_toolInputCommands.leftMouseRelease = false;
-
-	
+	Input::SetLeftMousePressed(true);
+	Input::SetLeftMouseReleased(false);
 }
 
 void ToolMain::onLeftMouseUp()
 {
-	m_toolInputCommands.leftMouseRelease = true;
-	m_toolInputCommands.leftMouseDown = false;
-	m_toolInputCommands.leftMouseDrag = false;
-	m_toolInputCommands.leftMouseDragUp = false;
-	m_toolInputCommands.leftMouseDragRight = false;
-	m_toolInputCommands.leftMouseDragDown = false;
-	m_toolInputCommands.leftMouseDragLeft = false;
-	m_toolInputCommands.doubleLeftMouseClick = false;
-	
+	Input::SetLeftMouseReleased(true);
+	Input::SetLeftMousePressed(false);
+	Input::SetLeftMouseDrag(false);
+	Input::SetLeftMouseDouble(false);
 }
 
 void ToolMain::onRightMouseDown(MSG* msg)
@@ -617,28 +493,32 @@ void ToolMain::onRightMouseDown(MSG* msg)
 	int xPos = GET_X_LPARAM(msg->lParam);
 	int yPos = GET_Y_LPARAM(msg->lParam);
 
+	Input::SetMouseX(xPos);
+	Input::SetMouseY(yPos);
+
 	POINT cursorPoint;
 	cursorPoint.x = xPos;
 	cursorPoint.y = yPos;
 	_previousMouse = cursorPoint;
 	
-	m_toolInputCommands.rightMouseDown = true;
+	Input::SetRightMousePressed(true);
 }
 
 void ToolMain::onRightMouseUp()
 {
-	m_toolInputCommands.rightMouseDown = false;
-	m_toolInputCommands.rightMouseDrag = false;
-	m_toolInputCommands.rightMouseDragUp = false;
-	m_toolInputCommands.rightMouseDragRight = false;
-	m_toolInputCommands.rightMouseDragDown = false;
-	m_toolInputCommands.rightMouseDragLeft = false;
+	Input::SetRightMouseReleased(true);
+	Input::SetRightMousePressed(false);
+	Input::SetRightMouseDrag(false);
+	Input::SetRightMouseDouble(false);
 }
 
 void ToolMain::onMouseMove(MSG* msg)
 {
 	int xPos = GET_X_LPARAM(msg->lParam);
 	int yPos = GET_Y_LPARAM(msg->lParam);
+
+	Input::SetMouseX(xPos);
+	Input::SetMouseY(yPos);
 
 	POINT deltaPosition;
 	deltaPosition.x = xPos - _previousMouse.x;
@@ -655,85 +535,50 @@ void ToolMain::onMouseMove(MSG* msg)
 
 void ToolMain::onRightButtonMouseDrag(int mouseX, int mouseY)
 {
-	if (!m_toolInputCommands.rightMouseDown)
+	if (!Input::RightMousePressed())
 		return;
 
-	m_toolInputCommands.rightMouseDrag = true;
+	Input::SetRightMouseDrag(true);
+	Input::SetRightMouseReleased(false);
 
 	// Checking x axis drag.
 	if (mouseX >= _mouseDragDeadCentre)
-	{
-		m_toolInputCommands.rightMouseDragRight = true;
-		m_toolInputCommands.rightMouseDragLeft = false;
-	}
+		Input::SetMouseDragAxisX(1.0f);
 	else if (mouseX <= -_mouseDragDeadCentre)
-	{
-		m_toolInputCommands.rightMouseDragRight = false;
-		m_toolInputCommands.rightMouseDragLeft = true;
-	}
+		Input::SetMouseDragAxisX(-1.0f);
 	else
-	{
-		m_toolInputCommands.rightMouseDragRight = false;
-		m_toolInputCommands.rightMouseDragLeft = false;
-	}
+		Input::SetMouseDragAxisX(0.0f);
 
 	// Checking y axis drag.
 	if (mouseY >= _mouseDragDeadCentre)
-	{
-		m_toolInputCommands.rightMouseDragUp = false;
-		m_toolInputCommands.rightMouseDragDown = true;
-	}
+		Input::SetMouseDragAxisY(-1.0f);
 	else if (mouseY <= -_mouseDragDeadCentre)
-	{
-		m_toolInputCommands.rightMouseDragUp = true;
-		m_toolInputCommands.rightMouseDragDown = false;
-	}
+		Input::SetMouseDragAxisY(1.0f);
 	else
-	{
-		m_toolInputCommands.rightMouseDragUp = false;
-		m_toolInputCommands.rightMouseDragDown = false;
-	}
+		Input::SetMouseDragAxisY(0.0f);
 }
 
 void ToolMain::onLeftButtonMouseDrag(int mouseX, int mouseY)
 {
-	if (!m_toolInputCommands.leftMouseDown)
+	if (!Input::LeftMousePressed())
 		return;
 
-	m_toolInputCommands.leftMouseDrag = true;
-	m_toolInputCommands.leftMouseRelease = false;
+	Input::SetLeftMouseDrag(true);
+	Input::SetLeftMouseReleased(false);
 
 	// Checking x axis drag.
 	if (mouseX >= _mouseDragDeadCentre)
-	{
-		m_toolInputCommands.leftMouseDragRight = true;
-		m_toolInputCommands.leftMouseDragLeft = false;
-	}
+		Input::SetMouseDragAxisX(1.0f);
 	else if (mouseX <= -_mouseDragDeadCentre)
-	{
-		m_toolInputCommands.leftMouseDragRight = false;
-		m_toolInputCommands.leftMouseDragLeft = true;
-	}
+		Input::SetMouseDragAxisX(-1.0f);
 	else
-	{
-		m_toolInputCommands.leftMouseDragRight = false;
-		m_toolInputCommands.leftMouseDragLeft = false;
-	}
+		Input::SetMouseDragAxisX(0.0f);
 
 	// Checking y axis drag.
 	if (mouseY >= _mouseDragDeadCentre)
-	{
-		m_toolInputCommands.leftMouseDragUp = false;
-		m_toolInputCommands.leftMouseDragDown = true;
-	}
+		Input::SetMouseDragAxisY(-1.0f);
 	else if (mouseY <= -_mouseDragDeadCentre)
-	{
-		m_toolInputCommands.leftMouseDragUp = true;
-		m_toolInputCommands.leftMouseDragDown = false;
-	}
+		Input::SetMouseDragAxisY(1.0f);
 	else
-	{
-		m_toolInputCommands.leftMouseDragUp = false;
-		m_toolInputCommands.leftMouseDragDown = false;
-	}
+		Input::SetMouseDragAxisY(0.0f);
 }

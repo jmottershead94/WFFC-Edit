@@ -2,7 +2,7 @@
 
 #include "../Utilities/Maths/Maths.h"
 #include "../Components/Transform/TransformComponent.h"
-#include "../../InputCommands.h"
+#include "../Utilities/Input/CrossPlatformInput.h"
 
 /**
  * A class to store camera functionality.
@@ -13,11 +13,10 @@ class Camera
 		/**
 		 * Constructs this instance.
 		 * @param position the starting position of the camera.
-		 * @param input the main input for the tool.
 		 * @param speed how fast the camera moves.
 		 * @param rotateRate how fast the camera rotates.
 		 */
-		explicit Camera(const DirectX::SimpleMath::Vector3 position, InputCommands& input, const float speed, const float rotateRate);
+		explicit Camera(const DirectX::SimpleMath::Vector3 position, const float speed, const float rotateRate);
 
 		/**
 		 * Destructs this instance.
@@ -46,5 +45,4 @@ class Camera
 		const float _rotationXClamp = 90.0f;
 		float _speed, _rotateRate;
 		TransformComponent _transform;
-		InputCommands* _input;
 };

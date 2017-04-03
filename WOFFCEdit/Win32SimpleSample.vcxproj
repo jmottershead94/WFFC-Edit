@@ -169,6 +169,7 @@
     <ClCompile Include="1300455_MottersheadJason\Components\Physics\BoxColliderComponent.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Objects\Camera.cpp" />
     <ClCompile Include="ChunkObject.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Utilities\Input\CrossPlatformInput.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="DisplayChunk.cpp" />
     <ClCompile Include="DisplayObject.cpp" />
@@ -197,13 +198,13 @@
     <ClInclude Include="ChunkObject.h" />
     <ClInclude Include="1300455_MottersheadJason\Components\Component.h" />
     <ClInclude Include="1300455_MottersheadJason\Components\Physics\ColliderComponent.h" />
+    <ClInclude Include="1300455_MottersheadJason\Utilities\Input\CrossPlatformInput.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="DisplayChunk.h" />
     <ClInclude Include="DisplayObject.h" />
     <ClInclude Include="1300455_MottersheadJason\Events\EventSystem.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="1300455_MottersheadJason\Utilities\Input\Input.h" />
-    <ClInclude Include="InputCommands.h" />
     <ClInclude Include="1300455_MottersheadJason\Utilities\Maths\Maths.h" />
     <ClInclude Include="MFCFrame.h" />
     <ClInclude Include="MFCRenderFrame.h" />

@@ -63,6 +63,14 @@ class Maths
 		static float Abs(const float value);
 
 		/**
+		 * Provides a way to clamp a floating point value between a minimum and maximum value.
+		 * @param value the floating point number to clamp.
+		 * @param min the minimum value that the number should be.
+		 * @param max the maximum value that the number should be.
+		 */
+		static float ClampFloat(const float value, const float min, const float max);
+
+		/**
 		 * Provides access to rounded floating point values.
 		 * @param value the value to return as rounded.
 		 * @return float the rounded float value.

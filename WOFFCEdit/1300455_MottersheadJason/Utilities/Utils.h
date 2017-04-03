@@ -10,6 +10,9 @@ using namespace std;
 
 #define UNUSED(x) (void)(x)
 
+// If we are using the tool (this can help to separate game logic from tool logic).
+#define TOOL_EDITOR 1
+
 /**
  * Provides quick an easy access to common header files,
  * and will provide access to common functionality.

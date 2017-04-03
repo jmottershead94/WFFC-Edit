@@ -61,7 +61,7 @@ void Game::Initialize(HWND window, int width, int height)
     CreateWindowSizeDependentResources();
 
 	// Initialise the camera.
-	_camera = std::make_shared<Camera>(DirectX::SimpleMath::Vector3(30.0f, 10.0f, 10.0f), m_InputCommands, 0.3f, 1.5f);
+	_camera = std::make_shared<Camera>(DirectX::SimpleMath::Vector3(30.0f, 10.0f, 10.0f), 0.3f, 1.5f);
 	_camera->Transform().Rotate(0.0f, 180.0f, 0.0f);
 	_editorState = EditorState::TRANSLATE;
 
@@ -96,10 +96,9 @@ void Game::SetGridState(bool state)
 
 #pragma region Frame Update
 // Executes the basic game loop.
-void Game::Tick(InputCommands *Input)
+void Game::Tick()
 {
 	//copy over the input commands so we have a local version to use elsewhere.
-	m_InputCommands = *Input;
     m_timer.Tick([&]()
     {
         Update(m_timer);
@@ -127,8 +126,11 @@ void Game::Update(DX::StepTimer const& timer)
 	planarMotionVector.y = 0.0f;
 
 	_dt = timer.GetElapsedSeconds();
+
+#if TOOL_EDITOR
 	SceneControls();
 	SceneUpdate();
+#endif
 
 	//apply camera vectors
 	m_view = Matrix::CreateLookAt(_camera->Transform().Position(), _camera->Transform().LookAt(), Vector3::UnitY);
@@ -334,6 +336,8 @@ void Game::OnDeactivated()
 
 void Game::OnSuspending()
 {
+	m_gamePad->Suspend();
+	//Input::GamePadSuspend();
 #ifdef DXTK_AUDIO
     m_audEngine->Suspend();
 #endif
@@ -341,8 +345,9 @@ void Game::OnSuspending()
 
 void Game::OnResuming()
 {
-    m_timer.ResetElapsedTime();
-
+	m_timer.ResetElapsedTime();
+	m_gamePad->Resume();
+	//Input::GamePadResume();
 #ifdef DXTK_AUDIO
     m_audEngine->Resume();
 #endif
@@ -549,25 +554,21 @@ void Game::OnDeviceRestored()
 
 void Game::SceneControls()
 {
-	if (m_InputCommands.generateTerrain)
+#if TOOL_EDITOR
+	if (CrossPlatformInput::GenerateTerrainPressed())
 		GenerateRandomTerrain();
 
-	if (m_InputCommands.wireframeMode)
+	if (CrossPlatformInput::WireframeModePressed())
 		SetWireframeMode();
+#endif
 
-	if (m_InputCommands.resetText)
-		_testingFocus = false;
-	
-	if (m_InputCommands.leftMouseDown)
+	if (CrossPlatformInput::SelectPressed())
 		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
-	
-	if(m_InputCommands.leftMouseRelease)
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_RELEASE, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
 
-	if(m_InputCommands.leftMouseDrag)
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_DRAG, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
+	if (CrossPlatformInput::SelectReleased())
+		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_RELEASE, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
 	
-	if(m_InputCommands.doubleLeftMouseClick)
+	if (CrossPlatformInput::SelectDoublePressed())
 		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK_DOUBLE, Utils::GetCursorPositionInWorld(m_world, _camera->Transform().Position()), _camera->Transform().Forward());
 }
 
@@ -592,18 +593,9 @@ void Game::SceneUpdate()
 			_copyEnabled = true;
 
 			// If the user isn't moving the camera, assume they are manipulating an object for now.
-			if (!m_InputCommands.rightMouseDown)
+			if (!Input::RightMousePressed())
 				ObjectManipulation(displayObject);
 		}
-
-		/*if (!_testingFocus)
-		{
-			if (displayObject.Focus())
-			{
-				_testingFocus = true;
-				_testingClick = displayObject.Transform().Position().x;
-			}
-		}*/
 	}
 }
 
@@ -622,20 +614,20 @@ void Game::ObjectManipulation(DisplayObject& displayObject)
 		case EditorState::ROTATE:
 		{
 			DirectX::SimpleMath::Vector3 rotation;
-
-			if (m_InputCommands.right)
+			
+			if (Input::IsKeyDown('D'))
 				rotation += DirectX::SimpleMath::Vector3::UnitY;
-			if (m_InputCommands.left)
+			if (Input::IsKeyDown('A'))
 				rotation -= DirectX::SimpleMath::Vector3::UnitY;
 
-			if (m_InputCommands.up)
+			if (Input::IsKeyDown('E'))
 				rotation -= DirectX::SimpleMath::Vector3::UnitZ;
-			if (m_InputCommands.down)
+			if (Input::IsKeyDown('Q'))
 				rotation += DirectX::SimpleMath::Vector3::UnitZ;
 
-			if (m_InputCommands.forward)
+			if (Input::IsKeyDown('W'))
 				rotation -= DirectX::SimpleMath::Vector3::UnitX;
-			if (m_InputCommands.back)
+			if (Input::IsKeyDown('S'))
 				rotation += DirectX::SimpleMath::Vector3::UnitX;
 
 			displayObject.Transform().Rotate(rotation);
@@ -657,19 +649,19 @@ void Game::ObjectManipulation(DisplayObject& displayObject)
 
 void Game::Manipulate(DirectX::SimpleMath::Vector3& manipulationVector)
 {
-	if (m_InputCommands.right)
+	if (Input::IsKeyDown('D'))
 		manipulationVector += DirectX::SimpleMath::Vector3::UnitX;
-	if (m_InputCommands.left)
+	if (Input::IsKeyDown('A'))
 		manipulationVector -= DirectX::SimpleMath::Vector3::UnitX;
 
-	if (m_InputCommands.up)
+	if (Input::IsKeyDown('E'))
 		manipulationVector += DirectX::SimpleMath::Vector3::UnitY;
-	if (m_InputCommands.down)
+	if (Input::IsKeyDown('Q'))
 		manipulationVector -= DirectX::SimpleMath::Vector3::UnitY;
 
-	if (m_InputCommands.forward)
+	if (Input::IsKeyDown('W'))
 		manipulationVector -= DirectX::SimpleMath::Vector3::UnitZ;
-	if (m_InputCommands.back)
+	if (Input::IsKeyDown('S'))
 		manipulationVector += DirectX::SimpleMath::Vector3::UnitZ;
 }
 

@@ -54,6 +54,18 @@ float Maths::Abs(const float value)
 	return absolute;
 }
 
+float Maths::ClampFloat(const float value, const float min, const float max)
+{
+	float clampedValue = value;
+
+	if (clampedValue < min)
+		clampedValue = min;
+	else if (clampedValue > max)
+		clampedValue = max;
+
+	return clampedValue;
+}
+
 float Maths::RoundFloat(const float value)
 {
 	float rounded = static_cast<int>(value);

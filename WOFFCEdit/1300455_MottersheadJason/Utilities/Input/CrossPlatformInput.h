@@ -8,7 +8,7 @@
  */
 class CrossPlatformInput
 {
-	friend class ToolMain;
+	friend class Editor;
 
 	private:
 		/**

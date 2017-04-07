@@ -1,13 +1,13 @@
 #pragma once
 #include "pch.h"
-#include "1300455_MottersheadJason/Objects/BaseObject.h"
 #include "DDSTextureLoader.h"
 #include "Effects.h"
+#include "1300455_MottersheadJason/Components/Transform/TransformComponent.h"
 
 /**
  * This is a standard object with a model.
  */
-class DisplayObject : public BaseObject
+class DisplayObject
 {
 	public:
 		/**
@@ -26,6 +26,7 @@ class DisplayObject : public BaseObject
 		 */
 		DisplayObject* Copy();
 
+		int m_ID;
 		std::shared_ptr<DirectX::Model>		m_model;	//main Mesh
 		bool								m_render;
 		bool								m_wireframe;
@@ -61,11 +62,17 @@ class DisplayObject : public BaseObject
 		 */
 		inline ID3D11ShaderResourceView** HighlightedTexture()		{ return &_highlightedTexture; }
 
+		/**
+		 
+		 */
+		inline TransformComponent& Transform() { return *_transform; }
+
 	private:
 		ID3D11ShaderResourceView* _currentTexture;
 		ID3D11ShaderResourceView* _originalTexture;
 		ID3D11ShaderResourceView* _highlightedTexture;
-		
+		TransformComponent* _transform;
+
 		/**
 		 * Updates the texture to the current texture pointer.
 		 */

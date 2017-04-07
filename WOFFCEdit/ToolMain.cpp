@@ -29,14 +29,9 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	m_width		= width;
 	m_height	= height;
 	m_d3dRenderer.GetDefaultSize(m_width, m_height);
-	m_d3dRenderer.Initialize(handle, m_width, m_height);
+	_editor.Initialize(m_d3dRenderer);
+	m_d3dRenderer.Initialize(handle, m_width, m_height, _editor.MainCamera());
 	Utils::Initialize(handle, width, height);
-	
-	//_testMenu.LoadMenuW(IDR_MENU1);
-	//_topLevelMenu = GetMenu(handle);
-	/*_topLevelMenu = LoadMenu(AfxGetInstanceHandle(), L"IDR_MENU1");
-	if (_topLevelMenu != NULL)
-		_popUpMenu = GetSubMenu(_topLevelMenu, 0);*/
 
 	//database connection establish
 	int rc;
@@ -84,15 +79,9 @@ void ToolMain::onActionLoad()
 		newSceneObject.chunk_ID = sqlite3_column_int(pResults, 1);
 		newSceneObject.model_path		= reinterpret_cast<const char*>(sqlite3_column_text(pResults, 2));
 		newSceneObject.tex_diffuse_path = reinterpret_cast<const char*>(sqlite3_column_text(pResults, 3));
-		newSceneObject.posX = sqlite3_column_double(pResults, 4);
-		newSceneObject.posY = sqlite3_column_double(pResults, 5);
-		newSceneObject.posZ = sqlite3_column_double(pResults, 6);
-		newSceneObject.rotX = sqlite3_column_double(pResults, 7);
-		newSceneObject.rotY = sqlite3_column_double(pResults, 8);
-		newSceneObject.rotZ = sqlite3_column_double(pResults, 9);
-		newSceneObject.scaX = sqlite3_column_double(pResults, 10);
-		newSceneObject.scaY = sqlite3_column_double(pResults, 11);
-		newSceneObject.scaZ = sqlite3_column_double(pResults, 12);
+		newSceneObject.Transform().SetPosition(sqlite3_column_double(pResults, 4), sqlite3_column_double(pResults, 5), sqlite3_column_double(pResults, 6));
+		newSceneObject.Transform().SetRotation(sqlite3_column_double(pResults, 7), sqlite3_column_double(pResults, 8), sqlite3_column_double(pResults, 9));
+		newSceneObject.Transform().SetScale(sqlite3_column_double(pResults, 10), sqlite3_column_double(pResults, 11), sqlite3_column_double(pResults, 12));
 		newSceneObject.render = sqlite3_column_int(pResults, 13);
 		newSceneObject.collision = sqlite3_column_int(pResults, 14);
 		newSceneObject.collision_mesh = reinterpret_cast<const char*>(sqlite3_column_text(pResults, 15));
@@ -126,6 +115,9 @@ void ToolMain::onActionLoad()
 		newSceneObject.editor_wireframe = sqlite3_column_int(pResults, 43);
 		newSceneObject.name = reinterpret_cast<const char*>(sqlite3_column_text(pResults, 44));
 		
+		newSceneObject.SetEditorCamera(_editor.MainCamera());
+		newSceneObject.SetOriginalTexturePath(newSceneObject.tex_diffuse_path);
+
 		//send completed object to scenegraph
 		m_sceneGraph.push_back(newSceneObject);
 	}
@@ -156,13 +148,13 @@ void ToolMain::onActionLoad()
 	m_chunk.tex_splat_2_tiling = sqlite3_column_int(pResultsChunk, 16);
 	m_chunk.tex_splat_3_tiling = sqlite3_column_int(pResultsChunk, 17);
 	m_chunk.tex_splat_4_tiling = sqlite3_column_int(pResultsChunk, 18);
-
+	
+	_editor.AddObjectsToEventSystem(m_sceneGraph);
 
 	//Process REsults into renderable
 	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
 	//build the renderable chunk 
 	m_d3dRenderer.BuildDisplayChunk(&m_chunk);
-
 }
 
 void ToolMain::onActionSave()
@@ -182,44 +174,26 @@ void ToolMain::onActionSave()
 	//Populate with our new objects
 	std::wstring sqlCommand2;
 	int numObjects = m_sceneGraph.size();	//Loop thru the scengraph.
-	
-	// Saving the changes from the game class into the scene graph.
-	for (int i = 0; i < numObjects; ++i)
-	{
-		DisplayObject* currentDisplayObject = &m_d3dRenderer.DisplayList().at(i);
-		SceneObject* currrentSceneObject = &m_sceneGraph.at(i);
-
-		currrentSceneObject->ID = currentDisplayObject->m_ID;
-
-		TransformComponent* _transform = currentDisplayObject->GetComponent<TransformComponent>();
-		currrentSceneObject->posX = _transform->Position().x;
-		currrentSceneObject->posY = _transform->Position().y;
-		currrentSceneObject->posZ = _transform->Position().z;
-		currrentSceneObject->rotX = _transform->Rotation().x;
-		currrentSceneObject->rotY = _transform->Rotation().y;
-		currrentSceneObject->rotZ = _transform->Rotation().z;
-		currrentSceneObject->scaX = _transform->Scale().x;
-		currrentSceneObject->scaY = _transform->Scale().y;
-		currrentSceneObject->scaZ = _transform->Scale().z;
-	}
 
 	for (int i = 0; i < numObjects; i++)
 	{
+		m_sceneGraph.at(i).tex_diffuse_path = m_sceneGraph.at(i).OriginalTexturePath();
+
 		std::stringstream command;
 		command << "INSERT INTO Objects "
 			<< "VALUES(" << m_sceneGraph.at(i).ID << ","
 			<< m_sceneGraph.at(i).chunk_ID << ","
 			<< "'" << m_sceneGraph.at(i).model_path << "'" << ","
 			<< "'" << m_sceneGraph.at(i).tex_diffuse_path << "'" << ","
-			<< m_sceneGraph.at(i).posX << ","
-			<< m_sceneGraph.at(i).posY << ","
-			<< m_sceneGraph.at(i).posZ << ","
-			<< m_sceneGraph.at(i).rotX << ","
-			<< m_sceneGraph.at(i).rotY << ","
-			<< m_sceneGraph.at(i).rotZ << ","
-			<< m_sceneGraph.at(i).scaX << ","
-			<< m_sceneGraph.at(i).scaY << ","
-			<< m_sceneGraph.at(i).scaZ << ","
+			<< m_sceneGraph.at(i).Transform().Position().x << ","
+			<< m_sceneGraph.at(i).Transform().Position().y << ","
+			<< m_sceneGraph.at(i).Transform().Position().z << ","
+			<< m_sceneGraph.at(i).Transform().Rotation().x << ","
+			<< m_sceneGraph.at(i).Transform().Rotation().y << ","
+			<< m_sceneGraph.at(i).Transform().Rotation().z << ","
+			<< m_sceneGraph.at(i).Transform().Scale().x << ","
+			<< m_sceneGraph.at(i).Transform().Scale().y << ","
+			<< m_sceneGraph.at(i).Transform().Scale().z << ","
 			<< m_sceneGraph.at(i).render << ","
 			<< m_sceneGraph.at(i).collision << ","
 			<< "'" << m_sceneGraph.at(i).collision_mesh << "'" << ","
@@ -295,26 +269,35 @@ void ToolMain::Tick(MSG *msg)
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
 
-#if TOOL_EDITOR
-	if (CrossPlatformInput::SavePressed())
+	//
+	// Input Logic.
+	//
+	_editor.Controls();
+
+	//
+	// Update Logic.
+	//
+	_updateSceneGraph = false;
+
+	for (size_t i = 0; i < m_sceneGraph.size(); ++i)
 	{
-		onActionSave();
-		onActionSaveTerrain();
+		SceneObject currentObject = m_sceneGraph.at(i);
+
+		if (currentObject.Dirty())
+		{
+			_updateSceneGraph = true;
+			currentObject.SetDirty(false);
+		}
 	}
 
-	if (CrossPlatformInput::SpawnTreePressed())
-		onActionSpawnModel("database/data/Lowpoly_tree_sample.cmo", "database/data/placeholder.dds", DirectX::SimpleMath::Vector3(3.0f, 3.0f, 3.0f));
+	if (_updateSceneGraph)
+		m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
 
-	if (CrossPlatformInput::TranslateHotKeyPressed())
-		onActionChangeEditorState(Game::EditorState::TRANSLATE);
-
-	if (CrossPlatformInput::RotateHotKeyPressed())
-		onActionChangeEditorState(Game::EditorState::ROTATE);
-
-	if (CrossPlatformInput::ScaleHotKeyPressed())
-		onActionChangeEditorState(Game::EditorState::SCALE);
-#endif
-
+	_editor.Update(m_sceneGraph);
+	
+	//
+	// Render Logic.
+	//
 	//Renderer Update Call
 	m_d3dRenderer.Tick();
 }
@@ -388,15 +371,9 @@ SceneObject* ToolMain::SpawnNewSceneObject(DisplayObject* displayObject, const s
 	newObject->chunk_ID = 0;
 	newObject->model_path = modelFilePath;
 	newObject->tex_diffuse_path = textureFilePath;
-	newObject->posX = displayObject->Transform().Position().x;
-	newObject->posY = displayObject->Transform().Position().y;
-	newObject->posZ = displayObject->Transform().Position().z;
-	newObject->rotX = displayObject->Transform().Rotation().x;
-	newObject->rotY = displayObject->Transform().Rotation().y;
-	newObject->rotZ = displayObject->Transform().Rotation().z;
-	newObject->scaX = modelScale.x;
-	newObject->scaY = modelScale.y;
-	newObject->scaZ = modelScale.z;
+	newObject->Transform().SetPosition(displayObject->Transform().Position());
+	newObject->Transform().SetRotation(displayObject->Transform().Rotation());
+	newObject->Transform().SetScale(displayObject->Transform().Scale() + modelScale);
 	newObject->render = false;
 	newObject->collision = false;
 	newObject->collision_mesh = "";
@@ -456,12 +433,12 @@ void ToolMain::PopUpMenu(MSG* msg)
 
 void ToolMain::onActionCopyItems()
 {
-	m_d3dRenderer.CopyObjects();
+	_editor.CopyObjects(m_sceneGraph);
 }
 
 void ToolMain::onActionPasteItems()
 {
-	m_d3dRenderer.PasteObjects();
+	_editor.PasteObjects(m_sceneGraph);
 }
 
 void ToolMain::onActionGenerateTerrain()
@@ -471,7 +448,7 @@ void ToolMain::onActionGenerateTerrain()
 
 void ToolMain::onActionToggleWireframe()
 {
-	m_d3dRenderer.SetWireframeMode();
+	Utils::SetWireframe(!Utils::WireframeMode());
 }
 
 void ToolMain::onActionSpawnModel(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
@@ -479,9 +456,9 @@ void ToolMain::onActionSpawnModel(const std::string modelFilePath, const std::st
 	m_sceneGraph.push_back(*SpawnNewSceneObject(m_d3dRenderer.SpawnNewDisplayObject(modelFilePath, textureFilePath, modelScale), modelFilePath, textureFilePath, modelScale));
 }
 
-void ToolMain::onActionChangeEditorState(const Game::EditorState newState)
+void ToolMain::onActionChangeEditorState(const Editor::State newState)
 {
-	m_d3dRenderer.ChangeEditorState(newState);
+	_editor.SetState(newState);
 }
 
 void ToolMain::onLeftMouseDown(MSG* msg)

@@ -12,8 +12,6 @@
 #include "ChunkObject.h"
 #include <vector>
 
-#include "1300455_MottersheadJason/Events/EventSystem.h"
-#include "1300455_MottersheadJason/Components/Transform/TransformComponent.h"
 #include "1300455_MottersheadJason/Objects/Camera.h"
 
 // A basic game implementation that creates a D3D11 device and
@@ -26,7 +24,7 @@ public:
 	~Game();
 
 	// Initialization and management
-	void Initialize(HWND window, int width, int height);
+	void Initialize(HWND window, int width, int height, std::shared_ptr<Camera>& mainCamera);
 	void SetGridState(bool state);
 
 	// Basic game loop
@@ -125,57 +123,26 @@ private:
 public:
 	inline std::vector<DisplayObject>& DisplayList() { return m_displayList; }
 
+	inline DirectX::SimpleMath::Matrix& WorldMatrix() { return m_world; }
+	inline DirectX::SimpleMath::Matrix& ViewMatrix() { return m_view; }
+	inline DirectX::SimpleMath::Matrix& ProjectionMatrix() { return m_projection; }
+
+	inline std::shared_ptr<DX::DeviceResources>& DeviceResources() { return m_deviceResources; }
+
 private:
-	bool _testingFocus = false;
-	bool _copyEnabled = true;
-	bool _pasteEnabled = true;
-	double _dt = 0.00;
-	float _testingClick = 0.0f;
-	EventSystem _eventSystem;
+	//bool _copyEnabled = true;
+	//bool _pasteEnabled = true;
+	//double _dt = 0.00;
+	//EventSystem _eventSystem;
 	std::shared_ptr<Camera> _camera;
-	DirectX::SimpleMath::Vector3 _testingComponent;
-	std::vector<BaseObject*> _copiedObjects;
-	DirectX::SimpleMath::Vector3 _mouseWorldPosition;
-
-	/**
-	 * Provides specific tool controls.
-	 */
-	void SceneControls();
-
-	/**
-	 * Provides specific tool updates.
-	 */
-	void SceneUpdate();
-
-	/**
-	 * Manipulates objects based on the current editor state.
-	 * @param displayObject the current object to manipulate.
-	 */
-	void ObjectManipulation(DisplayObject& displayObject);
-
-	/**
-	 * Provides a quick and easy way to manipulate vector3's based on the same control scheme.
-	 * @param manipulationVector the current vector to manipulate.
-	 */
-	void Manipulate(DirectX::SimpleMath::Vector3& manipulationVector);
+	//std::vector<BaseObject*> _copiedObjects;
+	//DirectX::SimpleMath::Vector3 _mouseWorldPosition;
 
 public:
-	enum EditorState
-	{
-		TRANSLATE,
-		ROTATE,
-		SCALE
-	};
-
 	/**
 	 * Generates random terrain.
 	 */
 	void GenerateRandomTerrain();
-
-	/**
-	 * Sets the wireframe mode of the application.
-	 */
-	void SetWireframeMode();
 
 	/**
 	 * Spawns in a model.
@@ -193,37 +160,28 @@ public:
 	// * @return DisplayObject* the new display object.
 	// */
 	//DisplayObject* SpawnNewDisplayObject(const DirectX::GeometricPrimitive primitive, DirectX::XMVECTORF32 colour);
+	
+	///**
+	// * Provides a copy of all selected objects.
+	// */
+	//void CopyObjects();
 
-	/**
-	 * Changes the state of the editor.
-	 * @param newState the new state of the editor.
-	 */
-	void ChangeEditorState(const EditorState newState);
-
-	/**
-	 * Provides a copy of all selected objects.
-	 */
-	void CopyObjects();
-
-	/**
-	 * Provides a way to paste the copied objects into the scene.
-	 */
-	void PasteObjects();
+	///**
+	// * Provides a way to paste the copied objects into the scene.
+	// */
+	//void PasteObjects();
 
 	/**
 	 * Provides access to the current state of the editor.
 	 * @return const EditorState the current editor state.
 	 */
-	inline EditorState const CurrentEditorState() const { return _editorState; }
+	//inline EditorState const CurrentEditorState() const { return _editorState; }
 
-	inline void ToggleCopy(const bool value)	{ _copyEnabled = value; }
+	/*inline void ToggleCopy(const bool value)	{ _copyEnabled = value; }
 	inline void TogglePaste(const bool value)	{ _pasteEnabled = value; }
 
 	inline bool const IsCopyEnabled() const		{ return _copyEnabled; }
-	inline bool const IsPasteEnabled() const	{ return _pasteEnabled; }
-
-	private:
-		EditorState _editorState;
+	inline bool const IsPasteEnabled() const	{ return _pasteEnabled; }*/
 };
 
 std::wstring StringToWCHART(std::string s);

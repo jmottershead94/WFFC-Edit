@@ -10,7 +10,7 @@
  */
 class Input
 {
-	friend class ToolMain;
+	friend class Editor;
 
 	private:
 		/**
@@ -43,6 +43,26 @@ class Input
 		 */
 		explicit Input();
 
+		
+
+	public:
+		/**
+		 * Destructs this instance.
+		 */
+		~Input();
+
+		/**
+		 * Provides a way to set a key down.
+		 * @param key the key that is being pressed down.
+		 */
+		static void SetKeyDown(WPARAM key);
+
+		/**
+		 * Provides a way to set a key up.
+		 * @param key the key that has been released.
+		 */
+		static void SetKeyUp(WPARAM key);
+
 		/**
 		 * Provides a way to set how far the mouse has dragged along the x axis.
 		 * @param drag how far the mouse has dragged along the x axis (clamped between -1.0f and 1.0f).
@@ -66,24 +86,6 @@ class Input
 		 * @param x the x position of the cursor.
 		 */
 		static void SetMouseY(const int y);
-
-	public:
-		/**
-		 * Destructs this instance.
-		 */
-		~Input();
-
-		/**
-		 * Provides a way to set a key down.
-		 * @param key the key that is being pressed down.
-		 */
-		static void SetKeyDown(WPARAM key);
-
-		/**
-		 * Provides a way to set a key up.
-		 * @param key the key that has been released.
-		 */
-		static void SetKeyUp(WPARAM key);
 
 		/**
 		 * Provides a way to toggle left mouse presses.

@@ -1,14 +1,11 @@
 #include "SceneObject.h"
 
-SceneObject::SceneObject()
+SceneObject::SceneObject() : BaseObject()
 {
 	ID = 0;
 	chunk_ID =0 ;
 	model_path ="";
 	tex_diffuse_path = "";
-	posX = 0.0f;	posY = 0.0f;	posZ = 0.0f;
-	rotX = 0.0f;	rotY = 0.0f;	rotZ = 0.0f;
-	scaX = 0.0f;	scaY = 0.0f;	scaZ = 0.0f;
 	render = true;
 	collision = false;
 	collision_mesh ="";
@@ -43,3 +40,40 @@ SceneObject::SceneObject()
 
 SceneObject::~SceneObject()
 {}
+
+SceneObject* SceneObject::Copy()
+{
+	SceneObject* newObject = new SceneObject();
+
+	newObject->model_path = model_path;
+	newObject->render = render;
+	newObject->editor_wireframe = editor_wireframe;
+	newObject->transform->Translate(transform->Position().x, transform->Position().y + 20.0f, transform->Position().z);
+	newObject->transform->Rotate(transform->Rotation());
+	newObject->transform->SetScale(transform->Scale());
+
+	newObject->collider->Update(0.00, newObject->transform->Position(), newObject->transform->Rotation(), newObject->transform->Scale());
+	newObject->editorCollider->Update(0.00, newObject->transform->Position(), newObject->transform->Rotation(), newObject->transform->Scale());
+
+	return newObject;
+}
+
+void SceneObject::OnLeftMouseClick()
+{
+	// Reverse the focus of this object.
+	inFocus = !inFocus;
+
+	// Set the correct texture.
+	if (inFocus)
+		tex_diffuse_path = Utils::HighlightedTexturePath();
+	else
+		tex_diffuse_path = _originalTexturePath;
+
+	dirty = true;
+}
+
+void SceneObject::OnLeftMouseDoubleClick()
+{
+	// Move the camera over to this object.
+	editorCamera->Transform().SetPosition(Maths::Lerp(editorCamera->Transform().Position(), transform->Position(), 0.2f));
+}

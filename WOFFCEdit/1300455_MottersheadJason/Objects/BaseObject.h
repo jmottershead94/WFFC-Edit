@@ -114,7 +114,10 @@ class BaseObject : public Observer
 		 * Provides a way to set the main camera for editor use.
 		 * @param mainCamera points to the main editor camera.
 		 */
-		inline void SetEditorCamera(std::shared_ptr<Camera> mainCamera) { camera = mainCamera; };
+		inline void SetEditorCamera(std::shared_ptr<Camera> mainCamera) { editorCamera = mainCamera; };
+
+		inline void SetDirty(const bool value) { dirty = value; }
+		inline bool const Dirty() const { return dirty; }
 
 		/**
 		 * Allows us to see if this object is in focus.
@@ -129,13 +132,14 @@ class BaseObject : public Observer
 		inline TransformComponent& Transform()							{ return *transform; }
 		
 	protected:
-		bool inFocus;
+		bool dirty = false;
+		bool inFocus = false;
 		Raycast ray;
 		TransformComponent* transform;
 		ColliderComponent* editorCollider;
 		ColliderComponent* collider;
 		std::vector<Component*> components;
-		std::shared_ptr<Camera> camera;
+		std::shared_ptr<Camera> editorCamera;
 
 	private:
 		/**

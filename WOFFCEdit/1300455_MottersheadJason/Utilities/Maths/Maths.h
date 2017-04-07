@@ -8,7 +8,7 @@
  */
 class Maths
 {
-	friend class ToolMain;
+	friend class Editor;
 
 	private:
 		/**

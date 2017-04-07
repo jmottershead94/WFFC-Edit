@@ -1,6 +1,6 @@
 #include "DisplayObject.h"
 
-DisplayObject::DisplayObject() : BaseObject()
+DisplayObject::DisplayObject()
 {
 	m_model = nullptr;
 	_currentTexture = nullptr;
@@ -8,10 +8,18 @@ DisplayObject::DisplayObject() : BaseObject()
 	_highlightedTexture = nullptr;
 	m_render = true;
 	m_wireframe = false;
+
+	_transform = new TransformComponent();
+	_transform->SetPosition(DirectX::SimpleMath::Vector3::Zero);
+	_transform->SetRotation(DirectX::SimpleMath::Vector3::Zero);
+	_transform->SetScale(DirectX::SimpleMath::Vector3::Zero);
 }
 
 DisplayObject::~DisplayObject()
-{}
+{
+	//if (_transform)
+	//	delete _transform;
+}
 
 DisplayObject* DisplayObject::Copy()
 {
@@ -23,12 +31,9 @@ DisplayObject* DisplayObject::Copy()
 	newObject->_currentTexture = _currentTexture;
 	newObject->_originalTexture = _originalTexture;
 	newObject->_highlightedTexture = _highlightedTexture;
-	newObject->transform->Translate(transform->Position().x, transform->Position().y + 20.0f, transform->Position().z);
-	newObject->transform->Rotate(transform->Rotation());
-	newObject->transform->SetScale(transform->Scale());
-
-	newObject->collider->Update(0.00, newObject->transform->Position(), newObject->transform->Rotation(), newObject->transform->Scale());
-	newObject->editorCollider->Update(0.00, newObject->transform->Position(), newObject->transform->Rotation(), newObject->transform->Scale());
+	newObject->_transform->Translate(_transform->Position().x, _transform->Position().y + 20.0f, _transform->Position().z);
+	newObject->_transform->Rotate(_transform->Rotation());
+	newObject->_transform->SetScale(_transform->Scale());
 
 	return newObject;
 }
@@ -63,22 +68,4 @@ void DisplayObject::UpdateTexture()
 			lights->SetTexture(_currentTexture);
 		}
 	});
-}
-
-void DisplayObject::OnLeftMouseClick()
-{
-	// Reverse the focus of this object.
-	inFocus = !inFocus;
-
-	// Set the correct texture.
-	if (inFocus)
-		SetTexture(_highlightedTexture);
-	else
-		SetTexture(_originalTexture);
-}
-
-void DisplayObject::OnLeftMouseDoubleClick()
-{
-	// Move the camera over to this object.
-	camera->Transform().SetPosition(Maths::Lerp(camera->Transform().Position(), transform->Position(), 0.2f));
 }

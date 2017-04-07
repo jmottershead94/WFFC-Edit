@@ -5,7 +5,7 @@ BaseObject::BaseObject() :
 	transform(nullptr),
 	collider(nullptr),
 	editorCollider(nullptr),
-	camera(nullptr),
+	editorCamera(nullptr),
 	_leftMouseOnce(true),
 	_rightMouseOnce(true)
 {
@@ -37,6 +37,8 @@ void BaseObject::Update(const double& dt)
 	// Updating the object colliders.
 	collider->Update(dt, transform->Position(), transform->Rotation(), transform->Scale());
 	editorCollider->Update(dt, transform->Position(), transform->Rotation(), transform->Scale());
+
+
 }
 
 void BaseObject::CleanUpComponents()

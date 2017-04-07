@@ -70,6 +70,7 @@
     <ClCompile Include="1300455_MottersheadJason\Utilities\Input\Input.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Utilities\Input\CrossPlatformInput.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Settings.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Editor\Editor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -131,6 +132,7 @@
     <ClInclude Include="1300455_MottersheadJason\Utilities\Input\Input.h" />
     <ClInclude Include="1300455_MottersheadJason\Utilities\Input\CrossPlatformInput.h" />
     <ClInclude Include="1300455_MottersheadJason\Settings.h" />
+    <ClInclude Include="1300455_MottersheadJason\Editor\Editor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

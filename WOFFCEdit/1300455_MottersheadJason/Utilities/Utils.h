@@ -19,7 +19,7 @@ using namespace std;
  */
 class Utils
 {
-	friend class ToolMain;
+	friend class Editor;
 
 	private:
 		HWND _hwnd;

@@ -7,7 +7,7 @@
  */
 class EventSystem
 {
-	friend class Game;
+	friend class Editor;
 
 	private:
 		bool _enabled;

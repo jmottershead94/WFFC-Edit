@@ -1,3 +1,98 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Win32SimpleSample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Utils.cpp
+  ToolMain.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\1300455_mottersheadjason\utilities\utils.h(11): warning C4005: 'UNUSED': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afx.h(412): note: see previous definition of 'UNUSED'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(32): warning C4005: 'ID_EDIT_COPY': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(251): note: see previous definition of 'ID_EDIT_COPY'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(33): warning C4005: 'ID_EDIT_PASTE': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(254): note: see previous definition of 'ID_EDIT_PASTE'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(82): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(83): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(84): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(85): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(86): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(88): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(89): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(91): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(92): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(93): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(94): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(95): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(96): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(97): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(98): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(99): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(100): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(102): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(103): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(104): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(105): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(106): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(107): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(108): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(109): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(110): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(111): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(112): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(113): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(115): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(144): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(145): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(400): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\toolmain.cpp(401): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  SelectDialogue.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(32): warning C4005: 'ID_EDIT_COPY': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(251): note: see previous definition of 'ID_EDIT_COPY'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(33): warning C4005: 'ID_EDIT_PASTE': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(254): note: see previous definition of 'ID_EDIT_PASTE'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\1300455_mottersheadjason\utilities\utils.h(11): warning C4005: 'UNUSED': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afx.h(412): note: see previous definition of 'UNUSED'
+  SceneObject.cpp
+  Main.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\1300455_mottersheadjason\utilities\utils.h(11): warning C4005: 'UNUSED': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afx.h(412): note: see previous definition of 'UNUSED'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(32): warning C4005: 'ID_EDIT_COPY': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(251): note: see previous definition of 'ID_EDIT_COPY'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(33): warning C4005: 'ID_EDIT_PASTE': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(254): note: see previous definition of 'ID_EDIT_PASTE'
+  MFCMain.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\1300455_mottersheadjason\utilities\utils.h(11): warning C4005: 'UNUSED': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afx.h(412): note: see previous definition of 'UNUSED'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(32): warning C4005: 'ID_EDIT_COPY': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(251): note: see previous definition of 'ID_EDIT_COPY'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(33): warning C4005: 'ID_EDIT_PASTE': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(254): note: see previous definition of 'ID_EDIT_PASTE'
+  MFCFrame.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\1300455_mottersheadjason\utilities\utils.h(11): warning C4005: 'UNUSED': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afx.h(412): note: see previous definition of 'UNUSED'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(32): warning C4005: 'ID_EDIT_COPY': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(251): note: see previous definition of 'ID_EDIT_COPY'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\resource.h(33): warning C4005: 'ID_EDIT_PASTE': macro redefinition
+  c:\program files (x86)\microsoft visual studio 14.0\vc\atlmfc\include\afxres.h(254): note: see previous definition of 'ID_EDIT_PASTE'
+  Game.cpp
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\game.cpp(205): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\game.cpp(173): warning C4101: 'Buffer': unreferenced local variable
+  DisplayObject.cpp
+  DisplayChunk.cpp
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(14): warning C4305: '=': truncation from 'double' to 'float'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(74): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(94): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(152): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(195): warning C4101: 'index4': unreferenced local variable
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(195): warning C4101: 'index2': unreferenced local variable
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(195): warning C4101: 'index3': unreferenced local variable
+c:\university\cgad\4th_year\semester_2\tools_programming\coursework\wffcrepository\woffcedit\displaychunk.cpp(195): warning C4101: 'index1': unreferenced local variable
+  BaseObject.cpp
+  Generating Code...
+  Compiling...
+  Editor.cpp
+  Generating Code...
   Win32SimpleSample.vcxproj -> C:\University\CGAD\4th_Year\Semester_2\Tools_Programming\Coursework\WFFCRepository\WOFFCEdit\Debug\WoFEdit.exe

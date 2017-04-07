@@ -158,17 +158,17 @@ void MFCMain::MenuSpawnTree()
 
 void MFCMain::MenuTranslate()
 {
-	m_ToolSystem.onActionChangeEditorState(Game::EditorState::TRANSLATE);
+	m_ToolSystem.onActionChangeEditorState(Editor::State::TRANSLATE);
 }
 
 void MFCMain::MenuRotate()
 {
-	m_ToolSystem.onActionChangeEditorState(Game::EditorState::ROTATE);
+	m_ToolSystem.onActionChangeEditorState(Editor::State::ROTATE);
 }
 
 void MFCMain::MenuScale()
 {
-	m_ToolSystem.onActionChangeEditorState(Game::EditorState::SCALE);
+	m_ToolSystem.onActionChangeEditorState(Editor::State::SCALE);
 }
 
 MFCMain::MFCMain()

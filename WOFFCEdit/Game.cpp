@@ -33,19 +33,10 @@ Game::~Game()
         m_audEngine->Suspend();
     }
 #endif
-
-	if (m_displayList.size() > 0)
-	{
-		for (size_t i = 0; i < m_displayList.size(); ++i)
-		{
-			DisplayObject displayObject = m_displayList.at(i);
-			displayObject.CleanUpComponents();
-		}
-	}
 }
 
 // Initialize the Direct3D resources required to run.
-void Game::Initialize(HWND window, int width, int height)
+void Game::Initialize(HWND window, int width, int height, std::shared_ptr<Camera>& mainCamera)
 {
     m_gamePad = std::make_unique<GamePad>();
     m_keyboard = std::make_unique<Keyboard>();
@@ -60,10 +51,7 @@ void Game::Initialize(HWND window, int width, int height)
     m_deviceResources->CreateWindowSizeDependentResources();
     CreateWindowSizeDependentResources();
 
-	// Initialise the camera.
-	_camera = std::make_shared<Camera>(DirectX::SimpleMath::Vector3(30.0f, 10.0f, 10.0f), 0.3f, 1.5f);
-	_camera->Transform().Rotate(0.0f, 180.0f, 0.0f);
-	_editorState = EditorState::TRANSLATE;
+	_camera = mainCamera;
 
 #ifdef DXTK_AUDIO
     // Create DirectXTK for Audio objects
@@ -120,18 +108,6 @@ void Game::Tick()
 // Updates the world.
 void Game::Update(DX::StepTimer const& timer)
 {
-	//TODO  any more complex than this, and the camera should be abstracted out to somewhere else
-	//camera motion is on a plane, so kill the 7 component of the look direction
-	Vector3 planarMotionVector = _camera->Transform().Forward();
-	planarMotionVector.y = 0.0f;
-
-	_dt = timer.GetElapsedSeconds();
-
-#if TOOL_EDITOR
-	SceneControls();
-	SceneUpdate();
-#endif
-
 	//apply camera vectors
 	m_view = Matrix::CreateLookAt(_camera->Transform().Position(), _camera->Transform().LookAt(), Vector3::UnitY);
 
@@ -196,7 +172,7 @@ void Game::Render()
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
 
-	std::wstring currentState = L" ";
+	/*std::wstring currentState = L" ";
 	if (_editorState == EditorState::TRANSLATE)
 	{
 		currentState = L"TRANSLATE";
@@ -211,7 +187,7 @@ void Game::Render()
 	{
 		currentState = L"SCALE";
 		m_font->DrawString(m_sprites.get(), currentState.c_str(), XMFLOAT2(600, 10), Colors::Yellow);
-	}
+	}*/
 
 	m_sprites->End();
 
@@ -372,7 +348,7 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 	{
 		//create a temp display object that we will populate then append to the display list.
 		DisplayObject newDisplayObject;
-		newDisplayObject.SetEditorCamera(_camera);
+		newDisplayObject.m_ID = SceneGraph->at(i).ID;
 
 		//load model
 		std::wstring modelwstr = StringToWCHART(SceneGraph->at(i).model_path);							//convect string to Wchar
@@ -385,9 +361,10 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		newDisplayObject.SetTexture(*newDisplayObject.Texture());
 
 		// Set the transform for this object (position, rotation and scale).
-		newDisplayObject.Transform().SetPosition(SceneGraph->at(i).posX, SceneGraph->at(i).posY, SceneGraph->at(i).posZ);
-		newDisplayObject.Transform().SetRotation(SceneGraph->at(i).rotX, SceneGraph->at(i).rotY, SceneGraph->at(i).rotZ);
-		newDisplayObject.Transform().SetScale(SceneGraph->at(i).scaX, SceneGraph->at(i).scaY, SceneGraph->at(i).scaZ);
+		TransformComponent* transform = &SceneGraph->at(i).Transform();
+		newDisplayObject.Transform().SetPosition(transform->Position().x, transform->Position().y, transform->Position().z);
+		newDisplayObject.Transform().SetRotation(transform->Rotation().x, transform->Rotation().x, transform->Rotation().x);
+		newDisplayObject.Transform().SetScale(transform->Scale().x, transform->Scale().x, transform->Scale().x);
 
 		//set wireframe / render flags
 		newDisplayObject.m_render = SceneGraph->at(i).editor_render;
@@ -399,14 +376,11 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 	if (m_displayList.size() < 0)
 		return;
 
-	DisplayObject testing = m_displayList.at(0);
-	_testingComponent = testing.GetComponent<TransformComponent>()->Position();
-
-	for (size_t i = 0; i < m_displayList.size(); ++i)
-	{
-		// Add this display object into the event system to listen out for input.
-		_eventSystem.AddObserver(&m_displayList[i]);
-	}
+	//for (size_t i = 0; i < m_displayList.size(); ++i)
+	//{
+	//	// Add this display object into the event system to listen out for input.
+	//	_eventSystem.AddObserver(&m_displayList[i]);
+	//}
 }
 
 void Game::BuildDisplayChunk(ChunkObject * SceneChunk)
@@ -547,127 +521,9 @@ void Game::OnDeviceRestored()
 }
 #pragma endregion
 
-void Game::SceneControls()
-{
-#if TOOL_EDITOR
-	if (CrossPlatformInput::GenerateTerrainPressed())
-		GenerateRandomTerrain();
-
-	if (CrossPlatformInput::WireframeModePressed())
-		SetWireframeMode();
-#endif
-
-	if (CrossPlatformInput::SelectPressed())
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(m_world, m_projection, m_view, m_deviceResources->GetScreenViewport()), Utils::GetCursorDirectionInWorld());
-
-	if (CrossPlatformInput::SelectReleased())
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_RELEASE, Utils::GetCursorPositionInWorld(m_world, m_projection, m_view, m_deviceResources->GetScreenViewport()), Utils::GetCursorDirectionInWorld());
-
-	if (CrossPlatformInput::SelectDoublePressed())
-		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK_DOUBLE, Utils::GetCursorPositionInWorld(m_world, m_projection, m_view, m_deviceResources->GetScreenViewport()), Utils::GetCursorDirectionInWorld());
-}
-
-void Game::SceneUpdate()
-{
-	_camera->Update(_dt);
-
-	if (m_displayList.empty())
-		return;
-
-	// Resetting the enabled status for copy.
-	_copyEnabled = false;
-
-	for (size_t i = 0; i < m_displayList.size(); ++i)
-	{
-		DisplayObject displayObject = m_displayList[i];
-		displayObject.Update(_dt);
-
-		if (displayObject.Focus())
-		{
-			// The copy option for the menus should be available now.
-			_copyEnabled = true;
-
-			// If the user isn't moving the camera, assume they are manipulating an object for now.
-			if (!Input::RightMousePressed())
-				ObjectManipulation(displayObject);
-		}
-	}
-}
-
-void Game::ObjectManipulation(DisplayObject& displayObject)
-{
-	switch (_editorState)
-	{
-		case EditorState::TRANSLATE:
-		{
-			DirectX::SimpleMath::Vector3 translation;
-			Manipulate(translation);
-			displayObject.Transform().Translate(translation);
-
-			break;
-		}
-		case EditorState::ROTATE:
-		{
-			DirectX::SimpleMath::Vector3 rotation;
-			
-			if (Input::IsKeyDown('D'))
-				rotation += DirectX::SimpleMath::Vector3::UnitY;
-			if (Input::IsKeyDown('A'))
-				rotation -= DirectX::SimpleMath::Vector3::UnitY;
-
-			if (Input::IsKeyDown('E'))
-				rotation -= DirectX::SimpleMath::Vector3::UnitZ;
-			if (Input::IsKeyDown('Q'))
-				rotation += DirectX::SimpleMath::Vector3::UnitZ;
-
-			if (Input::IsKeyDown('W'))
-				rotation -= DirectX::SimpleMath::Vector3::UnitX;
-			if (Input::IsKeyDown('S'))
-				rotation += DirectX::SimpleMath::Vector3::UnitX;
-
-			displayObject.Transform().Rotate(rotation);
-
-			break;
-		}
-		case EditorState::SCALE:
-		{
-			DirectX::SimpleMath::Vector3 scale = displayObject.Transform().Scale();
-			Manipulate(scale);
-			displayObject.Transform().SetScale(scale);
-
-			break;
-		}
-		default:
-			break;
-	}
-}
-
-void Game::Manipulate(DirectX::SimpleMath::Vector3& manipulationVector)
-{
-	if (Input::IsKeyDown('D'))
-		manipulationVector += DirectX::SimpleMath::Vector3::UnitX;
-	if (Input::IsKeyDown('A'))
-		manipulationVector -= DirectX::SimpleMath::Vector3::UnitX;
-
-	if (Input::IsKeyDown('E'))
-		manipulationVector += DirectX::SimpleMath::Vector3::UnitY;
-	if (Input::IsKeyDown('Q'))
-		manipulationVector -= DirectX::SimpleMath::Vector3::UnitY;
-
-	if (Input::IsKeyDown('W'))
-		manipulationVector -= DirectX::SimpleMath::Vector3::UnitZ;
-	if (Input::IsKeyDown('S'))
-		manipulationVector += DirectX::SimpleMath::Vector3::UnitZ;
-}
-
 void Game::GenerateRandomTerrain()
 {
 	m_displayChunk.GenerateHeightmap();
-}
-
-void Game::SetWireframeMode()
-{
-	Utils::SetWireframe(!Utils::WireframeMode());
 }
 
 DisplayObject* Game::SpawnNewDisplayObject(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
@@ -678,7 +534,7 @@ DisplayObject* Game::SpawnNewDisplayObject(const std::string modelFilePath, cons
 	//create a temp display object that we will populate then append to the display list.
 	DisplayObject* newDisplayObject = new DisplayObject();
 	newDisplayObject->m_ID = m_displayList.size() + 1;
-	newDisplayObject->SetEditorCamera(_camera);
+	//newDisplayObject->SetEditorCamera(_camera);
 
 	//load model
 	std::wstring modelwstr = StringToWCHART(modelFilePath);							
@@ -701,63 +557,6 @@ DisplayObject* Game::SpawnNewDisplayObject(const std::string modelFilePath, cons
 
 	m_displayList.push_back(*newDisplayObject);
 	return newDisplayObject;
-}
-
-void Game::ChangeEditorState(const EditorState newState)
-{
-	if(_editorState != newState)
-		_editorState = newState;
-}
-
-void Game::CopyObjects()
-{
-	_pasteEnabled = false;
-
-	for (size_t i = 0; i < m_displayList.size(); ++i)
-	{
-		DisplayObject currentObject = m_displayList.at(i);
-
-		if (currentObject.Focus())
-		{
-			DisplayObject* newObject = currentObject.Copy();
-			_copiedObjects.push_back(newObject);
-			_pasteEnabled = true;
-		}
-	}
-}
-
-void Game::PasteObjects()
-{
-	if (!_pasteEnabled || _copiedObjects.size() < 1)
-		return;
-
-	// Deselecting all of the current display list objects.
-	for (size_t i = 0; i < m_displayList.size(); ++i)
-	{
-		DisplayObject currentObject = m_displayList.at(i);
-
-		if (currentObject.Focus())
-		{
-			currentObject.SetFocus(false);
-			currentObject.SetTexture(*currentObject.OriginalTexture());
-		}
-	}
-
-	// Pasting and selecting all of the new display list objects.
-	for (size_t i = 0; i < _copiedObjects.size(); ++i)
-	{
-		DisplayObject* currentObject = new DisplayObject(*(DisplayObject*)(_copiedObjects.at(i)));
-
-		currentObject->m_ID = m_displayList.size() + (i + 1);
-		currentObject->SetTexture(*currentObject->OriginalTexture());
-
-		m_displayList.push_back(*currentObject);
-	}
-
-	_copiedObjects.clear();
-
-	_copyEnabled = true;
-	_pasteEnabled = false;
 }
 
 std::wstring StringToWCHART(std::string s)

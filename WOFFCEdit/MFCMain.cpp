@@ -136,9 +136,6 @@ void MFCMain::MenuEditPaste()
 void MFCMain::MenuEditSettings()
 {
 	_settings.ShowWindow(SW_SHOW);
-
-	if(_invertedCamCheckBox == nullptr)
-		_invertedCamCheckBox = (CButton*)GetDlgItem(m_toolHandle, IDC_CHECK3);
 }
 
 void MFCMain::MenuGenerateRandomTerrain()

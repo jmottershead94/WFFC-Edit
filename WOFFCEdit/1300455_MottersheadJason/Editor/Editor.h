@@ -24,6 +24,7 @@ class Editor
 		~Editor();
 		void Initialize(Game& game);
 		void AddObjectsToEventSystem(std::vector<SceneObject>& sceneObjects);
+		void RemoveObjectsFromEventSystem(std::vector<SceneObject>& sceneObjects);
 
 		/**
 		 * Provides a copy of all selected objects.
@@ -62,6 +63,7 @@ class Editor
 	private:
 		bool _copyEnabled, _pasteEnabled;
 		double _dt;
+		DirectX::SimpleMath::Vector3 _translationSpeed, _rotationSpeed, _scaleSpeed;
 		EventSystem _eventSystem;
 		std::shared_ptr<Camera> _camera;
 		std::vector<BaseObject*> _copiedObjects;

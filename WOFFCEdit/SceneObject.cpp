@@ -77,3 +77,8 @@ void SceneObject::OnLeftMouseDoubleClick()
 	// Move the camera over to this object.
 	editorCamera->Transform().SetPosition(Maths::Lerp(editorCamera->Transform().Position(), transform->Position(), 0.2f));
 }
+
+void SceneObject::OnLeftMouseReleased()
+{
+	//dirty = false;
+}

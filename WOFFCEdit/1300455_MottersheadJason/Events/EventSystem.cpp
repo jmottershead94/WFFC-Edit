@@ -52,4 +52,6 @@ void EventSystem::RemoveObserver(Observer* observer)
 		if (observer == _observers[i])
 			_observers.erase(_observers.begin() + i);
 	}
+
+	_observers.clear();
 }

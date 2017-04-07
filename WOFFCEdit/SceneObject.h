@@ -73,4 +73,9 @@ class SceneObject : public BaseObject
 		 * What happens when the user has double clicked on this object.
 		 */
 		void OnLeftMouseDoubleClick();
+
+		/**
+		 * What happens when the user has released the left mouse button on this object.
+		 */
+		void OnLeftMouseReleased();
 };

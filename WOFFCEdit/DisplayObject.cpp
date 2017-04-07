@@ -16,10 +16,7 @@ DisplayObject::DisplayObject()
 }
 
 DisplayObject::~DisplayObject()
-{
-	//if (_transform)
-	//	delete _transform;
-}
+{}
 
 DisplayObject* DisplayObject::Copy()
 {

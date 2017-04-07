@@ -18,6 +18,9 @@ void Utils::Initialize(HWND hwnd, int width, int height)
 	instance->_hwnd = hwnd;
 	instance->_width = width;
 	instance->_height = height;
+	instance->_translationSpeed = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
+	instance->_rotationSpeed = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
+	instance->_scaleSpeed = DirectX::SimpleMath::Vector3(0.25f, 0.25f, 0.25f);
 }
 
 HWND const Utils::GetWindow()
@@ -100,6 +103,36 @@ void Utils::SetInvertedCamera(const bool invertedState)
 bool const Utils::InvertCamera()
 {
 	return instance->_invertedCameraControls;
+}
+
+void Utils::SetTranslationSpeed(DirectX::SimpleMath::Vector3 newSpeed)
+{
+	instance->_translationSpeed = newSpeed;
+}
+
+void Utils::SetRotationRate(DirectX::SimpleMath::Vector3 newRate)
+{
+	instance->_rotationSpeed = newRate;
+}
+
+void Utils::SetScaleRate(DirectX::SimpleMath::Vector3 newRate)
+{
+	instance->_scaleSpeed = newRate;
+}
+
+DirectX::SimpleMath::Vector3 const Utils::TranslationSpeed()
+{
+	return instance->_translationSpeed;
+}
+
+DirectX::SimpleMath::Vector3 const Utils::RotationRate()
+{
+	return instance->_rotationSpeed;
+}
+
+DirectX::SimpleMath::Vector3 const Utils::ScaleRate()
+{
+	return instance->_scaleSpeed;
 }
 
 std::wstring const Utils::StringToWCHART(std::string s)

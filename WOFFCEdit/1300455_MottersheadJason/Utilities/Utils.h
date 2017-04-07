@@ -27,6 +27,7 @@ class Utils
 		bool _wireframeMode;
 		bool _invertedCameraControls;
 		DirectX::SimpleMath::Vector3 _cursorWorldDirection;
+		DirectX::SimpleMath::Vector3 _translationSpeed, _rotationSpeed, _scaleSpeed;
 
 		/**
 		 * Constructs this instance.
@@ -98,6 +99,20 @@ class Utils
 		 * @return const bool if the camera should use inverted controls.
 		 */
 		static bool const InvertCamera();
+
+		/**
+		 * Sets the transform tool speed.
+		 */
+		static void SetTranslationSpeed(DirectX::SimpleMath::Vector3 newSpeed);
+		static void SetRotationRate(DirectX::SimpleMath::Vector3 newRate);
+		static void SetScaleRate(DirectX::SimpleMath::Vector3 newRate);
+
+		/**
+		 * Gets the transform tool speed.
+		 */
+		static DirectX::SimpleMath::Vector3 const TranslationSpeed();
+		static DirectX::SimpleMath::Vector3 const RotationRate();
+		static DirectX::SimpleMath::Vector3 const ScaleRate();
 
 		/**
 		 * Provides a way to convert a string to a wstring.

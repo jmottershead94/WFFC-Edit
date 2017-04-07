@@ -55,6 +55,7 @@ void ToolMain::onActionLoad()
 	//load current chunk and objects into lists
 	if (!m_sceneGraph.empty())		//is the vector empty
 	{
+		_editor.RemoveObjectsFromEventSystem(m_sceneGraph);
 		m_sceneGraph.clear();		//if not, empty it
 	}
 
@@ -274,24 +275,31 @@ void ToolMain::Tick(MSG *msg)
 	//
 	_editor.Controls();
 
+	if (CrossPlatformInput::SavePressed())
+	{
+		onActionSave();
+		onActionSaveTerrain();
+	}
+
 	//
 	// Update Logic.
 	//
-	_updateSceneGraph = false;
-
 	for (size_t i = 0; i < m_sceneGraph.size(); ++i)
 	{
-		SceneObject currentObject = m_sceneGraph.at(i);
+		SceneObject* currentObject = &m_sceneGraph.at(i);
 
-		if (currentObject.Dirty())
+		if (currentObject->Dirty())
 		{
 			_updateSceneGraph = true;
-			currentObject.SetDirty(false);
+			currentObject->SetDirty(false);
 		}
 	}
 
 	if (_updateSceneGraph)
+	{
 		m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
+		_updateSceneGraph = false;
+	}
 
 	_editor.Update(m_sceneGraph);
 	

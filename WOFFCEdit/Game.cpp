@@ -363,8 +363,8 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		// Set the transform for this object (position, rotation and scale).
 		TransformComponent* transform = &SceneGraph->at(i).Transform();
 		newDisplayObject.Transform().SetPosition(transform->Position().x, transform->Position().y, transform->Position().z);
-		newDisplayObject.Transform().SetRotation(transform->Rotation().x, transform->Rotation().x, transform->Rotation().x);
-		newDisplayObject.Transform().SetScale(transform->Scale().x, transform->Scale().x, transform->Scale().x);
+		newDisplayObject.Transform().SetRotation(transform->Rotation().x, transform->Rotation().y, transform->Rotation().z);
+		newDisplayObject.Transform().SetScale(transform->Scale().x, transform->Scale().y, transform->Scale().z);
 
 		//set wireframe / render flags
 		newDisplayObject.m_render = SceneGraph->at(i).editor_render;
@@ -375,12 +375,6 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 
 	if (m_displayList.size() < 0)
 		return;
-
-	//for (size_t i = 0; i < m_displayList.size(); ++i)
-	//{
-	//	// Add this display object into the event system to listen out for input.
-	//	_eventSystem.AddObserver(&m_displayList[i]);
-	//}
 }
 
 void Game::BuildDisplayChunk(ChunkObject * SceneChunk)

@@ -1,6 +1,9 @@
 #include "Editor.h"
 
-Editor::Editor()
+Editor::Editor() :
+	_translationSpeed(1.0f, 1.0f, 1.0f),
+	_rotationSpeed(1.0f, 1.0f, 1.0f),
+	_scaleSpeed(1.0f, 1.0f, 1.0f)
 {}
 
 Editor::~Editor()
@@ -20,6 +23,15 @@ void Editor::AddObjectsToEventSystem(std::vector<SceneObject>& sceneObjects)
 	{
 		// Add this object into the event system to listen out for input.
 		_eventSystem.AddObserver(&sceneObjects.at(i));
+	}
+}
+
+void Editor::RemoveObjectsFromEventSystem(std::vector<SceneObject>& sceneObjects)
+{
+	for (size_t i = 0; i < sceneObjects.size(); ++i)
+	{
+		// Remove this object from the event system.
+		_eventSystem.RemoveObserver(&sceneObjects.at(i));
 	}
 }
 
@@ -85,15 +97,21 @@ void Editor::ObjectManipulation(SceneObject& displayObject)
 	{
 		case State::TRANSLATE:
 		{
-			DirectX::SimpleMath::Vector3 translation;
+			DirectX::SimpleMath::Vector3 translation(DirectX::SimpleMath::Vector3::Zero);
+			
 			Manipulate(translation);
-			displayObject.Transform().Translate(translation);
+			displayObject.Transform().Translate(translation * Utils::TranslationSpeed());
+
+			if (translation != DirectX::SimpleMath::Vector3::Zero)
+				displayObject.SetDirty(true);
+			else
+				displayObject.SetDirty(false);
 
 			break;
 		}
 		case State::ROTATE:
 		{
-			DirectX::SimpleMath::Vector3 rotation;
+			DirectX::SimpleMath::Vector3 rotation(DirectX::SimpleMath::Vector3::Zero);
 
 			if (Input::IsKeyDown('D'))
 				rotation += DirectX::SimpleMath::Vector3::UnitY;
@@ -110,20 +128,35 @@ void Editor::ObjectManipulation(SceneObject& displayObject)
 			if (Input::IsKeyDown('S'))
 				rotation += DirectX::SimpleMath::Vector3::UnitX;
 
-			displayObject.Transform().Rotate(rotation);
+			displayObject.Transform().Rotate(rotation * Utils::RotationRate());
+
+			if (rotation != DirectX::SimpleMath::Vector3::Zero)
+				displayObject.SetDirty(true);
+			else
+				displayObject.SetDirty(false);
 
 			break;
 		}
 		case State::SCALE:
 		{
-			DirectX::SimpleMath::Vector3 scale = displayObject.Transform().Scale();
+			DirectX::SimpleMath::Vector3 originalScale = displayObject.Transform().Scale();
+			DirectX::SimpleMath::Vector3 scale = originalScale;
+
 			Manipulate(scale);
 			displayObject.Transform().SetScale(scale);
+			
+			if(scale != originalScale)
+				displayObject.SetDirty(true);
+			else
+				displayObject.SetDirty(false);
 
 			break;
 		}
 		default:
+		{
+			displayObject.SetDirty(false);
 			break;
+		}
 	}
 }
 
@@ -153,6 +186,15 @@ void Editor::Controls()
 	if (CrossPlatformInput::WireframeModePressed())
 		ToggleWireframe();
 	
+	if (CrossPlatformInput::TranslateHotKeyPressed())
+		_editorState = Editor::State::TRANSLATE;
+
+	if (CrossPlatformInput::RotateHotKeyPressed())
+		_editorState = Editor::State::ROTATE;
+
+	if (CrossPlatformInput::ScaleHotKeyPressed())
+		_editorState = Editor::State::SCALE;
+
 	if (CrossPlatformInput::SelectPressed())
 		_eventSystem.Notify(EventType::EVENT_LEFT_MOUSE_CLICK, Utils::GetCursorPositionInWorld(_renderer->WorldMatrix(), _renderer->ProjectionMatrix(), _renderer->ViewMatrix(), _renderer->DeviceResources()->GetScreenViewport()), Utils::GetCursorDirectionInWorld());
 
@@ -180,17 +222,17 @@ void Editor::Update(std::vector<SceneObject>& sceneObjects)
 
 	for (size_t i = 0; i < sceneObjects.size(); ++i)
 	{
-		SceneObject sceneObject = sceneObjects.at(i);
-		sceneObject.Update(_dt);
+		SceneObject* sceneObject = &sceneObjects.at(i);
+		sceneObject->Update(_dt);
 
-		if (sceneObject.Focus())
+		if (sceneObject->Focus())
 		{
 			// The copy option for the menus should be available now.
 			_copyEnabled = true;
 
 			// If the user isn't moving the camera, assume they are manipulating an object for now.
 			if (!Input::RightMousePressed())
-				ObjectManipulation(sceneObject);
+				ObjectManipulation(*sceneObject);
 		}
 	}
 }

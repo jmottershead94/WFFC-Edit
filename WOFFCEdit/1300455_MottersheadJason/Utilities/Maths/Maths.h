@@ -63,6 +63,13 @@ class Maths
 		static float Abs(const float value);
 
 		/**
+		 * Get the absolute value of a vector3.
+		 * @param value the value to return an absolute value of.
+		 * @return DirectX::SimpleMath::Vector3 the absolute value itself.
+		 */
+		static DirectX::SimpleMath::Vector3 const AbsVector(const DirectX::SimpleMath::Vector3 value);
+
+		/**
 		 * Provides a way to clamp a floating point value between a minimum and maximum value.
 		 * @param value the floating point number to clamp.
 		 * @param min the minimum value that the number should be.

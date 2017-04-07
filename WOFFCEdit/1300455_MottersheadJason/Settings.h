@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../resource.h"
-#include "Utilities/Utils.h"
+#include "Utilities/Maths/Maths.h"
 
 // Settings dialog
 
@@ -22,10 +22,14 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 private:
+	virtual BOOL OnInitDialog();
+	
 	/**
 	 * Allows the user to invert camera controls.
 	 */
 	afx_msg void MenuInvertCamera();
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedOk();
 };

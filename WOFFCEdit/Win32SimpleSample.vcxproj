@@ -237,6 +237,9 @@
     <ResourceCompile Include="Win32SimpleSample.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\Assets\Art\SPR_Rotation.png" />
+    <Image Include="..\..\Assets\Art\SPR_Scale.png" />
+    <Image Include="..\..\Assets\Art\SPR_Translation.png" />
     <Image Include="toolbar1.bmp" />
     <Image Include="toolbar2.bmp" />
   </ItemGroup>

@@ -54,6 +54,17 @@ float Maths::Abs(const float value)
 	return absolute;
 }
 
+DirectX::SimpleMath::Vector3 const Maths::AbsVector(const DirectX::SimpleMath::Vector3 value)
+{
+	DirectX::SimpleMath::Vector3 absoluteVector(value);
+
+	absoluteVector.x = Abs(absoluteVector.x);
+	absoluteVector.y = Abs(absoluteVector.y);
+	absoluteVector.z = Abs(absoluteVector.z);
+
+	return absoluteVector;
+}
+
 float Maths::ClampFloat(const float value, const float min, const float max)
 {
 	float clampedValue = value;

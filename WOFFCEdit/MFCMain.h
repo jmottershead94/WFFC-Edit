@@ -9,6 +9,7 @@
 #include "resource.h"
 #include "MFCFrame.h"
 #include "SelectDialogue.h"
+#include "1300455_MottersheadJason/Settings.h"
 
 class MFCMain : public CWinApp 
 {
@@ -26,6 +27,7 @@ private:
 	CRect WindowRECT;	//Window area rectangle. 
 	SelectDialogue m_ToolSelectDialogue;			//for modeless dialogue, declare it here
 	
+
 	int m_width;		
 	int m_height;
 	
@@ -36,8 +38,9 @@ private:
 	afx_msg	void ToolBarButton1();
 
 	// Jason's Added Work.
-	CDialogEx _editorSettings;
-	CButton* invertedCamCheckBox = nullptr;
+	//CDialogEx _editorSettings;
+	CButton* _invertedCamCheckBox = nullptr;
+	Settings _settings;
 
 	/**
 	 * Allows the user to save the scene.
@@ -88,11 +91,6 @@ private:
 	 * Allows the user to scale selected objects.
 	 */
 	afx_msg void MenuScale();
-
-	/**
-	 * Allows the user to invert camera controls.
-	 */
-	afx_msg void MenuInvertCamera();
 
 	DECLARE_MESSAGE_MAP()	// required macro for message map functionality  One per class
 };

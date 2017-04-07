@@ -182,14 +182,34 @@ void ToolMain::onActionSave()
 	//Populate with our new objects
 	std::wstring sqlCommand2;
 	int numObjects = m_sceneGraph.size();	//Loop thru the scengraph.
+	
+	// Saving the changes from the game class into the scene graph.
+	for (int i = 0; i < numObjects; ++i)
+	{
+		DisplayObject* currentDisplayObject = &m_d3dRenderer.DisplayList().at(i);
+		SceneObject* currrentSceneObject = &m_sceneGraph.at(i);
+
+		currrentSceneObject->ID = currentDisplayObject->m_ID;
+
+		TransformComponent* _transform = currentDisplayObject->GetComponent<TransformComponent>();
+		currrentSceneObject->posX = _transform->Position().x;
+		currrentSceneObject->posY = _transform->Position().y;
+		currrentSceneObject->posZ = _transform->Position().z;
+		currrentSceneObject->rotX = _transform->Rotation().x;
+		currrentSceneObject->rotY = _transform->Rotation().y;
+		currrentSceneObject->rotZ = _transform->Rotation().z;
+		currrentSceneObject->scaX = _transform->Scale().x;
+		currrentSceneObject->scaY = _transform->Scale().y;
+		currrentSceneObject->scaZ = _transform->Scale().z;
+	}
 
 	for (int i = 0; i < numObjects; i++)
 	{
 		std::stringstream command;
-		command << "INSERT INTO Objects " 
-			<<"VALUES(" << m_sceneGraph.at(i).ID << ","
-			<< m_sceneGraph.at(i).chunk_ID  << ","
-			<< "'" << m_sceneGraph.at(i).model_path <<"'" << ","
+		command << "INSERT INTO Objects "
+			<< "VALUES(" << m_sceneGraph.at(i).ID << ","
+			<< m_sceneGraph.at(i).chunk_ID << ","
+			<< "'" << m_sceneGraph.at(i).model_path << "'" << ","
 			<< "'" << m_sceneGraph.at(i).tex_diffuse_path << "'" << ","
 			<< m_sceneGraph.at(i).posX << ","
 			<< m_sceneGraph.at(i).posY << ","
@@ -235,8 +255,9 @@ void ToolMain::onActionSave()
 			<< ")";
 		std::string sqlCommand2 = command.str();
 		rc = sqlite3_prepare_v2(m_databaseConnection, sqlCommand2.c_str(), -1, &pResults, 0);
-		sqlite3_step(pResults);	
+		sqlite3_step(pResults);
 	}
+
 	MessageBox(NULL, L"Objects Saved", L"Notification", MB_OK);
 }
 
@@ -262,11 +283,6 @@ void ToolMain::onActionExit(MSG* msg)
 		SendMessage(msg->hwnd, WM_CLOSE, 0, 0);
 		PostQuitMessage(0);
 	}
-}
-
-void ToolMain::onActionToggleInvertedCamera()
-{
-	//Utils::SetInvertedCamera(true);
 }
 
 void ToolMain::Tick(MSG *msg)

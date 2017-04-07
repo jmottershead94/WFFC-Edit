@@ -185,6 +185,7 @@
     <ClCompile Include="1300455_MottersheadJason\Physics\Raycast.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="SelectDialogue.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Settings.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="ToolMain.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Utilities\Utils.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="SelectDialogue.h" />
+    <ClInclude Include="1300455_MottersheadJason\Settings.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StepTimer.h" />
@@ -233,9 +235,6 @@
     <ResourceCompile Include="Win32SimpleSample.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\Assets\Art\SPR_Rotation.png" />
-    <Image Include="..\..\Assets\Art\SPR_Scale.png" />
-    <Image Include="..\..\Assets\Art\SPR_Translation.png" />
     <Image Include="toolbar1.bmp" />
     <Image Include="toolbar2.bmp" />
   </ItemGroup>

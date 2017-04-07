@@ -53,6 +53,8 @@ public:
 	void SaveDisplayChunk(ChunkObject *SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
 
+	
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif
@@ -120,6 +122,9 @@ private:
     DirectX::SimpleMath::Matrix                                             m_projection;
 
 // Jason's Added Work.
+public:
+	inline std::vector<DisplayObject>& DisplayList() { return m_displayList; }
+
 private:
 	bool _testingFocus = false;
 	bool _copyEnabled = true;

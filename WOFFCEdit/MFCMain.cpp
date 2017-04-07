@@ -16,7 +16,6 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_TRANSLATE, &MFCMain::MenuTranslate)
 	ON_COMMAND(ID_ROTATE, &MFCMain::MenuRotate)
 	ON_COMMAND(ID_SCALE, &MFCMain::MenuScale)
-	ON_COMMAND(IDC_CHECK3, &MFCMain::MenuInvertCamera)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -46,7 +45,7 @@ BOOL MFCMain::InitInstance()
 	m_frame->ShowWindow(SW_SHOW);
 	m_frame->UpdateWindow();
 
-	_editorSettings.Create(IDD_DIALOG2);
+	_settings.Create(IDD_DIALOG2);
 	m_ToolSystem.onActionInitialise(m_toolHandle, 800, 600);
 
 	return TRUE;
@@ -136,10 +135,10 @@ void MFCMain::MenuEditPaste()
 
 void MFCMain::MenuEditSettings()
 {
-	_editorSettings.ShowWindow(SW_SHOW);
+	_settings.ShowWindow(SW_SHOW);
 
-	if(invertedCamCheckBox == nullptr)
-		invertedCamCheckBox = (CButton*)GetDlgItem(m_toolHandle, IDC_CHECK3);
+	if(_invertedCamCheckBox == nullptr)
+		_invertedCamCheckBox = (CButton*)GetDlgItem(m_toolHandle, IDC_CHECK3);
 }
 
 void MFCMain::MenuGenerateRandomTerrain()
@@ -170,11 +169,6 @@ void MFCMain::MenuRotate()
 void MFCMain::MenuScale()
 {
 	m_ToolSystem.onActionChangeEditorState(Game::EditorState::SCALE);
-}
-
-void MFCMain::MenuInvertCamera()
-{
-	//m_ToolSystem.onActionToggleInvertedCamera();
 }
 
 MFCMain::MFCMain()

@@ -69,6 +69,7 @@
     <ClCompile Include="1300455_MottersheadJason\Objects\Camera.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Utilities\Input\Input.cpp" />
     <ClCompile Include="1300455_MottersheadJason\Utilities\Input\CrossPlatformInput.cpp" />
+    <ClCompile Include="1300455_MottersheadJason\Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -129,6 +130,7 @@
     <ClInclude Include="1300455_MottersheadJason\Objects\Camera.h" />
     <ClInclude Include="1300455_MottersheadJason\Utilities\Input\Input.h" />
     <ClInclude Include="1300455_MottersheadJason\Utilities\Input\CrossPlatformInput.h" />
+    <ClInclude Include="1300455_MottersheadJason\Settings.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -143,15 +145,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="toolbar2.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Assets\Art\SPR_Translation.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Assets\Art\SPR_Rotation.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Assets\Art\SPR_Scale.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

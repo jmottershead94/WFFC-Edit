@@ -29,9 +29,10 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	m_width		= width;
 	m_height	= height;
 	m_d3dRenderer.GetDefaultSize(m_width, m_height);
+	Utils::Initialize(handle, width, height);
 	_editor.Initialize(m_d3dRenderer);
 	m_d3dRenderer.Initialize(handle, m_width, m_height, _editor.MainCamera());
-	Utils::Initialize(handle, width, height);
+	
 
 	//database connection establish
 	int rc;
@@ -306,7 +307,6 @@ void ToolMain::Tick(MSG *msg)
 	//
 	// Render Logic.
 	//
-	//Renderer Update Call
 	m_d3dRenderer.Tick();
 }
 
@@ -441,12 +441,12 @@ void ToolMain::PopUpMenu(MSG* msg)
 
 void ToolMain::onActionCopyItems()
 {
-	_editor.CopyObjects(m_sceneGraph);
+	//_editor.CopyObjects(m_sceneGraph);
 }
 
 void ToolMain::onActionPasteItems()
 {
-	_editor.PasteObjects(m_sceneGraph);
+	//_editor.PasteObjects(m_sceneGraph);
 }
 
 void ToolMain::onActionGenerateTerrain()

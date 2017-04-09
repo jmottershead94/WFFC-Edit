@@ -41,11 +41,11 @@ void Editor::CopyObjects(std::vector<SceneObject>& sceneObjects)
 
 	for (size_t i = 0; i < sceneObjects.size(); ++i)
 	{
-		SceneObject currentObject = sceneObjects.at(i);
+		SceneObject* currentObject = &sceneObjects.at(i);
 
-		if (currentObject.Focus())
+		if (currentObject->Focus())
 		{
-			SceneObject* newObject = currentObject.Copy();
+			SceneObject* newObject = currentObject->Copy();
 			_copiedObjects.push_back(newObject);
 			_pasteEnabled = true;
 		}
@@ -60,26 +60,28 @@ void Editor::PasteObjects(std::vector<SceneObject>& sceneObjects)
 	// Deselecting all of the current display list objects.
 	for (size_t i = 0; i < sceneObjects.size(); ++i)
 	{
-		SceneObject currentObject = sceneObjects.at(i);
+		SceneObject* currentObject = &sceneObjects.at(i);
 
-		if (currentObject.Focus())
+		if (currentObject->Focus())
 		{
-			currentObject.SetFocus(false);
-			currentObject.tex_diffuse_path = currentObject.OriginalTexturePath();
+			currentObject->SetFocus(false);
+			currentObject->tex_diffuse_path = currentObject->OriginalTexturePath();
 		}
 	}
 
 	// Pasting and selecting all of the new display list objects.
 	for (size_t i = 0; i < _copiedObjects.size(); ++i)
 	{
-		SceneObject* currentObject = new SceneObject(*(SceneObject*)(_copiedObjects.at(i)));
+		SceneObject* currentObject = &sceneObjects.at(i);
+		SceneObject* newObject = currentObject->Copy();
 
-		currentObject->m_ID = sceneObjects.size() + (i + 1);
-		currentObject->tex_diffuse_path = currentObject->OriginalTexturePath();
+		newObject->m_ID = sceneObjects.size() + (i + 1);
+		newObject->tex_diffuse_path = currentObject->OriginalTexturePath();
 
-		sceneObjects.push_back(*currentObject);
+		sceneObjects.push_back(*newObject);
 	}
 
+	_renderer->BuildDisplayList(&sceneObjects);
 	_copiedObjects.clear();
 
 	_copyEnabled = true;

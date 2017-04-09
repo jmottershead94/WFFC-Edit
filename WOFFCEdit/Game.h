@@ -122,21 +122,13 @@ private:
 // Jason's Added Work.
 public:
 	inline std::vector<DisplayObject>& DisplayList() { return m_displayList; }
-
 	inline DirectX::SimpleMath::Matrix& WorldMatrix() { return m_world; }
 	inline DirectX::SimpleMath::Matrix& ViewMatrix() { return m_view; }
 	inline DirectX::SimpleMath::Matrix& ProjectionMatrix() { return m_projection; }
-
 	inline std::shared_ptr<DX::DeviceResources>& DeviceResources() { return m_deviceResources; }
 
 private:
-	//bool _copyEnabled = true;
-	//bool _pasteEnabled = true;
-	//double _dt = 0.00;
-	//EventSystem _eventSystem;
 	std::shared_ptr<Camera> _camera;
-	//std::vector<BaseObject*> _copiedObjects;
-	//DirectX::SimpleMath::Vector3 _mouseWorldPosition;
 
 public:
 	/**
@@ -152,36 +144,6 @@ public:
 	 * @return DisplayObject* the new display object.
 	 */
 	DisplayObject* SpawnNewDisplayObject(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
-
-	///**
-	// * Spawns in a primitive.
-	// * @param modelFilePath the file path to the model we want to spawn in.
-	// * @param colour the colour of the primitive.
-	// * @return DisplayObject* the new display object.
-	// */
-	//DisplayObject* SpawnNewDisplayObject(const DirectX::GeometricPrimitive primitive, DirectX::XMVECTORF32 colour);
-	
-	///**
-	// * Provides a copy of all selected objects.
-	// */
-	//void CopyObjects();
-
-	///**
-	// * Provides a way to paste the copied objects into the scene.
-	// */
-	//void PasteObjects();
-
-	/**
-	 * Provides access to the current state of the editor.
-	 * @return const EditorState the current editor state.
-	 */
-	//inline EditorState const CurrentEditorState() const { return _editorState; }
-
-	/*inline void ToggleCopy(const bool value)	{ _copyEnabled = value; }
-	inline void TogglePaste(const bool value)	{ _pasteEnabled = value; }
-
-	inline bool const IsCopyEnabled() const		{ return _copyEnabled; }
-	inline bool const IsPasteEnabled() const	{ return _pasteEnabled; }*/
 };
 
 std::wstring StringToWCHART(std::string s);

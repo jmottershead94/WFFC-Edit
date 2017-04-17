@@ -114,7 +114,7 @@ class BaseObject : public Observer
 		 * Provides a way to set the main camera for editor use.
 		 * @param mainCamera points to the main editor camera.
 		 */
-		inline void SetEditorCamera(std::shared_ptr<Camera> mainCamera) { editorCamera = mainCamera; };
+		inline void SetEditorCamera(std::shared_ptr<Camera>& mainCamera) { editorCamera = mainCamera; };
 
 		inline void SetDirty(const bool value) { dirty = value; }
 		inline bool const Dirty() const { return dirty; }

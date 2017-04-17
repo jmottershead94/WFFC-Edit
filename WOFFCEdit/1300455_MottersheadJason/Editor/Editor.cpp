@@ -35,6 +35,72 @@ void Editor::RemoveObjectsFromEventSystem(std::vector<SceneObject>& sceneObjects
 	}
 }
 
+SceneObject* Editor::SpawnNewSceneObject(const int numberOfSceneObjects, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
+{
+	SceneObject* newObject = new SceneObject();
+	newObject->ID = numberOfSceneObjects + 1;
+	newObject->chunk_ID = 0;
+	newObject->model_path = modelFilePath;
+	newObject->tex_diffuse_path = textureFilePath;
+	newObject->Transform().SetPosition(_camera->Transform().Position());
+	newObject->Transform().SetRotation(_camera->Transform().Rotation());
+	newObject->Transform().SetScale(DirectX::SimpleMath::Vector3::One * modelScale);
+	newObject->render = false;
+	newObject->collision = false;
+	newObject->collision_mesh = "";
+	newObject->collectable = false;
+	newObject->destructable = false;
+	newObject->health_amount = 0;
+	newObject->editor_render = true;
+	newObject->editor_texture_vis = true;
+	newObject->editor_normals_vis = false;
+	newObject->editor_collision_vis = false;
+	newObject->editor_pivot_vis = false;
+	newObject->pivotX = 0.0f;
+	newObject->pivotY = 0.0f;
+	newObject->pivotZ = 0.0f;
+	newObject->snapToGround = false;
+	newObject->AINode = false;
+	newObject->audio_path = "";
+	newObject->volume = 0.0f;
+	newObject->pitch = 0.0f;
+	newObject->pan = 0.0f;
+	newObject->one_shot = false;
+	newObject->play_on_init = false;
+	newObject->play_in_editor = false;
+	newObject->min_dist = 0.0f;
+	newObject->max_dist = 0.0f;
+	newObject->camera = false;
+	newObject->path_node = false;
+	newObject->path_node_start = false;
+	newObject->path_node_end = false;
+	newObject->parent_id = 0;
+	newObject->editor_wireframe = false;
+	newObject->name = "Name";
+
+	newObject->SetEditorCamera(_camera);
+	newObject->SetOriginalTexturePath(textureFilePath);
+	//_eventSystem.AddObserver(newObject);
+
+	return newObject;
+}
+
+void Editor::SpawnTree(std::vector<SceneObject>& sceneObjects)
+{
+	// Removing observers because we are about to update the scene graph.
+	RemoveObjectsFromEventSystem(sceneObjects);
+
+	// Spawning in a new tree.
+	SceneObject* newTree = SpawnNewSceneObject(sceneObjects.size(), "database/data/Lowpoly_tree_sample.cmo", "database/data/placeholder.dds", DirectX::SimpleMath::Vector3(3.0f, 3.0f, 3.0f));
+	sceneObjects.push_back(*newTree);
+
+	// Adding observers because we have updated the scene graph.
+	AddObjectsToEventSystem(sceneObjects);
+
+	// Rebuilding the display list to show changes via the renderer.
+	_renderer->BuildDisplayList(&sceneObjects);
+}
+
 void Editor::CopyObjects(std::vector<SceneObject>& sceneObjects)
 {
 	_pasteEnabled = false;
@@ -180,7 +246,7 @@ void Editor::Manipulate(DirectX::SimpleMath::Vector3& manipulationVector)
 		manipulationVector += DirectX::SimpleMath::Vector3::UnitZ;
 }
 
-void Editor::Controls()
+void Editor::Controls(std::vector<SceneObject>& sceneObjects)
 {
 	if (CrossPlatformInput::GenerateTerrainPressed())
 		_renderer->GenerateRandomTerrain();
@@ -188,6 +254,9 @@ void Editor::Controls()
 	if (CrossPlatformInput::WireframeModePressed())
 		ToggleWireframe();
 	
+	if (CrossPlatformInput::SpawnTreePressed())
+		SpawnTree(sceneObjects);
+
 	if (CrossPlatformInput::TranslateHotKeyPressed())
 		_editorState = Editor::State::TRANSLATE;
 

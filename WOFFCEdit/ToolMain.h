@@ -50,16 +50,6 @@ class ToolMain
 		Editor _editor;
 
 		/**
-		 * Spawns in a new scene object.
-		 * @param displayObject the display object to copy variables from.
-		 * @param modelFilePath the file path to the model.
-		 * @param textureFilePath the file path to the texture.
-		 * @param modelScale the scaling offset for the model.
-		 * @return SceneObject* the new scene object.
-		 */
-		SceneObject* SpawnNewSceneObject(DisplayObject* displayObject, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
-
-		/**
 		 * Creates a new pop up menu.
 		 * @param msg the message with the lParam and wParam for windows parameters.
 		 */

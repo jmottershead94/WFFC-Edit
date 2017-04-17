@@ -28,7 +28,7 @@ BOOL MFCMain::InitInstance()
 	m_frame->Create(	NULL,
 					_T("World Of Flim-Flam Craft Editor"),
 					WS_OVERLAPPEDWINDOW,
-					CRect(100, 100, 1024, 768),
+					CRect(0, 0, 1920, 1080),
 					NULL,
 					NULL,
 					0,
@@ -46,7 +46,7 @@ BOOL MFCMain::InitInstance()
 	m_frame->UpdateWindow();
 
 	_settings.Create(IDD_DIALOG2);
-	m_ToolSystem.onActionInitialise(m_toolHandle, 800, 600);
+	m_ToolSystem.onActionInitialise(m_toolHandle, 1920, 1080);
 
 	return TRUE;
 }

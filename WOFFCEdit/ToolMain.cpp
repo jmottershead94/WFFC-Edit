@@ -274,7 +274,7 @@ void ToolMain::Tick(MSG *msg)
 	//
 	// Input Logic.
 	//
-	_editor.Controls();
+	_editor.Controls(m_sceneGraph);
 
 	if (CrossPlatformInput::SavePressed())
 	{
@@ -372,51 +372,6 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 }
 
-SceneObject* ToolMain::SpawnNewSceneObject(DisplayObject* displayObject, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
-{
-	SceneObject* newObject = new SceneObject();
-	newObject->ID = displayObject->m_ID;
-	newObject->chunk_ID = 0;
-	newObject->model_path = modelFilePath;
-	newObject->tex_diffuse_path = textureFilePath;
-	newObject->Transform().SetPosition(displayObject->Transform().Position());
-	newObject->Transform().SetRotation(displayObject->Transform().Rotation());
-	newObject->Transform().SetScale(displayObject->Transform().Scale() + modelScale);
-	newObject->render = false;
-	newObject->collision = false;
-	newObject->collision_mesh = "";
-	newObject->collectable = false;
-	newObject->destructable = false;
-	newObject->health_amount = 0;
-	newObject->editor_render = true;
-	newObject->editor_texture_vis = true;
-	newObject->editor_normals_vis = false;
-	newObject->editor_collision_vis = false;
-	newObject->editor_pivot_vis = false;
-	newObject->pivotX = 0.0f;
-	newObject->pivotY = 0.0f;
-	newObject->pivotZ = 0.0f;
-	newObject->snapToGround = false;
-	newObject->AINode = false;
-	newObject->audio_path = "";
-	newObject->volume = 0.0f;
-	newObject->pitch = 0.0f;
-	newObject->pan = 0.0f;
-	newObject->one_shot = false;
-	newObject->play_on_init = false;
-	newObject->play_in_editor = false;
-	newObject->min_dist = 0.0f;
-	newObject->max_dist = 0.0f;
-	newObject->camera = false;
-	newObject->path_node = false;
-	newObject->path_node_start = false;
-	newObject->path_node_end = false;
-	newObject->parent_id = 0;
-	newObject->editor_wireframe = false;
-	newObject->name = "Name";
-	return newObject;
-}
-
 void ToolMain::PopUpMenu(MSG* msg)
 {
 	int xPos = GET_X_LPARAM(msg->lParam);
@@ -461,7 +416,7 @@ void ToolMain::onActionToggleWireframe()
 
 void ToolMain::onActionSpawnModel(const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale)
 {
-	m_sceneGraph.push_back(*SpawnNewSceneObject(m_d3dRenderer.SpawnNewDisplayObject(modelFilePath, textureFilePath, modelScale), modelFilePath, textureFilePath, modelScale));
+	_editor.SpawnTree(m_sceneGraph);
 }
 
 void ToolMain::onActionChangeEditorState(const Editor::State newState)

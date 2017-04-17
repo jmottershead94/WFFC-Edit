@@ -27,6 +27,22 @@ class Editor
 		void RemoveObjectsFromEventSystem(std::vector<SceneObject>& sceneObjects);
 
 		/**
+		 * Spawns in a new scene object.
+		 * @param numberOfSceneObjects the current amount of scene objects.
+		 * @param displayObject the display object to copy variables from.
+		 * @param modelFilePath the file path to the model.
+		 * @param textureFilePath the file path to the texture.
+		 * @param modelScale the scaling offset for the model.
+		 * @return SceneObject* the new scene object.
+		 */
+		SceneObject* SpawnNewSceneObject(const int numberOfSceneObjects, const std::string modelFilePath, const std::string textureFilePath, DirectX::SimpleMath::Vector3 modelScale);
+
+		/**
+		 * Spawns a tree scene object.
+		 */
+		void SpawnTree(std::vector<SceneObject>& sceneObjects);
+
+		/**
 		 * Provides a copy of all selected objects.
 		 */
 		void CopyObjects(std::vector<SceneObject>& sceneObjects);
@@ -44,7 +60,7 @@ class Editor
 		/**
 		 * Provides specific editor controls.
 		 */
-		void Controls();
+		void Controls(std::vector<SceneObject>& sceneObjects);
 
 		/**
 		 * Provides specific editor updates.

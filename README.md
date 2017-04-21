@@ -61,34 +61,34 @@ Controls listed here already have button representations, so these controls are 
 
 | Control | Action |
 | --- | --- |
-| W | Moves the object(s) forward. |
-| A | Moves the object(s) left. |
-| S | Moves the object(s) back. |
-| D | Moves the object(s) right. |
-| E | Moves the object(s) up. |
-| Q | Moves the object(s) down. |  
+| I | Moves the object(s) forward. |
+| J | Moves the object(s) left. |
+| K | Moves the object(s) back. |
+| L | Moves the object(s) right. |
+| O | Moves the object(s) up. |
+| U | Moves the object(s) down. |  
   
 **Rotation**  
 
 | Control | Action |
 | --- | --- |
-| W | Rotates pitch of object(s). |
-| A | Rotates yaw of object(s). |
-| S | Rotates pitch of object(s). |
-| D | Rotates yaw of object(s). |
-| E | Rotates roll of object(s). |
-| Q | Rotates roll of object(s). |
+| I | Rotates pitch of object(s). |
+| J | Rotates yaw of object(s). |
+| K | Rotates pitch of object(s). |
+| L | Rotates yaw of object(s). |
+| O | Rotates roll of object(s). |
+| U | Rotates roll of object(s). |
 
 **Scale**  
 
 | Control | Action |
 | --- | --- |
-| W | Scales object(s) along the z axis (inward). |
-| A | Scales object(s) along the x axis (inward). |
-| S | Scales object(s) along the z axis (outward). |
-| D | Scales object(s) along the x axis (outward). |
-| E | Scales object(s) along the y axis (outward). |
-| Q | Scales object(s) along the y axis (inward). |
+| I | Scales object(s) along the z axis (inward). |
+| J | Scales object(s) along the x axis (inward). |
+| K | Scales object(s) along the z axis (outward). |
+| L | Scales object(s) along the x axis (outward). |
+| O | Scales object(s) along the y axis (outward). |
+| U | Scales object(s) along the y axis (inward). |
 
 ## Authors
 Jason Mottershead - Level Editing Functionality  

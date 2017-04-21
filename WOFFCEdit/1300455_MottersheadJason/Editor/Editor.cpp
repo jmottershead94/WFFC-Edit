@@ -181,19 +181,19 @@ void Editor::ObjectManipulation(SceneObject& displayObject)
 		{
 			DirectX::SimpleMath::Vector3 rotation(DirectX::SimpleMath::Vector3::Zero);
 
-			if (Input::IsKeyDown('D'))
+			if (Input::IsKeyDown('L'))
 				rotation += DirectX::SimpleMath::Vector3::UnitY;
-			if (Input::IsKeyDown('A'))
+			if (Input::IsKeyDown('J'))
 				rotation -= DirectX::SimpleMath::Vector3::UnitY;
 
-			if (Input::IsKeyDown('E'))
+			if (Input::IsKeyDown('O'))
 				rotation -= DirectX::SimpleMath::Vector3::UnitZ;
-			if (Input::IsKeyDown('Q'))
+			if (Input::IsKeyDown('U'))
 				rotation += DirectX::SimpleMath::Vector3::UnitZ;
 
-			if (Input::IsKeyDown('W'))
+			if (Input::IsKeyDown('I'))
 				rotation -= DirectX::SimpleMath::Vector3::UnitX;
-			if (Input::IsKeyDown('S'))
+			if (Input::IsKeyDown('K'))
 				rotation += DirectX::SimpleMath::Vector3::UnitX;
 
 			displayObject.Transform().Rotate(rotation * Utils::RotationRate());
@@ -230,19 +230,19 @@ void Editor::ObjectManipulation(SceneObject& displayObject)
 
 void Editor::Manipulate(DirectX::SimpleMath::Vector3& manipulationVector)
 {
-	if (Input::IsKeyDown('D'))
+	if (Input::IsKeyDown('L'))
 		manipulationVector += DirectX::SimpleMath::Vector3::UnitX;
-	if (Input::IsKeyDown('A'))
+	if (Input::IsKeyDown('J'))
 		manipulationVector -= DirectX::SimpleMath::Vector3::UnitX;
 
-	if (Input::IsKeyDown('E'))
+	if (Input::IsKeyDown('O'))
 		manipulationVector += DirectX::SimpleMath::Vector3::UnitY;
-	if (Input::IsKeyDown('Q'))
+	if (Input::IsKeyDown('U'))
 		manipulationVector -= DirectX::SimpleMath::Vector3::UnitY;
 
-	if (Input::IsKeyDown('W'))
+	if (Input::IsKeyDown('I'))
 		manipulationVector -= DirectX::SimpleMath::Vector3::UnitZ;
-	if (Input::IsKeyDown('S'))
+	if (Input::IsKeyDown('K'))
 		manipulationVector += DirectX::SimpleMath::Vector3::UnitZ;
 }
 

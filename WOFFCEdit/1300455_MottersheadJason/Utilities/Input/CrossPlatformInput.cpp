@@ -68,7 +68,7 @@ bool const CrossPlatformInput::MoveDown()
 bool const CrossPlatformInput::RotateRight()
 {
 #if _WIN32
-	return (Input::MouseDragAxisX() > 0.0f || Input::IsKeyDown('L'));
+	return (Input::MouseDragAxisX() > 0.0f);
 #elif
 	return false;
 #endif
@@ -77,7 +77,7 @@ bool const CrossPlatformInput::RotateRight()
 bool const CrossPlatformInput::RotateLeft()
 {
 #if _WIN32
-	return (Input::MouseDragAxisX() < 0.0f || Input::IsKeyDown('J'));
+	return (Input::MouseDragAxisX() < 0.0f);
 #elif
 	return false;
 #endif
@@ -86,7 +86,7 @@ bool const CrossPlatformInput::RotateLeft()
 bool const CrossPlatformInput::RotateUp()
 {
 #if _WIN32
-	return (Input::MouseDragAxisY() > 0.0f || Input::IsKeyDown('I'));
+	return (Input::MouseDragAxisY() > 0.0f);
 #elif
 	return false;
 #endif
@@ -95,7 +95,7 @@ bool const CrossPlatformInput::RotateUp()
 bool const CrossPlatformInput::RotateDown()
 {
 #if _WIN32
-	return (Input::MouseDragAxisY() < 0.0f || Input::IsKeyDown('K'));
+	return (Input::MouseDragAxisY() < 0.0f);
 #elif
 	return false;
 #endif

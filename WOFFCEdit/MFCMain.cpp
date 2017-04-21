@@ -28,7 +28,7 @@ BOOL MFCMain::InitInstance()
 	m_frame->Create(	NULL,
 					_T("World Of Flim-Flam Craft Editor"),
 					WS_OVERLAPPEDWINDOW,
-					CRect(0, 0, 1920, 1080),
+					CRect(0, 0, 800, 600),
 					NULL,
 					NULL,
 					0,

@@ -407,8 +407,8 @@ void Game::NewAudioDevice()
 // Properties
 void Game::GetDefaultSize(int& width, int& height) const
 {
-    width = 1920;
-    height = 1080;
+    width = 800;
+    height = 600;
 }
 #pragma endregion
 
